@@ -28,7 +28,7 @@ public class CharsetUtil {
 		while (i != -1) {
 			i = channel.read(buff);
 			buff.flip();
-			byte[] dst = new byte[buff.limit()];
+			byte[] dst = new byte[buff.remaining()];
 			buff.get(dst);
 			result += new String(dst, charset);
 			buff.clear();
