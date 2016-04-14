@@ -7,12 +7,16 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class TestBuffer {
+/**
+ *	测试使用ByteBuff
+ *	并简单描述其用法。
+ */
+public class TestByteBuffer {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException {
 //		System.getProperty("user.dir") 			         获取当前项目路径
 //		TestBuffer.class.getResource("").getPath()  获取绝对路径
-		File file = new File(TestBuffer.class.getResource("").getPath() + "tian.txt");
+		File file = new File(TestByteBuffer.class.getResource("").getPath() + "tian.txt");
 		FileChannel channel =  new FileInputStream(file).getChannel();
 
 // 		分配一个buff
