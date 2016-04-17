@@ -1,4 +1,4 @@
-package com.thread.testThreadAbort;
+package learn.thread.testThreadAbort;
 
 import java.io.IOException;
 import java.net.Socket;

@@ -1,4 +1,4 @@
-package com.thread.testModuleBuild;
+package learn.thread.testModuleBuild;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.BrokenBarrierException;

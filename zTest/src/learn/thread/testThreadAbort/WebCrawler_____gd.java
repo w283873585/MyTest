@@ -1,4 +1,4 @@
-package com.thread.testThreadAbort;
+package learn.thread.testThreadAbort;
 
 import java.net.URL;
 import java.util.HashSet;

@@ -1,19 +1,21 @@
-package com.thread.testFoundation;
+package learn.thread.testFoundation;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.thread.util.ThreadUtil;
-import com.thread.util.ThreadUtil.Task;
+import learn.thread.util.ThreadSafe;
+import learn.thread.util.ThreadUtil;
+import learn.thread.util.ThreadUtil.Task;
 
 /**
  * 用不变对象同步一个缓存因数的servlet
  * @author Administrator
  *
  */
-public class TestCacheServlet1 {
+@ThreadSafe
+public class TestCacheServlet_ImmutableObj {
 	// one situation for concurrent
 	// @Immutable
 	public static class OneValueCache {

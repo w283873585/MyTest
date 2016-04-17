@@ -1,4 +1,4 @@
-package com.thread.testThreadAbort;
+package learn.thread.testThreadAbort;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
@@ -6,8 +6,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.thread.util.ThreadUtil;
-import com.thread.util.ThreadUtil.Task;
+import learn.thread.util.ThreadUtil;
+import learn.thread.util.ThreadUtil.Task;
 
 
 

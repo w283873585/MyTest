@@ -1,7 +1,7 @@
-package com.thread.testFoundation;
+package learn.thread.testFoundation;
 
-import com.thread.util.ThreadUtil;
-import com.thread.util.ThreadUtil.Task;
+import learn.thread.util.ThreadUtil;
+import learn.thread.util.ThreadUtil.Task;
 
 /**
  * 单例实现1

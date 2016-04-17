@@ -1,4 +1,4 @@
-package com.thread.testThreadAbort;
+package learn.thread.testThreadAbort;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 
@@ -9,8 +9,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
-import com.thread.util.ThreadUtil;
-import com.thread.util.ThreadUtil.Task;
+import learn.thread.util.ThreadUtil;
+import learn.thread.util.ThreadUtil.Task;
 
 public class LogServiceUseExecutor {
 	private final ExecutorService exec = Executors.newSingleThreadExecutor();

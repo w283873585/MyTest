@@ -1,4 +1,4 @@
-package com.thread.testModuleBuild;
+package learn.thread.testModuleBuild;
 
 import java.util.Collections;
 import java.util.HashSet;

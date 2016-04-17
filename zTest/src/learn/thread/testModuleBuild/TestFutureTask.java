@@ -1,4 +1,4 @@
-package com.thread.testModuleBuild;
+package learn.thread.testModuleBuild;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -8,7 +8,6 @@ import java.util.concurrent.FutureTask;
 
 
 /**
- * 线程闭锁
  * FutureTask
  * @author Administrator
  *

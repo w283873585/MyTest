@@ -1,4 +1,4 @@
-package com.thread.testThreadAbort;
+package learn.thread.testThreadAbort;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -6,8 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.thread.util.ThreadUtil;
-import com.thread.util.ThreadUtil.Task;
+import learn.thread.util.ThreadUtil;
+import learn.thread.util.ThreadUtil.Task;
 
 public class LogService_____gd {
 	private final BlockingQueue<String> queue = new LinkedBlockingQueue<String>();

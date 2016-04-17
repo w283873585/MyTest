@@ -1,4 +1,4 @@
-package com.thread.testFoundation;
+package learn.thread.testFoundation;
 
 import java.util.Collections;
 import java.util.Map;

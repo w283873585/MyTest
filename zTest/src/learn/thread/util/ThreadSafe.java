@@ -1,4 +1,4 @@
-package com.thread.util;
+package learn.thread.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

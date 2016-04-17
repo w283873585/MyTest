@@ -1,4 +1,4 @@
-package com.thread.testThreadAbort;
+package learn.thread.testThreadAbort;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler{
 

@@ -1,4 +1,4 @@
-package com.thread.testFoundation;
+package learn.thread.testFoundation;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.thread.util.ThreadUtil;
-import com.thread.util.ThreadUtil.Task;
+import learn.thread.util.ThreadUtil;
+import learn.thread.util.ThreadUtil.Task;
 
 /**
  * 同步一个缓存因数的servlet
@@ -16,7 +16,7 @@ import com.thread.util.ThreadUtil.Task;
  * @author Administrator
  *
  */
-public class TestCacheServlet3 {
+public class TestCacheServlet_cacheMulit {
 	// one situation for concurrent
 	// @Immutable
 	public static class OneValueCache {
