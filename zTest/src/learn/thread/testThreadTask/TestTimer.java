@@ -1,4 +1,4 @@
-package com.thread.testThreadTask;
+package learn.thread.testThreadTask;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.thread.testModuleBuild;
+package learn.thread.testModuleBuild;
 
 import java.io.File;
 import java.io.FileFilter;

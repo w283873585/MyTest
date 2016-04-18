@@ -26,6 +26,7 @@ public class QiniuUtil {
 	}
 	public static String getToken(String bucket) {
 		String result = tokenCache.get(bucket);
+		/*
 		if (result == null) {
 			synchronized (QiniuUtil.class) {
 				if (tokenCache.get(bucket) == null) {
@@ -33,6 +34,19 @@ public class QiniuUtil {
 				}
 			}
 			result = tokenCache.get(bucket);
+		}
+		*/
+		/**
+			如果为空，则放入一个新的，
+			多线程时可能会同时放入两个新的，
+			putIfAbsent则可以处理这种情况，因为他是串行操作，且返回的必定是第一个放入的，或者返回null（返回null则说明，此次放入就是第一次放入）
+		*/
+		if (result == null) {
+			String token = auth.uploadToken(bucket);
+			result = tokenCache.putIfAbsent(bucket, token);
+			if (result == null) {
+				result = token;
+			}
 		}
 		return result;
 	}

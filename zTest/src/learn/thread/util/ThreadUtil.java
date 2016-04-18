@@ -1,4 +1,4 @@
-package com.thread.util;
+package learn.thread.util;
 
 public class ThreadUtil {
 	public static void exec(final Task task, int threadCount){

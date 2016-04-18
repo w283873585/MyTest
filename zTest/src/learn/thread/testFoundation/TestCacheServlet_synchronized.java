@@ -1,11 +1,12 @@
-package com.thread.testFoundation;
+package learn.thread.testFoundation;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.thread.util.ThreadUtil;
-import com.thread.util.ThreadUtil.Task;
+import learn.thread.util.GuardedBy;
+import learn.thread.util.ThreadUtil;
+import learn.thread.util.ThreadUtil.Task;
 
 /**
  * 同步一个缓存因数的servlet，
@@ -13,12 +14,12 @@ import com.thread.util.ThreadUtil.Task;
  * @author Administrator
  *
  */
-public class TestCacheServlet2 {
+public class TestCacheServlet_synchronized {
 	public static class OneServlet {
-		private BigInteger[] lastFactors;
-		private BigInteger lastNumber;
-		private long hits;
-		private long cacheHits;
+		@GuardedBy("this") private BigInteger[] lastFactors;
+		@GuardedBy("this") private BigInteger lastNumber;
+		@GuardedBy("this") private long hits;
+		@GuardedBy("this") private long cacheHits;
 		
 		
 		public synchronized long getHits() {

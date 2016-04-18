@@ -1,4 +1,4 @@
-package com.thread.testThreadPool;
+package learn.thread.testThreadPool;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;

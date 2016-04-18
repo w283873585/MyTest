@@ -1,4 +1,4 @@
-package com.thread.testThreadAbort;
+package learn.thread.testThreadAbort;
 
 import java.math.BigInteger;
 import java.util.concurrent.BlockingQueue;
@@ -7,7 +7,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 协作中断
- * 用boolean协作中断
  */
 public class PrimeProducer extends Thread{
 	private final BlockingQueue<BigInteger> queue;
