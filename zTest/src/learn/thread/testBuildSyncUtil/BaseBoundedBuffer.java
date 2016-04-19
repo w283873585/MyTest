@@ -4,13 +4,13 @@ import learn.thread.util.GuardedBy;
 import learn.thread.util.ThreadSafe;
 
 @ThreadSafe
-public class BaseBoundBuffer<V> {
+public class BaseBoundedBuffer<V> {
 	@GuardedBy("this") private final V[] buf;
 	@GuardedBy("this") private int tail;
 	@GuardedBy("this") private int head;
 	@GuardedBy("this") private int count;
 	
-	protected BaseBoundBuffer(int capacity) {
+	protected BaseBoundedBuffer(int capacity) {
 		this.buf = (V[]) new Object[capacity];
 	}
 	

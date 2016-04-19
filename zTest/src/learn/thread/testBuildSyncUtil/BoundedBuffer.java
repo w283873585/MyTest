@@ -3,7 +3,7 @@ package learn.thread.testBuildSyncUtil;
 // 条件队列
 // 使用对象的wait和notify实现线程通信
 // 来阻塞非法操作
-public class BoundedBuffer<V> extends BaseBoundBuffer<V> {
+public class BoundedBuffer<V> extends BaseBoundedBuffer<V> {
 
 	protected BoundedBuffer(int capacity) {
 		super(capacity);

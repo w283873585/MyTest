@@ -1,7 +1,7 @@
 package learn.thread.testBuildSyncUtil;
 
 // 通过抛出异常来防止前置条件未满足前的非法调用
-public class GrumpyBoundedBuffer<V> extends BaseBoundBuffer<V>{
+public class GrumpyBoundedBuffer<V> extends BaseBoundedBuffer<V>{
 
 	protected GrumpyBoundedBuffer(int capacity) {
 		super(capacity);
