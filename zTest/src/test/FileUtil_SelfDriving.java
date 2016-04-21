@@ -10,19 +10,28 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileUtil1 {
+public class FileUtil_SelfDriving {
 	private FileChannel channel;
 	private ByteBuffer buff;
+	private int capacity = 1024;
+	private String charset = "GBK";
+	
+	public FileUtil_SelfDriving() {}
+	public FileUtil_SelfDriving(int capacity) { this.capacity = capacity; }
+	public FileUtil_SelfDriving(String charset) { this.charset = charset; }
+	public FileUtil_SelfDriving(int capacity, String charset) {
+		this.capacity = capacity; 
+		this.charset = charset;
+	}
 	
 	public List<String> read(String path, Consumer consumer) {
 		List<String> result = new ArrayList<String>();
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(path);
-			buff = ByteBuffer.allocate(1024);
+			buff = ByteBuffer.allocate(capacity);
 			channel = fis.getChannel();
 			consumer.consume(new Carrier());
-			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} finally {
@@ -44,6 +53,9 @@ public class FileUtil1 {
 			} catch (IOException e) {}
 			return buff;
 		}
+		public CharBuffer getChar() {
+			return Charset.forName(charset).decode(get());
+		}
 	}
 	
 	public static interface Consumer{
@@ -54,23 +66,19 @@ public class FileUtil1 {
 	public static void main(String[] args) {
 		final List<String> result = new ArrayList<String>();
 		final StringBuilder sb = new StringBuilder();
-		FileUtil1 util = new FileUtil1();
+		FileUtil_SelfDriving util = new FileUtil_SelfDriving();
 		util.read("C:/Users/Administrator/Desktop/b.txt", new Consumer() {
 			public void consume(Carrier carrier) {
-				ByteBuffer buff = carrier.get();
+				CharBuffer buff = carrier.getChar();
 				while (buff.hasRemaining()) {
-					CharBuffer cBuff = Charset.forName("GBK").decode(buff);
-					buff.clear();
-					while (cBuff.hasRemaining()) {
-						char cur = cBuff.get();
-						if (cur != '\r') {
-							sb.append(cur);
-						} else {
-							result.add(sb.toString());
-							sb.delete(0, sb.length());
-						}
+					char cur = buff.get();
+					if (cur != '\r') {
+						sb.append(cur);
+					} else {
+						result.add(sb.toString());
+						sb.delete(0, sb.length());
 					}
-					buff = carrier.get();
+					buff = carrier.getChar();
 				}
 			}
 		});
