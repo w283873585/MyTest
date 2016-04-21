@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FileUtil {
-	public static List<String> read(String path, Consumer consumer) {
-		List<String> result = new ArrayList<String>();
+	public static void read(String path, Consumer consumer) {
 		FileChannel channel = null;
 		FileInputStream fis = null;
 		try {
@@ -36,7 +35,6 @@ public class FileUtil {
 				if (fis != null) fis.close();
 			} catch (IOException e) {}
 		}
-		return result;
 	}
 	
 	public static interface Consumer{

@@ -24,8 +24,7 @@ public class FileUtil_Mixin {
 		this.charset = charset;
 	}
 	
-	public List<String> read(String path, Consumer consumer) {
-		List<String> result = new ArrayList<String>();
+	public void read(String path, Consumer consumer) {
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(path);
@@ -48,7 +47,6 @@ public class FileUtil_Mixin {
 				if (fis != null) fis.close();
 			} catch (IOException e) {}
 		}
-		return result;
 	}
 	
 	public class Carrier{
