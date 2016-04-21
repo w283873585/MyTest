@@ -60,7 +60,10 @@ public class FileUtil_Mixin {
 			return buff;
 		}
 		public CharBuffer getChar() {
-			return Charset.forName(charset).decode(get());
+			return getChar(get());
+		}
+		public CharBuffer getChar(ByteBuffer buff) {
+			return Charset.forName(charset).decode(buff);
 		}
 	}
 	
