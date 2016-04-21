@@ -32,8 +32,8 @@ public class Kernel2 {
 	}
 	public static void main(String[] args) {
 		List<String> list = Kernel2.getResources("C:/Users/Administrator/Desktop/b.txt");
-		 System.out.println(list.size());
-		 System.out.println(list.get(122));
-		 System.out.println(list.get(100));
+		System.out.println(list.size());
+		System.out.println(list.get(122));
+		System.out.println(list.get(100));
 	}
 }
