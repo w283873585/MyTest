@@ -6,7 +6,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
+/*
+ * byte数组流
+ * 对象流
+ * 通道流
+ * 文件流
+ * 过滤流
+ */
 public class Test1 {
 	public <V> Future<V> submit(final Callable<V> callable) {
 		class MyFuture implements Future<V> {
