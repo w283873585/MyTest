@@ -2,7 +2,7 @@ package learn.string;
 
 import java.io.UnsupportedEncodingException;
 
-public class Test1 {
+public class StringEncode {
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		char c = '中';
 		System.out.println((int) c);
