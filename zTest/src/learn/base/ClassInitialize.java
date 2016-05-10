@@ -1,7 +1,7 @@
-package learn.classInitialize;
+package learn.base;
 
-public class OneClass {
-	private static OneClass one = new OneClass();
+public class ClassInitialize {
+	private static ClassInitialize one = new ClassInitialize();
 	private static int x;
 	private static int y = 2;
 	private String str = "1245";
@@ -14,14 +14,14 @@ public class OneClass {
 		System.out.println("static module loading");
 	}
 	
-	public OneClass() {
+	public ClassInitialize() {
 		System.out.println("a constructor function");
 		x++;
 		y++;
 	}
 	
 	public static void main(String[] args) {
-		new OneClass();
+		new ClassInitialize();
 /**
  * 构造函数构造流程（如果有父类则先初始化父类）
  * 1.为静态作用域分配内存空间，并初始化值

@@ -1,4 +1,4 @@
-package learn.string;
+package learn.base;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

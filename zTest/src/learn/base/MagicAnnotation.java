@@ -1,4 +1,4 @@
-package learn.annotation;
+package learn.base;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 	ElementType.METHOD,
 	ElementType.PACKAGE,
 	ElementType.PARAMETER})
-public @interface Magic {
+public @interface MagicAnnotation {
 	// 注解的方法相当于注解内部域，在其他类使用注解时传递的参数对应这些方法域
 	// 默认的方法，value方法域
 	// 这些方法域在没有default的情况下是必填的，有default则选填.
@@ -34,9 +34,9 @@ public @interface Magic {
 	
 	
 	// 在只有value方法域需要填时，可省略value=
-	@Magic("helloword")
+	@MagicAnnotation("helloword")
 	class Hello{}
-	@Magic(value="world", id="helloworld")
+	@MagicAnnotation(value="world", id="helloworld")
 	class World{}
 	
 	
@@ -47,11 +47,11 @@ public @interface Magic {
 			// 首先拿到类上面的注解信息
 			Annotation[] annos = clazz.getAnnotations();
 			for (Annotation anno : annos) {
-				Magic m = (Magic) anno;
+				MagicAnnotation m = (MagicAnnotation) anno;
 				System.out.print(m.id());
 				System.out.println(m.value());
 				System.out.println(m.annotationType());
-				Class<? extends Magic> class_m = m.getClass();
+				Class<? extends MagicAnnotation> class_m = m.getClass();
 			}
 		}
 		
@@ -65,7 +65,7 @@ public @interface Magic {
 		}
 		
 		public static void main(String[] args) {
-			new AnnotationHandler().printAnnoInfo(Magic.class);
+			new AnnotationHandler().printAnnoInfo(MagicAnnotation.class);
 		}
 	}
 }

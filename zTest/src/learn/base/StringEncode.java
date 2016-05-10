@@ -1,4 +1,4 @@
-package learn.string;
+package learn.base;
 
 import java.io.UnsupportedEncodingException;
 
