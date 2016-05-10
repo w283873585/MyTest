@@ -1,4 +1,4 @@
-package learn.http;
+package learn.http.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
