@@ -3,7 +3,7 @@ package vr.com.rest;
 public interface ValueProcessor {
 	
 	/**
-	 * ¼Ó¹¤×Ö·û
+	 * åŠ å·¥å­—ç¬¦
 	 * @param value
 	 * @return
 	 */

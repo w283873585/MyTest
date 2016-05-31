@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import vr.com.request.Client;
+import vr.com.request.ClientFactory;
+import vr.com.request.Request;
 import vr.com.rest.ValueProcessorUtil;
 import vr.com.util.ClientUtil;
 
@@ -30,7 +33,7 @@ public class TestInterfaceAction {
 	@RequestMapping(value="/send",  produces = "text/html;charset=utf-8")
 	@ResponseBody
 	public String send(HttpServletRequest request, HttpServletResponse response,
-			String keyWord, 
+			String clientName,
 			String url, 
 			String paramsInfo) {
 		/**
@@ -54,10 +57,10 @@ public class TestInterfaceAction {
 		 	}
 		 */
 		
-		// TODO ¼Ó¹¤ÇëÇó
+		// TODO åŠ å·¥è¯·æ±‚
+		Client client = ClientFactory.getClient(clientName);
 		
-		
-		//  »ñÈ¡¼Ó¹¤ºóµÄ²ÎÊıĞÅÏ¢
+		//  è·å–åŠ å·¥åçš„å‚æ•°ä¿¡æ¯
 		Map<String, Object> params = new HashMap<String, Object>();
 		JSONArray arr = JSONArray.parseArray(paramsInfo);
 		for (int i = 0; i < arr.size(); i++) {
@@ -66,8 +69,9 @@ public class TestInterfaceAction {
 					ValueProcessorUtil.process(obj.getString("value"), obj.getString("processorKeys")));
 		}
 		
-		// TODO ·¢ËÍ×îÖÕÇëÇó, »ñÈ¡ÏìÓ¦½á¹¹
-		String responseText = "";
+		// TODO å‘é€æœ€ç»ˆè¯·æ±‚, è·å–å“åº”ç»“æ„
+		Request req = new Request(false, url, params);
+		String responseText = client.httpRequest(req);
 		
 		result.put("params", params);
 		result.put("result", responseText);

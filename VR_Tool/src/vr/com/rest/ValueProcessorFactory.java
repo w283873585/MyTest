@@ -2,12 +2,12 @@ package vr.com.rest;
 
 public class ValueProcessorFactory {
 	
-	// ¸ù¾İkeyÖµ»ñÈ¡processor
+	// æ ¹æ®keyå€¼è·å–processor
 	public static ValueProcessor getProcessor(String key) {
 		return null;
 	}
 	
-	// ·µ»ØÒÑÓĞµÄkeyµÄÁĞ±í
+	// è¿”å›å·²æœ‰çš„keyçš„åˆ—è¡¨
 	public static String keySet() {
 		return null;
 	}
