@@ -70,7 +70,7 @@
     			} catch (e) {
     				alert("参数错误");
     				isBusy = false;
-    				return;
+    				return; 
     			}
     			$(".result").html("等待中...");
     			$.ajax({
