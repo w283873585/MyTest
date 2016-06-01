@@ -1,7 +1,7 @@
 package vr.com.request;
 
 public abstract class ClientTips implements Client{
-	private Client client = new BaseClient();
+	private Client client = new ClientBase();
 	
 	
 	public String httpRequest(Request request) {

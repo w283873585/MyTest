@@ -58,4 +58,9 @@ public class Client_vrshow extends ClientTips {
 		
 	}
 
+	@Override
+	public String getName() {
+		return "vrshow";
+	}
+
 }

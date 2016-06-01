@@ -45,4 +45,9 @@ public class Client_vrdev extends ClientTips {
 			}
 		};
 	}
+
+	@Override
+	public String getName() {
+		return "vrdev";
+	}
 }
