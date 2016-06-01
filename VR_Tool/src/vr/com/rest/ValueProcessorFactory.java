@@ -11,7 +11,9 @@ public class ValueProcessorFactory extends Factory<ValueProcessor> {
 	static {
 		factory.initialize(new DevRsaEncodeProcessor(),
 				new RsaEncodeProcessor(), 
-				new UrlEncodeProcessor());
+				new UrlEncodeProcessor(),
+				new DesEncodeProcessor(),
+				new MD5Processor());
 	}
 	
 	public static ValueProcessor getProcessor(String name) {
