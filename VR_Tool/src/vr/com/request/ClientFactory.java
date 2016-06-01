@@ -8,12 +8,13 @@ public class ClientFactory {
 	private static Map<String, Client> clients = new HashMap<String, Client>();
 	
 	static {
-		Client clientBase = new ClientBase();
-		Client client_dev = new Client_vrdev();
-		Client client_vrshow = new Client_vrshow();
-		clients.put(clientBase.getName(), clientBase);
-		clients.put(client_dev.getName(), client_dev);
-		clients.put(client_vrshow.getName(), client_vrshow);
+		register(new ClientBase());
+		register(new Client_vrdev());
+		register(new Client_vrshow());
+	}
+	
+	private static void register(Client client) {
+		clients.put(client.getName(), client);
 	}
 	
 	public static Client getClient(String name) {

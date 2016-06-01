@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSON;
 
 import vr.com.util.VR_MD5Util;
 
-public class Client_vrdev extends ClientTips {
+public class Client_vrdev extends ClientWithProcessor {
 	private String authMd5 = "";
 	private String clientType = "";
 	private String ipAddress = "192.168.200.74";

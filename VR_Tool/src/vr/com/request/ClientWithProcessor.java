@@ -1,6 +1,6 @@
 package vr.com.request;
 
-public abstract class ClientTips implements Client{
+public abstract class ClientWithProcessor implements Client{
 	private Client client = new ClientBase();
 	
 	

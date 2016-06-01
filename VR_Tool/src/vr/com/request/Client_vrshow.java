@@ -8,7 +8,7 @@ import com.vr.show.client.common.VR_ParamsRSAUtils;
 
 import vr.com.util.VR_MD5Util;
 
-public class Client_vrshow extends ClientTips {
+public class Client_vrshow extends ClientWithProcessor {
 	private String authMd5 = "";
 	private String ipAddress = "";
 	private String browserName = "";
