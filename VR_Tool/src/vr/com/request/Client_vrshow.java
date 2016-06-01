@@ -4,19 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
-import com.vr.show.client.common.VR_ParamsRSAUtils;
 
 import vr.com.util.VR_MD5Util;
+import vr.com.util.VR_RSACoder;
+import vr.com.util.rsa.RSA_vrshow;
 
 public class Client_vrshow extends ClientWithProcessor {
-	private String authMd5 = "";
-	private String ipAddress = "";
-	private String browserName = "";
+	private String authMd5 = "92A864886F70D010101050101010500048202613082025D02010002818";
+	private String ipAddress = "127.0.0.1";
+	private String browserName = "chorme";
 	@SuppressWarnings("unused")
 	private String cookieName = "VR_SHOW_CLIENT_EQU_" + browserName;
-	private String cookieValue = "";
-	private String version = "";
-	private String clientType = "";
+	private String cookieValue = "12345678910111213141516171819202";
+	private String version = "1.0";
+	private String clientType = "1";
 	
 	@Override
 	public RequestProcessor getRequestProcessor() {
@@ -42,7 +43,7 @@ public class Client_vrshow extends ClientWithProcessor {
 
 				// 身份标识
 				String identificationCode = cookieValue + "_" + browserName;
-				identificationCode = VR_ParamsRSAUtils.encryptParamsRsa(identificationCode);
+				identificationCode = RSA_vrshow.encrypt(identificationCode);
 
 				params.put("jsonData", jsonData);
 				params.put("ipAddr", ipAddress);

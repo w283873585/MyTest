@@ -17,7 +17,6 @@ import vr.com.request.Client;
 import vr.com.request.ClientFactory;
 import vr.com.request.Request;
 import vr.com.rest.ValueProcessorUtil;
-import vr.com.util.ClientUtil;
 
 @Controller
 @RequestMapping("/my")
@@ -25,7 +24,7 @@ public class TestInterfaceAction {
 	
 	@RequestMapping("/testRest")
 	public String toTestRest(HttpServletRequest request, HttpServletResponse response) {
-		request.setAttribute("params", ClientUtil.getParamInfo());
+		// request.setAttribute("params", ClientUtil.getParamInfo());
 		return "zTestRest";
 	}
 	

@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
-import com.vr.show.client.common.VR_ParamsRSAUtils;
+
+import vr.com.util.rsa.RSA_vrshow;
 
 /**
  * 一个生成接口参数的工具类
@@ -35,7 +36,7 @@ public class ParamsMapUtil {
 					val = URLEncoder.encode(val.toString(), CHARSETUTF8);
 				}
 				if (needEncrypt) {
-					val = VR_ParamsRSAUtils.encryptParamsRsa(val.toString());
+					val = RSA_vrshow.encrypt(val.toString());
 				}
 			}
 			put(key, val);

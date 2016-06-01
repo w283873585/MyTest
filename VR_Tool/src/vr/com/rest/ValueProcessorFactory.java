@@ -1,14 +1,24 @@
 package vr.com.rest;
 
-public class ValueProcessorFactory {
+import java.util.Set;
+
+import vr.com.kernel.Factory;
+
+public class ValueProcessorFactory extends Factory<ValueProcessor> {
 	
-	// 根据key值获取processor
-	public static ValueProcessor getProcessor(String key) {
-		return null;
+	private static ValueProcessorFactory factory = new ValueProcessorFactory();
+	
+	static {
+		factory.initialize(new DevRsaEncodeProcessor(),
+				new RsaEncodeProcessor(), 
+				new UrlEncodeProcessor());
 	}
 	
-	// 返回已有的key的列表
-	public static String keySet() {
-		return null;
+	public static ValueProcessor getProcessor(String name) {
+		return factory.get(name);
+	}
+	
+	public static Set<String> keySet() {
+		return factory.keyset();
 	}
 }

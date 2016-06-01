@@ -1,27 +1,24 @@
 package vr.com.request;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
-public class ClientFactory {
-	private static Map<String, Client> clients = new HashMap<String, Client>();
+import vr.com.kernel.Factory;
+
+public class ClientFactory extends Factory<Client>{
+	
+	private static ClientFactory factory = new ClientFactory();
 	
 	static {
-		register(new ClientBase());
-		register(new Client_vrdev());
-		register(new Client_vrshow());
-	}
-	
-	private static void register(Client client) {
-		clients.put(client.getName(), client);
+		factory.initialize(new ClientBase(),
+				new Client_vrdev(), 
+				new Client_vrshow());
 	}
 	
 	public static Client getClient(String name) {
-		return null;
+		return factory.get(name);
 	}
 	
 	public static Set<String> keySet() {
-		return clients.keySet();
+		return factory.keyset();
 	}
 }

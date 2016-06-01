@@ -1,6 +1,8 @@
 package vr.com.rest;
 
-public interface ValueProcessor {
+import vr.com.kernel.Denominative;
+
+public interface ValueProcessor extends Denominative{
 	
 	/**
 	 * 加工字符

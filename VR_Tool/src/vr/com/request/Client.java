@@ -1,7 +1,8 @@
 package vr.com.request;
 
-public interface Client {
-	public String getName();
+import vr.com.kernel.Denominative;
+
+public interface Client extends Denominative{
 	
 	public String httpRequest(Request req);
 }

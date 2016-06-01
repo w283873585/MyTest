@@ -8,9 +8,9 @@ import com.alibaba.fastjson.JSON;
 import vr.com.util.VR_MD5Util;
 
 public class Client_vrdev extends ClientWithProcessor {
-	private String authMd5 = "";
-	private String clientType = "";
-	private String ipAddress = "192.168.200.74";
+	private String authMd5 = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC9QQzNcUrWngZJwNXGwE0EyQVIVqHAMgsqro6yRFD2zbvx34Rvb6XjFjEqqDEB0D2hJOoe9ezHbGMlhqdtoIrQCr13rnEqJ11HIvuaD4SW6Sos2JnWnFZNR3XJqYZIF2Hv3+hq8LSFyednpMMq3gDzW4VfKuZ0+hBFSoAoeJewIDAQAB";
+	private String clientType = "1";
+	private String ipAddress = "127.0.0.1";
 	
 	@Override
 	public RequestProcessor getRequestProcessor() {

@@ -37,6 +37,5 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-core-asl-1.9.13.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-databind-2.5.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-mapper-asl-1.9.13.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/client.jar" sourcepath="/client"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
