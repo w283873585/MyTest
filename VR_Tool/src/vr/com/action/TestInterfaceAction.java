@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import vr.com.request.Client;
 import vr.com.request.ClientFactory;
 import vr.com.request.Request;
+import vr.com.rest.ValueProcessorFactory;
 import vr.com.rest.ValueProcessorUtil;
 
 @Controller
@@ -24,7 +25,8 @@ public class TestInterfaceAction {
 	
 	@RequestMapping("/testRest")
 	public String toTestRest(HttpServletRequest request, HttpServletResponse response) {
-		// request.setAttribute("params", ClientUtil.getParamInfo());
+		request.setAttribute("clients", ClientFactory.keySet());
+		request.setAttribute("processors", ValueProcessorFactory.keySet());
 		return "zTestRest";
 	}
 	
@@ -35,6 +37,8 @@ public class TestInterfaceAction {
 			String clientName,
 			String url, 
 			String paramsInfo) {
+		
+		JSONObject result = new JSONObject();
 		/**
 		paramsInfo : [{
 			key: ""
@@ -42,7 +46,26 @@ public class TestInterfaceAction {
 			processorKeys: "a,b,c"
 		}]
 		*/
-		JSONObject result = new JSONObject();
+		//  获取加工后的参数信息
+		Map<String, Object> params = new HashMap<String, Object>();
+		JSONArray arr = JSONArray.parseArray(paramsInfo);
+		for (int i = 0; i < arr.size(); i++) {
+			JSONObject obj = arr.getJSONObject(i);
+			params.put(obj.getString("key"), 
+					ValueProcessorUtil.process(obj.getString("value"), obj.getString("processorKeys")));
+		}
+		
+		// 获取客户端
+		Client client = ClientFactory.getClient(clientName);
+		
+		// 发送最终请求, 获取响应结构
+		Request req = new Request(false, url, params);
+		String responseText = client.httpRequest(req);
+		
+		// 保存参数与响应结果
+		result.put("params", params);
+		result.put("result", responseText);
+		
 		
 		// TODO record the history of request
 		/**
@@ -54,27 +77,7 @@ public class TestInterfaceAction {
 		 		params: "",
 		 		result: ""
 		 	}
-		 */
-		
-		// TODO 加工请求
-		Client client = ClientFactory.getClient(clientName);
-		
-		//  获取加工后的参数信息
-		Map<String, Object> params = new HashMap<String, Object>();
-		JSONArray arr = JSONArray.parseArray(paramsInfo);
-		for (int i = 0; i < arr.size(); i++) {
-			JSONObject obj = arr.getJSONObject(i);
-			params.put(obj.getString("key"), 
-					ValueProcessorUtil.process(obj.getString("value"), obj.getString("processorKeys")));
-		}
-		
-		// TODO 发送最终请求, 获取响应结构
-		Request req = new Request(false, url, params);
-		String responseText = client.httpRequest(req);
-		
-		result.put("params", params);
-		result.put("result", responseText);
-		
+		*/
 		return result.toJSONString();
 	}
 }
