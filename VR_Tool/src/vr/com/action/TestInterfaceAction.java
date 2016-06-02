@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -25,8 +26,8 @@ public class TestInterfaceAction {
 	
 	@RequestMapping("/testRest")
 	public String toTestRest(HttpServletRequest request, HttpServletResponse response) {
-		request.setAttribute("clients", ClientFactory.keySet());
-		request.setAttribute("processors", ValueProcessorFactory.keySet());
+		request.setAttribute("clients", JSON.toJSONString(ClientFactory.keySet()));
+		request.setAttribute("processors", JSON.toJSONString(ValueProcessorFactory.keySet()));
 		return "zTestRest";
 	}
 	
