@@ -1,4 +1,4 @@
-package vr.com.rest;
+package vr.com.processor;
 
 import vr.com.kernel.Denominative;
 

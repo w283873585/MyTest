@@ -1,4 +1,4 @@
-package vr.com.rest;
+package vr.com.processor;
 
 public class ValueProcessorUtil {
 	
