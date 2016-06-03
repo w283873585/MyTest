@@ -156,7 +156,7 @@ $(function() {
 				isBusy = false;
 			},
 			error: function(a, b, c, d) {
-				$(".result").html("ajax请求出现了一点小错误。。。<br/>" + a + b + c + d);
+				$(".result").html("ajax请求出现了一点小错误。。。<br/>" + JSON.stringify(a) + b + c + d);
 				isBusy = false;
 			}
 		});
