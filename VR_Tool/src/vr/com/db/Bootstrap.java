@@ -9,7 +9,7 @@ public class Bootstrap{
 	
 	public static void main(String[] args) throws Exception {
 		System.setProperty("file.encoding", "utf-8");  
-		int port = args.length > 1 ? Integer.parseInt(args[1]) : 8989;
+		int port = args.length > 0 ? Integer.parseInt(args[0]) : 8888;
 		Server server = new Server(port);
 		server.setAttribute("CharacterEncoding", "utf-8");
 		WebAppContext webAppContext = new WebAppContext("WebRoot", "/");

@@ -19,6 +19,7 @@ import vr.com.processor.ValueProcessorUtil;
 import vr.com.request.Client;
 import vr.com.request.ClientFactory;
 import vr.com.request.Request;
+import vr.com.util.CacheUtil;
 
 @Controller
 @RequestMapping("/my")
@@ -67,18 +68,25 @@ public class TestInterfaceAction {
 		result.put("params", JSON.toJSONString(params));
 		result.put("result", responseText);
 		
-		
-		// TODO record the history of request
 		/**
-		 	{
-		 		url: "",
-		 		requestProcessor: "",
-		 		paramsInfo: "",
-		 		
-		 		params: "",
-		 		result: ""
-		 	}
+	 	record : {
+	 		url: "",
+	 		clientName: ""
+	 		paramsInfo: "",
+	 		
+	 		params: "",
+	 		result: ""
+	 	}
 		*/
+		// record the history of request
+		Map<String, Object> record = new HashMap<String, Object>();
+		record.put("url", url);
+		record.put("clientName", clientName);
+		record.put("paramsInfo", paramsInfo);
+		record.put("params", params);
+		record.put("result", JSON.parse(responseText));
+		CacheUtil.add(JSON.toJSONString(record));
+		
 		return result;
 	}
 }

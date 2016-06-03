@@ -34,7 +34,7 @@ public class PersistUtil {
 		persist("commandCache.properties", key, val);
 	}
 	
-	public static void cacheInterfaceInfo(String key, String val){
-		persist("service_params.properties", key, val);
+	public static void cacheRequest(String key, String val){
+		persist("request_cache.properties", key, val);
 	}
 }
