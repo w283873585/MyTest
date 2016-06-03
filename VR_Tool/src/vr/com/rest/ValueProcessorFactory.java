@@ -13,7 +13,8 @@ public class ValueProcessorFactory extends Factory<ValueProcessor> {
 				new RsaEncodeProcessor(), 
 				new UrlEncodeProcessor(),
 				new DesEncodeProcessor(),
-				new MD5Processor());
+				new MD5Processor(),
+				new JsonProcessor());
 	}
 	
 	public static ValueProcessor getProcessor(String name) {

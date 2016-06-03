@@ -9,5 +9,5 @@ public interface ValueProcessor extends Denominative{
 	 * @param value
 	 * @return
 	 */
-	public String process(String value);
+	public Object process(String value);
 }
