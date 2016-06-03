@@ -34,7 +34,7 @@ public class TestInterfaceAction {
 
 	@RequestMapping(value="/send", produces = "text/html;charset=utf-8")
 	@ResponseBody
-	public String send(HttpServletRequest request, HttpServletResponse response,
+	public Object send(HttpServletRequest request, HttpServletResponse response,
 			String clientName,
 			String url, 
 			String paramsInfo) {
@@ -64,7 +64,7 @@ public class TestInterfaceAction {
 		String responseText = client.httpRequest(req);
 		
 		// 保存参数与响应结果
-		result.put("params", params);
+		result.put("params", JSON.toJSONString(params));
 		result.put("result", responseText);
 		
 		
@@ -79,6 +79,6 @@ public class TestInterfaceAction {
 		 		result: ""
 		 	}
 		*/
-		return result.toJSONString();
+		return result;
 	}
 }

@@ -146,7 +146,6 @@ $(function() {
 			data: data,
 			success: function(res) {
 				res = $.parseJSON(res);
-				res = $.parseJSON(res);
 				$(".result").html("");
 				$(".params").html("");
 				$(".result").html(res.result);
