@@ -39,6 +39,8 @@
 				border-radius: 4px;
 				padding: 0 10px;
 				position: relative;
+				font-size: 5px;
+    			width: 80px;
 			}
 			.processor ._close {
 				position: absolute;
@@ -48,6 +50,7 @@
 				line-height: 7px;
 				color: black;
 				font-size: 10px;
+				
 			}
     	</style>
     </head>
