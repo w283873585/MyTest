@@ -7,7 +7,7 @@ import java.nio.channels.FileChannel;
 
 public class PersistUtil {
 	private static final String CHARSET = "UTF-8";
-	private static final String TARGETDIR = "E:/xnxs/VR_Tool/config/";
+	private static final String TARGETDIR = "C:/Users/xnxs/git/MyTest/VR_Tool/config/";
 	
 	private static void persist(String filename, String key, String val){
 		FileOutputStream fos = null;
