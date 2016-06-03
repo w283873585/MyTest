@@ -11,7 +11,7 @@ public class Request {
 	private String charset = "utf-8";
 	private String requestUrl;
 	private boolean isGet;
-	private boolean isJsonBody = true;
+	private boolean isJsonBody = false;
 	private Map<String, String> header;
 	private Map<String, Object> params;
 	
@@ -49,8 +49,9 @@ public class Request {
 		this.header = new HashMap<String, String>();
 	}
 	
-	
-	
+	public void setJsonBody(boolean isJsonBody) {
+		this.isJsonBody = isJsonBody;
+	}
 	
 	public Map<String, Object> getParams() {
 		return params;
@@ -97,7 +98,7 @@ public class Request {
 	}
 	
 	private byte[] mapToByteData(Map<String, Object> params) {
-		if (params == null) {
+		if (params == null || params.size() == 0) {
 			return null;
 		}
 		try {

@@ -9,9 +9,9 @@ public class ClientFactory extends Factory<Client>{
 	private static ClientFactory factory = new ClientFactory();
 	
 	static {
-		factory.initialize(new ClientBase(),
+		factory.initialize(new Client_vrshow(),
 				new Client_vrdev(), 
-				new Client_vrshow());
+				new ClientBase());
 	}
 	
 	public static Client getClient(String name) {

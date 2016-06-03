@@ -146,7 +146,9 @@ $(function() {
 			data: data,
 			success: function(res) {
 				res = $.parseJSON(res);
+				res = $.parseJSON(res);
 				$(".result").html("");
+				$(".params").html("");
 				$(".result").html(res.result);
 				$(".params").html(res.params);
 				isBusy = false;
@@ -300,7 +302,7 @@ $(function() {
    	
    	function renderClients() {
 	   	var clientsHtml = "";
-	   	for (var i = 0; i < clients.length; i++) {
+	   	for (var i = clients.length - 1; i >= 0; i--) {
 	   		clientsHtml += "<option value='" + clients[i] + "'>" + clients[i] + "</option>";
 	   	}
 	   	$("#clients").html(clientsHtml);

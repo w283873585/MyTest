@@ -32,7 +32,7 @@ public class TestInterfaceAction {
 	}
 	
 
-	@RequestMapping(value="/send",  produces = "text/html;charset=utf-8")
+	@RequestMapping(value="/send", produces = "text/html;charset=utf-8")
 	@ResponseBody
 	public String send(HttpServletRequest request, HttpServletResponse response,
 			String clientName,

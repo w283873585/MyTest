@@ -11,7 +11,7 @@ import vr.com.util.rsa.RSA_vrshow;
 public class Client_vrshow extends ClientWithProcessor {
 	private String authMd5 = "92A864886F70D010101050101010500048202613082025D02010002818";
 	private String ipAddress = "127.0.0.1";
-	private String browserName = "chorme";
+	private String browserName = "webkit";
 	@SuppressWarnings("unused")
 	private String cookieName = "VR_SHOW_CLIENT_EQU_" + browserName;
 	private String cookieValue = "12345678910111213141516171819202";
