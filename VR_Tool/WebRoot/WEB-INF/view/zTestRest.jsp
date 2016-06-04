@@ -31,6 +31,7 @@
 			.params {
 				border-left-color: #5cb85c;
 				min-height: 80px;
+				word-wrap: break-word;
 			}
 			.processor {
 				height: 32px;

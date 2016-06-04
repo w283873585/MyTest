@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 import vr.com.processor.ValueProcessorFactory;
@@ -88,9 +89,10 @@ public class TestInterfaceAction {
 			record.put("params", params);
 			record.put("result", JSON.parse(responseText));
 			CacheUtil.add(JSON.toJSONString(record));
+		} catch (JSONException e) {
+			System.out.println("记录失败, 响应不是JSON格式");
 		} catch (Exception e) {
-			System.out.println("记录失败");
-			e.printStackTrace();
+			System.out.println("记录失败, 持久化地址错误");
 		}
 		return result;
 	}
