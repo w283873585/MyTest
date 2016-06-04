@@ -46,16 +46,20 @@
 				position: absolute;
 				top: 4px;
 				right : 4px;
-				height: 7px;
+				height: 20px;
 				line-height: 7px;
 				color: black;
 				font-size: 10px;
+				width: 30px;
+				text-align: right;
 				
 			}
     	</style>
     </head>
     <body>
     <div class="container">
+    
+    	<!-- 参数相关 -->
     	<div class="h3">测试参数</div>
     	<div class="highlight">
 	    	<div class="row">
@@ -67,9 +71,9 @@
 				</div>
 				<div class="form-group col-sm-2">
 		    		<select class="form-control" id="serverUrl">
-		    		  <option value="http://192.168.200.148:8080/VR_Service/">default</option>
-					  <option value="http://127.0.0.1:8080/VR_Service/">local</option>
-					  <!-- <option value="http://120.76.79.49:38080/VR_Service/">online</option> -->
+		    		  <option value="http://192.168.200.148:8080">default</option>
+					  <option value="http://127.0.0.1:8080">local</option>
+					  <!-- <option value="http://120.76.79.49:38080">online</option> -->
 					</select>
 				</div>
 	    	</div>
@@ -84,13 +88,33 @@
 				</div>
 	    	</div>
     	</div>
+    	
+    	<!-- 最终请求结果 -->
     	<div class="h3">结果</div>
     		<div class="highlight result">
     	</div>
+    	
+    	<!-- 最终请求参数 -->
     	<div class="h3">参数</div>
     		<div class="highlight params">
     	</div>
+    	
+    	<!-- 历史记录 -->
+    	<div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingOne">
+		      <h4 class="panel-title">
+		        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+		          	历史记录
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+		        <ul class="list-group"></ul>
+		    </div>
+		</div>
     </div>
+    
+    <!-- 高级设置 -->
    	<div class="modal fade" id="myModal">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -121,10 +145,12 @@
 $(function() {
 	var clients = $.parseJSON('${clients}');
    	var processors = $.parseJSON('${processors}');
+   	var cache = $.parseJSON('${cache}');
    	var isBusy = false;
   
    	// init 
    	renderClients();
+   	renderCaches();
    	
 	var manager = paramsManager();
    	manager.init();
@@ -190,10 +216,14 @@ $(function() {
    		
    		// 事件注册
    		// 添加参数行
-   		$("#addParam").click(addParam);
+   		$("#addParam").click(function() {
+   			addParam.call(this);
+   		});
    		
    		// 添加参数处理
-   		$(".highlight").on("click", ".paramBox ul li a", addProcessor);
+   		$(".highlight").on("click", ".paramBox ul li a", function() {
+   			addProcessor.call(this);
+   		});
    		
    		// 删除参数处理
   		$(".highlight").on("click", ".paramBox ._close", removeProcessor);
@@ -201,13 +231,19 @@ $(function() {
    		
    		// 暴漏的接口
    		return {
+   			// 初始化, 即默认添加两个参数
    			init: function() {
    				$(".paramBox").remove();
    				// 默认为两个参数
    		  		addParam();
    		  		addParam();
    			},
-   			getData: getData
+   			
+   			// 获取最终参数string
+   			getData: getData,
+   			
+   			// 批量添加参数, 用来加载历史请求数据
+   			addParams: addParams
    			/**
    	   		paramsInfo : [{
    				key: ""
@@ -217,17 +253,30 @@ $(function() {
    	   		*/
    		};
   		
-  		
-   		function addParam() {
+   		function addParams(paramsInfo) {
+   			// 清空参数信息
+   			$(".paramBox").remove();
+   			
+   			// 渲染参数信息
+   			for (var i = 0; i < paramsInfo.length; i++) {
+   				var id = addParam(paramsInfo[i].key, paramsInfo[i].value);
+   				var processorKeys = paramsInfo[i].processorKeys ? paramsInfo[i].processorKeys.split(",") : [];
+   				for (var j = 0; j < processorKeys.length; j++) {
+   					addProcessor(id, processorKeys[j]);
+   				}
+   			}
+   		}
+   		
+   		function addParam(key, value) {
    			var index = data.push([]) - 1;
    			validIds.push(index);
    			
    			var html = "<div class='row paramBox' value='" + index +"' id='paramBox_" + index + "'>"
 					+ "<div class='form-group col-sm-4'>"
-						+ "<input type='text' class='form-control'  placeholder='参数名'>"
+						+ "<input type='text' class='form-control' value='" + (key || "") + "'  placeholder='参数名'>"
 					+ "</div>"
 					+ "<div class='form-group col-sm-4'>"
-						+ "<input type='text' class='form-control'  placeholder='参数值'>"
+						+ "<input type='text' class='form-control' value='" + (value || "") + "' placeholder='参数值'>"
 					+ "</div>"
 					+ "<div class='form-group col-sm-1'>"
 						+ "<div class='btn-group'>"
@@ -241,12 +290,12 @@ $(function() {
 					+ "</div>"
 				+ "</div>";
    			$("#sendContainer").before(html);
+   			return index;
    		}
    		
-   		function addProcessor() {
-   			var that = $(this);
-   			var id = getParamId(that);
-   			var key = that.attr("value");
+   		function addProcessor(id, key) {
+   			id = id || getParamId($(this));
+   			key = key || $(this).attr("value");
    			data[id].push(key);
    			
    			var proHtml = "<div class='form-group col-sm-1'>"
@@ -264,6 +313,7 @@ $(function() {
    			that.parent().parent().remove();
    		}
    		
+   		// 根据某dom对象, 寻找所属参数对象的Id
    		function getParamId(obj) {
    			return +obj.parents(".paramBox").attr("value");
    		}
@@ -293,6 +343,7 @@ $(function() {
    			return JSON.stringify(result);
    		}
    		
+   		// 根据参数对象ID,获取参数名与参数值
    		function getKeyValue(id) {
    			var arr = $("#paramBox_" + id).find("input[type='text']");
    			return {
@@ -309,6 +360,55 @@ $(function() {
 	   	}
 	   	$("#clients").html(clientsHtml);
    	}
+   	
+   	
+ 	// 渲染历史记录请求
+	function renderCaches() {
+   		var keysMap = {};
+   		var container = $("#collapseOne .list-group");
+   		
+   		// 事件注册
+   		container.on("click", "a", function() {
+   			var id = $(this).attr("value");
+   			var cacheObj = cache[keysMap[id]];
+   			
+   			// 渲染参数信息
+   			manager.addParams(cacheObj.paramsInfo);
+   			
+   			// 设置客户端类型
+   			$("#clients").val(cacheObj.clientName);
+   			
+   			var urlObj = parseUrl(cacheObj.url);
+   			// 设置服务器地址
+   			$("#manualServerUrl").val(urlObj.server);
+   			
+   			// 设置资源地址
+   			$("#resourceUrl").val(urlObj.resource);
+   			
+   			// 设置结果
+   			$(".result").html(JSON.stringify(cacheObj.result));
+			
+   			// 设置参数
+   			$(".params").html(JSON.stringify(cacheObj.params));
+   		});
+   		
+   		// 渲染历史记录
+   		for (var i = 0; i < cache.length; i++) {
+   			var obj = cache[i];
+   			keysMap[obj.id] = i;
+   			var html = "<li class='list-group-item'><a value='" + obj.id +"'>" + obj.url + "</a></li>";
+   			container.append(html);
+   		}
+   	}
+ 	
+ 	// 解析url 分离server与resource
+ 	function parseUrl(url) {
+ 		var result = /^(\w+:\/\/[^:\/]*(?::[0-9]+)?)(\/.*)?$/.exec(url);
+		return {
+			server: result ? result[1] : "",
+			resource: result ? result[2] : ""
+		};
+ 	}
 });
 </script>
 </body>

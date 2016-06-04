@@ -2,6 +2,8 @@ package vr.com.util;
 
 import java.util.Properties;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public class CacheUtil {
@@ -24,7 +26,14 @@ public class CacheUtil {
 		return index;
 	}
 	
-	public static String getJson() {
-		return JSONObject.toJSONString(properties);
+	public static String toJson() {
+		JSONArray arr = new JSONArray();
+		for (Object key : properties.keySet()) {
+			String result = properties.getProperty((String) key);
+			JSONObject obj = JSON.parseObject(result);
+			obj.put("id", key);
+			arr.add(obj);
+		}
+		return arr.toJSONString();
 	}
 }

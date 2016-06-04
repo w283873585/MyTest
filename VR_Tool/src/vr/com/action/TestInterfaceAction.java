@@ -29,6 +29,7 @@ public class TestInterfaceAction {
 	public String toTestRest(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("clients", JSON.toJSONString(ClientFactory.keySet()));
 		request.setAttribute("processors", JSON.toJSONString(ValueProcessorFactory.keySet()));
+		request.setAttribute("cache", CacheUtil.toJson());
 		return "zTestRest";
 	}
 	
@@ -50,9 +51,9 @@ public class TestInterfaceAction {
 		*/
 		//  获取加工后的参数信息
 		Map<String, Object> params = new HashMap<String, Object>();
-		JSONArray arr = JSONArray.parseArray(paramsInfo);
-		for (int i = 0; i < arr.size(); i++) {
-			JSONObject obj = arr.getJSONObject(i);
+		JSONArray paramArr = JSONArray.parseArray(paramsInfo);
+		for (int i = 0; i < paramArr.size(); i++) {
+			JSONObject obj = paramArr.getJSONObject(i);
 			params.put(obj.getString("key"), 
 					ValueProcessorUtil.process(obj.getString("value"), obj.getString("processorKeys")));
 		}
@@ -82,7 +83,7 @@ public class TestInterfaceAction {
 		Map<String, Object> record = new HashMap<String, Object>();
 		record.put("url", url);
 		record.put("clientName", clientName);
-		record.put("paramsInfo", paramsInfo);
+		record.put("paramsInfo", paramArr);
 		record.put("params", params);
 		record.put("result", JSON.parse(responseText));
 		CacheUtil.add(JSON.toJSONString(record));

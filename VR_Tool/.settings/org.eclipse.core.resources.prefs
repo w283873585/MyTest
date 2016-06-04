@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//config/commandCache.properties=UTF-8
+encoding//config/request_cache.properties=UTF-8
 encoding//src/vr/com/processor/ValueProcessor.java=UTF-8
 encoding//src/vr/com/processor/ValueProcessorFactory.java=UTF-8
 encoding/<project>=UTF-8
