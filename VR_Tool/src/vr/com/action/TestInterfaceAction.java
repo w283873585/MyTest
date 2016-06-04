@@ -80,14 +80,18 @@ public class TestInterfaceAction {
 	 	}
 		*/
 		// record the history of request
-		Map<String, Object> record = new HashMap<String, Object>();
-		record.put("url", url);
-		record.put("clientName", clientName);
-		record.put("paramsInfo", paramArr);
-		record.put("params", params);
-		record.put("result", JSON.parse(responseText));
-		CacheUtil.add(JSON.toJSONString(record));
-		
+		try {
+			Map<String, Object> record = new HashMap<String, Object>();
+			record.put("url", url);
+			record.put("clientName", clientName);
+			record.put("paramsInfo", paramArr);
+			record.put("params", params);
+			record.put("result", JSON.parse(responseText));
+			CacheUtil.add(JSON.toJSONString(record));
+		} catch (Exception e) {
+			System.out.println("记录失败");
+			e.printStackTrace();
+		}
 		return result;
 	}
 }
