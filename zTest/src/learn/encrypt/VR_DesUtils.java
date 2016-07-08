@@ -1,4 +1,4 @@
-package work;
+package learn.encrypt;
 
 import java.io.InputStream;
 import java.net.URL;

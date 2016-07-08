@@ -1,4 +1,4 @@
-package work;
+package learn.encrypt;
 
 import java.security.MessageDigest;
 
