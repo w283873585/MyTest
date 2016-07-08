@@ -146,7 +146,11 @@
 $(function() {
 	var clients = $.parseJSON('${clients}');
    	var processors = $.parseJSON('${processors}');
-   	var cache = $.parseJSON('${cache}');
+   	try {
+	   	var cache = $.parseJSON('${cache}');
+   	} catch (e) {
+   		cache = "";
+   	}
    	var isBusy = false;
   
    	// init 
