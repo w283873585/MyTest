@@ -36,4 +36,18 @@ public class CacheUtil {
 		}
 		return arr.toJSONString();
 	}
+	
+	public static void main(String[] args) {
+		/*
+		long r = 0l;
+		for (long i = 1l; i <= 1000000000000l; i++) {
+			r += 1000000000000l % i;
+			if (r > 1000000000000l) {
+				r -= 1000000000000l;
+			}
+		}
+		System.out.println(r);
+		*/
+		System.out.println(9000000000000000000l + 1111111111111111111l);
+	}
 }
