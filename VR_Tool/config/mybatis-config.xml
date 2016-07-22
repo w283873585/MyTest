@@ -11,7 +11,7 @@
         	<transactionManager type="JDBC"/>
             <dataSource type="POOLED">
 	            <property name="driver" value="com.mysql.jdbc.Driver"/>
-	            <property name="url" value="jdbc:mysql://192.168.200.149:3306/vrshow?useUnicode=true&amp;characterEncoding=utf-8" />
+	            <property name="url" value="jdbc:mysql://192.168.200.149:3306/vr_show_test?useUnicode=true&amp;characterEncoding=utf-8" />
 	            <property name="username" value="vrshow_dev"/>
 	            <property name="password" value="vrshow_dev"/>
 	            <property name="poolPingQuery" value="select 1"/>
