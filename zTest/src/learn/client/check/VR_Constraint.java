@@ -10,6 +10,4 @@ import java.lang.annotation.Target;
 public @interface VR_Constraint {
 	
 	public VR_ConstraintEnum[] value();
-	
-	public String[] info();
 }

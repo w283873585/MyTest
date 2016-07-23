@@ -1,39 +1,67 @@
 package learn.client.check;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 public enum VR_ConstraintEnum {
-	Rsa{
+	Rsa("RSA解密失败"){
 		@Override
 		public Result check(Object o) {
-			return failed;
+			if (o.toString().contains("rsa")) {
+				return new Result(true, o.toString() + "rsa");
+			}
+			return getResult(false, info);
 		}
 	}, 
-	NoEmpty{
+	NoEmpty("参数不能为空"){
 		public Result check(Object c) {
-			return failed;
+			boolean success = false;
+			if (c != null) {
+				success = true;
+			}
+			return new Result(success, info);
 		}
 	},
-	number{
+	number("必须为数字"){
 		@Override
 		public Result check(Object o) {
+			boolean success = false;
 			if (o.toString().matches("[0-9]+")) {
-				return success;
-			} 
-			return failed;
+				success = true;
+			}
+			return new Result(success, info);
 		}
 	},
-	length6 {
+	length6("长度必须为6"){
 		@Override
 		public Result check(Object c) {
+			boolean success = false;
 			if (c.toString().length() == 6) {
-				return success;
+				success = true;
 			}
-			return failed;
+			return new Result(success, info);
 		}
 	};
 	
-	// 默认成功结果
-	private static final Result success = new Result(true, null);
-	private static final Result failed = new Result(false, null);
+	VR_ConstraintEnum(String info) {
+		this.info = info;
+	}
+	
+	String info;
+	
+	private static final ConcurrentHashMap<String, Result> pool = 
+			new ConcurrentHashMap<String, VR_ConstraintEnum.Result>();
+	
+	private static Result getResult(boolean success, String info) {
+		String key = success ? "success" : "failed" + info;
+		Result r = pool.get(key);
+		if (r == null) {
+			synchronized (VR_ConstraintEnum.class) {
+				r = new Result(success, info);
+				pool.put(key, r);
+			}
+		}
+		return r;
+	}
 	
 	public abstract Result check(Object c);
 	

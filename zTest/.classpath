@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/qiniu-java-sdk-7.0.8.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/vrshow_common_1.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/fastjson-1.1.37.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
