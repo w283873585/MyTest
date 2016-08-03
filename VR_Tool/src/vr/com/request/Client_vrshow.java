@@ -16,7 +16,7 @@ public class Client_vrshow extends ClientWithProcessor {
 	private String cookieName = "VR_SHOW_CLIENT_EQU_" + browserName;
 	private String cookieValue = "12345678910111213141516171819202";
 	private String version = "1.0";
-	private String clientType = "1";
+	private String clientType = "6";
 	
 	@Override
 	public RequestProcessor getRequestProcessor() {
