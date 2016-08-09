@@ -23,7 +23,6 @@ public class Metro {
 		return true;
 	}
 	
-	
 	public enum MetroStatus{
 		getIn,
 		getOut,

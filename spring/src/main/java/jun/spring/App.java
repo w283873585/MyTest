@@ -7,9 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  */
 public class App {
-    public static void main( String[] args )
-    {
-        System.out.println(App.class.getClassLoader().getResource("").getPath());
+    public static void main( String[] args ) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
     	Metro m = context.getBean(Metro.class);
         
