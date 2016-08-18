@@ -4,5 +4,7 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="metro" class="jun.spring.Metro"></bean>
+    <bean id="metro" class="jun.spring.Metro">
+    	<constructor-arg name="name" value="metro"></constructor-arg>
+    </bean>
 </beans>
