@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+    <!-- 通过id和email和mobile获取user -->
+    <select id="getUser" resultType="map">
+    	select * from user_info_tb
+    	<where>
+    		<if test="user_id!=null">
+    			user_id = #{user_id}
+    		</if>
+    		<if test="user_email!=null">
+    			user_email = #{user_email}
+    		</if>
+    		<if test="user_mobile!=null">
+    			user_mobile = #{user_mobile}
+    		</if>
+    	</where>
+    </select>
+    <!-- 假删除，其实是将旧的email或者mobile换成新的 -->
+    <update id="delUser" parameterType="map">
+    	update user_info_tb 
+    	<set>
+    		<if test="user_email!=null">
+    			user_email = #{newEmail}
+	    	</if>
+	    	<if test="user_mobile!=null">
+	    		user_mobile = #{newMobile}
+	    	</if>
+    	</set>
+    	<where>
+	    	<if test="user_email!=null">
+	    		user_email = #{user_email}
+	    	</if>
+	    	<if test="user_mobile!=null">
+	    		user_mobile = #{user_mobile}
+	    	</if>
+	    	<if test="user_id!=null">
+	    		user_id = #{user_id}
+	    	</if>
+    	</where>
+    	<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE">  
+    		select user_id from user_info_tb 
+    		<where>
+		    	<if test="user_email!=null">
+		    		user_email = #{user_email}
+		    	</if>
+		    	<if test="user_mobile!=null">
+		    		user_mobile = #{user_mobile}
+		    	</if>
+    		</where> 
+	    </selectKey>
+    </update>
+</mapper>
