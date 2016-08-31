@@ -15,11 +15,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
-import vr.com.processor.ValueProcessorFactory;
-import vr.com.processor.ValueProcessorUtil;
-import vr.com.request.Client;
-import vr.com.request.ClientFactory;
-import vr.com.request.Request;
+import vr.com.kernel.processor.ValueProcessorFactory;
+import vr.com.kernel.processor.ValueProcessorUtil;
+import vr.com.kernel.request.Client;
+import vr.com.kernel.request.ClientFactory;
+import vr.com.kernel.request.Request;
 import vr.com.util.CacheUtil;
 
 @Controller

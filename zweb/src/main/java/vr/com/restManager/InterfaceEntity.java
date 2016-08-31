@@ -2,7 +2,7 @@ package vr.com.restManager;
 
 import java.util.List;
 
-import vr.com.request.Client;
+import vr.com.kernel.request.Client;
 
 public class InterfaceEntity {
 	private String url;

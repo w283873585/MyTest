@@ -2,7 +2,7 @@ package vr.com.restManager;
 
 import java.util.List;
 
-import vr.com.processor.ValueProcessor;
+import vr.com.kernel.processor.ValueProcessor;
 
 public class InterfaceParam {
 	private String name;
