@@ -1,15 +1,14 @@
 package vr.com.data;
 
-import com.alibaba.fastjson.JSONObject;
-
 public interface DataProvider {
 	
-	public String get(String key);
+	DataProvider addCondition(Condition c);
 	
-	public JSONObject getJson(String key);
+	DataProvider addFilter(Filter f);
 	
-	public <T> T getBean(String key);
+	DataProvider addEntity(String entity);
 	
+	String invoke(Command command);
 	
 	/**
 	 * 	接口

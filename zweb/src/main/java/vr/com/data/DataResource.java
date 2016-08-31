@@ -1,6 +1,8 @@
 package vr.com.data;
 
-public interface DataResource {
+import java.io.Closeable;
+
+public interface DataResource extends Closeable{
 	
 	void initialize();
 	
