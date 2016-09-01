@@ -38,6 +38,10 @@ public class Condition extends HashMap<String, Object>{
 	/**
 	 *  logic operation
 	 */
+	public Condition and(String key, Object val) {
+		return and(key, val, null);
+	}
+	
 	public Condition and(String key, Object val, ConditionType t) {
 		this.put(key, t == null ? val : build(t.value(), val));
 		return this;
@@ -48,10 +52,20 @@ public class Condition extends HashMap<String, Object>{
 		return this;
 	}
 	
+	public Condition or(String key, Object val) {
+		return or(key, val, null);
+	}
+	
 	public Condition or(String key, Object val, ConditionType t) {
 		Condition c = new Condition();
 		c.put(OR, Arrays.asList(this, Condition.build(key, val, t)));
 		return c;
+	}
+	
+	public Condition or(Condition c) {
+		Condition r = new Condition();
+		r.put(OR, Arrays.asList(this, c));
+		return r;
 	}
 	
 	/**
