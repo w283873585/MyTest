@@ -3,6 +3,10 @@ package vr.com.data.mongo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.Document;
+
+import com.mongodb.client.MongoCollection;
+
 import vr.com.data.Command;
 import vr.com.data.Condition;
 import vr.com.data.DataProvider;
@@ -10,11 +14,17 @@ import vr.com.data.Filter;
 
 public class MongoDataProvider implements DataProvider{
 
+	private MongoCollection<Document> db = null;
+	
 	private List<Condition> conditions = new ArrayList<Condition>();
 	
 	private List<Filter> filters = new ArrayList<Filter>();
 	
-	private List<String> entitys = new ArrayList<String>();
+	private List<Object> entitys = new ArrayList<Object>();
+	
+	public MongoDataProvider(MongoCollection<Document> db) {
+		this.db = db;
+	}
 	
 	@Override
 	public DataProvider addCondition(Condition condition) {
@@ -29,7 +39,7 @@ public class MongoDataProvider implements DataProvider{
 	}
 	
 	@Override
-	public DataProvider addEntity(String entity) {
+	public DataProvider addEntity(Object entity) {
 		entitys.add(entity);
 		return this;
 	}
@@ -37,5 +47,25 @@ public class MongoDataProvider implements DataProvider{
 	@Override
 	public String invoke(Command command) {
 		return command.exec(this);
+	}
+	
+	public MongoCollection<Document> getDb() {
+		return db;
+	}
+
+	public Condition getConditions() {
+		Condition c = null;
+		for (Condition d : conditions) {
+			c = c == null ? d : c.and(d);
+		}
+		return c;
+	}
+	
+	public List<Filter> getFilters() {
+		return filters;
+	}
+
+	public List<Object> getEntitys() {
+		return entitys;
 	}
 }

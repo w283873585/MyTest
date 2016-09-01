@@ -6,7 +6,7 @@ public interface DataProvider {
 	
 	DataProvider addFilter(Filter f);
 	
-	DataProvider addEntity(String entity);
+	DataProvider addEntity(Object o);
 	
 	String invoke(Command command);
 	

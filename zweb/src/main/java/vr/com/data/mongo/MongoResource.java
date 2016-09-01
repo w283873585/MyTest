@@ -25,8 +25,7 @@ public class MongoResource implements DataResource{
 	@Override
 	public DataProvider getProvider(String name) {
 		MongoCollection<Document> c = db.getCollection(name);
-		c.count();
-		return null;
+		return new MongoDataProvider(c);
 	}
 
 	@Override
