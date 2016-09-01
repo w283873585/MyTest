@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 
 import vr.com.data.Command;
 import vr.com.data.Condition;
@@ -22,7 +23,7 @@ public enum MongoDbCommand implements Command{
 			FindIterable<Document> it = db.find(condition.toBson());
 			List<Document> result = new ArrayList<Document>();
 			it.<List<Document>> into(result);
-			return JSONObject.toJSONString(result);
+			return result.toString();
 		}
 	}), 
 	
@@ -31,7 +32,7 @@ public enum MongoDbCommand implements Command{
 			MongoCollection<Document> db = provider.getDb();
 			Condition condition = provider.getConditions();
 			FindIterable<Document> it = db.find(condition.toBson());
-			return JSONObject.toJSONString(it.first());
+			return it.first() == null ? null : it.first().toJson();
 		}
 	}), 
 	
@@ -48,7 +49,8 @@ public enum MongoDbCommand implements Command{
 		public String exec(MongoDataProvider provider) {
 			MongoCollection<Document> db = provider.getDb();
 			Condition condition = provider.getConditions();
-			return db.updateOne(condition.toBson(), (Document) provider.getEntitys()).toString();
+			UpdateResult result = db.updateOne(condition.toBson(), (Document) provider.getEntitys());
+			return result.toString();
 		}
 	}),
 	
@@ -56,7 +58,8 @@ public enum MongoDbCommand implements Command{
 		public String exec(MongoDataProvider provider) {
 			MongoCollection<Document> db = provider.getDb();
 			Condition condition = provider.getConditions();
-			return db.updateMany(condition.toBson(), (Document) provider.getEntitys()).toString();
+			UpdateResult result = db.updateMany(condition.toBson(), (Document) provider.getEntitys());
+			return result.toString();
 		}
 	}),
 	
@@ -65,7 +68,7 @@ public enum MongoDbCommand implements Command{
 			MongoCollection<Document> db = provider.getDb();
 			Condition condition = provider.getConditions();
 			DeleteResult result = db.deleteOne(condition.toBson());
-			return JSONObject.toJSONString(result);
+			return result.toString();
 		}
 	}),
 	
@@ -74,7 +77,7 @@ public enum MongoDbCommand implements Command{
 			MongoCollection<Document> db = provider.getDb();
 			Condition condition = provider.getConditions();
 			DeleteResult result = db.deleteMany(condition.toBson());
-			return JSONObject.toJSONString(result);
+			return result.toString();
 		}
 	});
 
