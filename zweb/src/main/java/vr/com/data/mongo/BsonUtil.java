@@ -20,35 +20,36 @@ public class BsonUtil {
 		JSONObject body = new JSONObject();
 		
 		try {
-			Stack<String> keyQueue = new Stack<String>();
-			Stack<Field> fieldQueue = new Stack<Field>();
-			Deque<Object> objDeque = new LinkedList<Object>();
+			Stack<String> keyStack = new Stack<String>();
+			Stack<Field> fieldStack = new Stack<Field>();
+			Deque<Object> valueDeque = new LinkedList<Object>();
 			
-			objDeque.add(obj);
-			fieldQueue.addAll(getFieldList(obj));
+			valueDeque.add(obj);
+			fieldStack.addAll(getFieldList(obj));
 			
-			while (!fieldQueue.isEmpty()) {
-				Field curField = fieldQueue.pop();
+			while (!fieldStack.isEmpty()) {
+				Field curField = fieldStack.pop();
 				if (curField == null) {
-					objDeque.removeLast();
-					keyQueue.pop();
+					valueDeque.removeLast();
+					keyStack.pop();
 					continue;
 				}
 				
 				curField.setAccessible(true);
-				keyQueue.add(curField.getName());
+				keyStack.add(curField.getName());
 				boolean isPojo = curField.getType().getAnnotation(Pojo.class) != null;
 				
 				if (!isPojo) {
-					String key = keyQueue.pop();
-					for (int i = keyQueue.size() - 1; i >= 0; i--)
-						key = keyQueue.get(i) + "." + key;
-					body.put(key, curField.get(objDeque.getLast()));
+					String key = keyStack.pop();
+					for (int i = keyStack.size() - 1; i >= 0; i--)
+						key = keyStack.get(i) + "." + key;
+					body.put(key, curField.get(valueDeque.getLast()));
 				} else {
-					Object childObj = curField.get(objDeque.getLast());
-					objDeque.addLast(childObj);
-					fieldQueue.add(null);
-					fieldQueue.addAll(getFieldList(childObj));
+					Object childObj = curField.get(valueDeque.getLast());
+					valueDeque.addLast(childObj);
+					// add a null as a separator
+					fieldStack.add(null);
+					fieldStack.addAll(getFieldList(childObj));
 				}
 			}
 		} catch (Exception e) {}
