@@ -53,7 +53,7 @@ public class MongoDataProvider implements DataProvider{
 		return db;
 	}
 
-	public Condition getConditions() {
+	public Condition getCondition() {
 		Condition c = null;
 		for (Condition d : conditions) {
 			c = c == null ? d : c.and(d);

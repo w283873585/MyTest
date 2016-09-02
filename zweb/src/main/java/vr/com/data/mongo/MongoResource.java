@@ -11,11 +11,13 @@ import com.mongodb.client.MongoDatabase;
 import vr.com.data.DataProvider;
 import vr.com.data.DataResource;
 
-public class MongoResource implements DataResource{
+public enum MongoResource implements DataResource{
+	
+	Instance;
 	
 	private MongoDatabase db = null;
 	private MongoClient mongoClient = null;
-	boolean initialize = false;
+	private boolean initialize = false;
 	
 	@Override
 	public void initialize() {

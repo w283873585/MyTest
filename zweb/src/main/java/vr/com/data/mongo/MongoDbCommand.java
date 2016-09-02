@@ -19,7 +19,7 @@ public enum MongoDbCommand implements Command{
 	select(new Consumer() {
 		public String exec(MongoDataProvider provider) {
 			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getConditions();
+			Condition condition = provider.getCondition();
 			FindIterable<Document> it = db.find(condition.toBson());
 			List<Document> result = new ArrayList<Document>();
 			it.<List<Document>> into(result);
@@ -30,7 +30,7 @@ public enum MongoDbCommand implements Command{
 	selectOne(new Consumer() {
 		public String exec(MongoDataProvider provider) {
 			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getConditions();
+			Condition condition = provider.getCondition();
 			FindIterable<Document> it = db.find(condition.toBson());
 			return it.first() == null ? null : it.first().toJson();
 		}
@@ -48,8 +48,9 @@ public enum MongoDbCommand implements Command{
 	updateOne(new Consumer() {
 		public String exec(MongoDataProvider provider) {
 			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getConditions();
-			UpdateResult result = db.updateOne(condition.toBson(), (Document) provider.getEntitys());
+			Condition condition = provider.getCondition();
+			UpdateResult result = db.updateOne(condition.toBson(), 
+					(Document) provider.getEntitys());
 			return result.toString();
 		}
 	}),
@@ -57,8 +58,9 @@ public enum MongoDbCommand implements Command{
 	updateMany(new Consumer() {
 		public String exec(MongoDataProvider provider) {
 			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getConditions();
-			UpdateResult result = db.updateMany(condition.toBson(), (Document) provider.getEntitys());
+			Condition condition = provider.getCondition();
+			UpdateResult result = db.updateMany(condition.toBson(), 
+					(Document) provider.getEntitys());
 			return result.toString();
 		}
 	}),
@@ -66,7 +68,7 @@ public enum MongoDbCommand implements Command{
 	deleteOne(new Consumer() {
 		public String exec(MongoDataProvider provider) {
 			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getConditions();
+			Condition condition = provider.getCondition();
 			DeleteResult result = db.deleteOne(condition.toBson());
 			return result.toString();
 		}
@@ -75,7 +77,7 @@ public enum MongoDbCommand implements Command{
 	delete(new Consumer() {
 		public String exec(MongoDataProvider provider) {
 			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getConditions();
+			Condition condition = provider.getCondition();
 			DeleteResult result = db.deleteMany(condition.toBson());
 			return result.toString();
 		}
