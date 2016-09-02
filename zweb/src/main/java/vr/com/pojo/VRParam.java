@@ -1,5 +1,6 @@
 package vr.com.pojo;
 
+@Pojo
 public class VRParam {
 	private String key;
 	private String desc;

@@ -2,6 +2,7 @@ package vr.com.pojo;
 
 import java.util.List;
 
+@Pojo
 public class VRInterface {
 	
 	private String url;

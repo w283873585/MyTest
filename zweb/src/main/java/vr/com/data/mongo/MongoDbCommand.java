@@ -41,7 +41,7 @@ public enum MongoDbCommand implements Command{
 			MongoCollection<Document> db = provider.getDb();
 			for (Object o : provider.getEntitys())
 				db.insertOne(Document.parse(JSONObject.toJSONString(o)));
-			return "";
+			return null;
 		}
 	}), 
 	
@@ -55,12 +55,12 @@ public enum MongoDbCommand implements Command{
 		}
 	}),
 	
-	updateMany(new Consumer() {
+	update(new Consumer() {
 		public String exec(MongoDataProvider provider) {
 			MongoCollection<Document> db = provider.getDb();
 			Condition condition = provider.getCondition();
 			UpdateResult result = db.updateMany(condition.toBson(), 
-					(Document) provider.getEntitys());
+					BsonUtil.toBson(provider.getEntitys().get(0)));
 			return result.toString();
 		}
 	}),
@@ -92,7 +92,7 @@ public enum MongoDbCommand implements Command{
 	@Override
 	public String exec(DataProvider provider) {
 		if (!(provider instanceof MongoDataProvider))
-			throw new RuntimeException("");
+			throw new RuntimeException("type error");
 		
 		return consumer.exec((MongoDataProvider) provider);
 	}

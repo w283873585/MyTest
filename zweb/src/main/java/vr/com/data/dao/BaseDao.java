@@ -4,18 +4,20 @@ import vr.com.data.Condition;
 import vr.com.data.DataProvider;
 import vr.com.data.mongo.MongoDbCommand;
 import vr.com.data.mongo.MongoResource;
+import vr.com.pojo.VRInterface;
 
 public class BaseDao<T> {
 	private String collectionName;
 	
-	protected MongoResource resource = MongoResource.Instance;
-	
-	private DataProvider provider = MongoResource.Instance.getProvider(getCollectionName());
-	
-	public BaseDao() {}
+	private DataProvider provider;
 	
 	public BaseDao(String collectionName) {
 		this.collectionName = collectionName;
+		provider = MongoResource.Instance.getProvider(getCollectionName());
+	}
+	
+	public BaseDao() {
+		provider = MongoResource.Instance.getProvider(getCollectionName());
 	}
 	
 	public void insert(T t) {
@@ -27,7 +29,7 @@ public class BaseDao<T> {
 	}
 	
 	public void update(T t, Condition c) {
-		provider.addEntity(t).addCondition(c).invoke(MongoDbCommand.updateMany);
+		provider.addEntity(t).addCondition(c).invoke(MongoDbCommand.update);
 	}
 	
 	public String selectOne(Condition c) {
@@ -40,5 +42,11 @@ public class BaseDao<T> {
 
 	protected String getCollectionName() {
 		return collectionName;
+	}
+	
+	public static void main(String[] args) {
+		VRInterface v = new VRInterface();
+		v.setUrl("http://127.0.0.1");
+		new BaseDao<VRInterface>("foo").update(v, Condition.build("bar", 1224));
 	}
 }
