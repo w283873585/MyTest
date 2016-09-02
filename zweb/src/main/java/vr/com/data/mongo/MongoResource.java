@@ -15,15 +15,20 @@ public class MongoResource implements DataResource{
 	
 	private MongoDatabase db = null;
 	private MongoClient mongoClient = null;
+	boolean initialize = false;
 	
 	@Override
 	public void initialize() {
+		initialize = true;
 		mongoClient = new MongoClient();
 		db = mongoClient.getDatabase("test");
 	}
 
 	@Override
 	public DataProvider getProvider(String name) {
+		if (!initialize) {
+			initialize();
+		}
 		MongoCollection<Document> c = db.getCollection(name);
 		return new MongoDataProvider(c);
 	}
