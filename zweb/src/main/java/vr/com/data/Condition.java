@@ -1,76 +1,18 @@
 package vr.com.data;
 
-import java.util.Arrays;
-import java.util.HashMap;
-
-import org.bson.types.ObjectId;
-
-public class Condition extends HashMap<String, Object>{
+public interface Condition {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4212670712276724405L;
+	public Condition and(Condition c);
 	
-	private static final String OR = "$or";
-
-	private Condition(){}
+	public Condition and(String key, Object val);
 	
-	/**
-	 * 	building
-	 */
-	public static Condition build(String key, Object val, ConditionType t) {
-		Condition c = new Condition();
-		c.and(key, val, t);
-		return c;
-	}
+	public Condition and(String key, Object val, ConditionType t);
 	
-	public static Condition build(String key, Object val) {
-		return build(key, val, null);
-	}
+	public Condition or(Condition c);
 	
-	public static Condition build(String expression) {
-		Condition c = new Condition();
-		return c;
-	}
+	public Condition or(String key, Object val);
 	
-	/**
-	 *  logic operation
-	 */
-	public Condition and(String key, Object val) {
-		return and(key, val, null);
-	}
-	
-	public Condition and(String key, Object val, ConditionType t) {
-		if (t == null)
-			this.put(key, val);
-		else if (t == ConditionType.oid) 
-			this.put(key, new ObjectId(val.toString()));
-		else
-			this.put(key, build(t.value(), val));
-		return this;
-	}
-	
-	public Condition and(Condition c) {
-		this.putAll(c);
-		return this;
-	}
-	
-	public Condition or(String key, Object val) {
-		return or(key, val, null);
-	}
-	
-	public Condition or(String key, Object val, ConditionType t) {
-		Condition c = new Condition();
-		c.put(OR, Arrays.asList(this, Condition.build(key, val, t)));
-		return c;
-	}
-	
-	public Condition or(Condition c) {
-		Condition r = new Condition();
-		r.put(OR, Arrays.asList(this, c));
-		return r;
-	}
+	public Condition or(String key, Object val, ConditionType t);
 	
 	/**
 	 * compare operation

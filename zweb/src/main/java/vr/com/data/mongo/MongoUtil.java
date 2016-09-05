@@ -76,7 +76,9 @@ public class MongoUtil {
 	 * ToBson
 	 */
 	public static Bson toBson(Condition c) {
-		return new Document(c);
+		if (c instanceof MongoCondition)
+			return new Document((MongoCondition) c);
+		return new Document();
 	}
 	
 	@Pojo
