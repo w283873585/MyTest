@@ -12,16 +12,17 @@ import org.bson.conversions.Bson;
 
 import com.alibaba.fastjson.JSONObject;
 
+import vr.com.data.Condition;
 import vr.com.pojo.Pojo;
 
-public class BsonUtil {
-	public static Bson toBson(Object obj)  {
+public class MongoUtil {
+	
+	public static JSONObject toPlainObject(Object obj) {
 		JSONObject result = new JSONObject();
-		JSONObject body = new JSONObject();
 		
 		try {
-			Stack<String> keyStack = new Stack<String>();
 			Stack<Field> fieldStack = new Stack<Field>();
+			Stack<String> keyStack = new Stack<String>();
 			Deque<Object> valueDeque = new LinkedList<Object>();
 			
 			valueDeque.add(obj);
@@ -43,7 +44,7 @@ public class BsonUtil {
 					String key = keyStack.pop();
 					for (int i = keyStack.size() - 1; i >= 0; i--)
 						key = keyStack.get(i) + "." + key;
-					body.put(key, curField.get(valueDeque.getLast()));
+						result.put(key, curField.get(valueDeque.getLast()));
 				} else {
 					Object childObj = curField.get(valueDeque.getLast());
 					valueDeque.addLast(childObj);
@@ -52,15 +53,30 @@ public class BsonUtil {
 					fieldStack.addAll(getFieldList(childObj));
 				}
 			}
-		} catch (Exception e) {}
-		result.put("$set", body);
-		return new Document(result);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 	private static List<Field> getFieldList(Object obj) {
 		Class<?> c = obj.getClass();
 		Field[] fArr = c.getDeclaredFields();
 		return Arrays.asList(fArr);
+	}
+
+	public static Bson toUpdateBson(Object obj)  {
+		JSONObject result = new JSONObject();
+		result.put("$set", toPlainObject(obj));
+		return new Document(result);
+	}
+	
+	/**
+	 * ToBson
+	 */
+	public static Bson toBson(Condition c) {
+		return new Document(c);
 	}
 	
 	@Pojo
@@ -86,6 +102,7 @@ public class BsonUtil {
 		O o = new O();
 		o.a = 4;
 		o.f = "3";
-		System.out.println(toBson(o));
+		System.out.println(toUpdateBson(o));
+		System.out.println(toPlainObject(o));
 	}
 }

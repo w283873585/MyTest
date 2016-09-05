@@ -8,9 +8,9 @@ import org.bson.Document;
 import com.mongodb.client.MongoCollection;
 
 import vr.com.data.Command;
-import vr.com.data.Condition;
 import vr.com.data.DataProvider;
 import vr.com.data.Filter;
+import vr.com.data.Condition;
 
 public class MongoDataProvider implements DataProvider{
 

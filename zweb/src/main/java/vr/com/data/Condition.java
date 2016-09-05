@@ -3,8 +3,6 @@ package vr.com.data;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 public class Condition extends HashMap<String, Object>{
@@ -73,14 +71,6 @@ public class Condition extends HashMap<String, Object>{
 		r.put(OR, Arrays.asList(this, c));
 		return r;
 	}
-	
-	/**
-	 * ToBson
-	 */
-	public Bson toBson() {
-		return new Document(this);
-	}
-	
 	
 	/**
 	 * compare operation

@@ -7,20 +7,17 @@ import org.bson.Document;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
 import vr.com.data.Command;
-import vr.com.data.Condition;
 import vr.com.data.DataProvider;
 
 public enum MongoDbCommand implements Command{
 	select(new Consumer() {
 		public String exec(MongoDataProvider provider) {
-			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getCondition();
-			FindIterable<Document> it = db.find(condition.toBson());
+			FindIterable<Document> it = provider.getDb().find(
+					MongoUtil.toBson(provider.getCondition()));
 			List<Document> result = new ArrayList<Document>();
 			it.<List<Document>> into(result);
 			return result.toString();
@@ -29,27 +26,25 @@ public enum MongoDbCommand implements Command{
 	
 	selectOne(new Consumer() {
 		public String exec(MongoDataProvider provider) {
-			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getCondition();
-			FindIterable<Document> it = db.find(condition.toBson());
+			FindIterable<Document> it = provider.getDb().find(
+					MongoUtil.toBson(provider.getCondition()));
 			return it.first() == null ? null : it.first().toJson();
 		}
 	}), 
 	
 	insert(new Consumer() {
 		public String exec(MongoDataProvider provider) {
-			MongoCollection<Document> db = provider.getDb();
 			for (Object o : provider.getEntitys())
-				db.insertOne(Document.parse(JSONObject.toJSONString(o)));
+				provider.getDb().insertOne(
+						Document.parse(JSONObject.toJSONString(o)));
 			return null;
 		}
 	}), 
 	
 	updateOne(new Consumer() {
 		public String exec(MongoDataProvider provider) {
-			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getCondition();
-			UpdateResult result = db.updateOne(condition.toBson(), 
+			UpdateResult result = provider.getDb().updateOne(
+					MongoUtil.toBson(provider.getCondition()), 
 					(Document) provider.getEntitys());
 			return result.toString();
 		}
@@ -57,28 +52,31 @@ public enum MongoDbCommand implements Command{
 	
 	update(new Consumer() {
 		public String exec(MongoDataProvider provider) {
-			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getCondition();
-			UpdateResult result = db.updateMany(condition.toBson(), 
-					BsonUtil.toBson(provider.getEntitys().get(0)));
+			Object entity = null;
+			List<Object> entityList = provider.getEntitys();
+			if (entityList.size() > 0)
+				entity = entityList.get(0);
+			
+			UpdateResult result = provider.getDb().updateMany(
+					MongoUtil.toBson(provider.getCondition()), 
+					MongoUtil.toUpdateBson(entity));
+			
 			return result.toString();
 		}
 	}),
 	
 	deleteOne(new Consumer() {
 		public String exec(MongoDataProvider provider) {
-			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getCondition();
-			DeleteResult result = db.deleteOne(condition.toBson());
+			DeleteResult result = provider.getDb().deleteOne(
+					MongoUtil.toBson(provider.getCondition()));
 			return result.toString();
 		}
 	}),
 	
 	delete(new Consumer() {
 		public String exec(MongoDataProvider provider) {
-			MongoCollection<Document> db = provider.getDb();
-			Condition condition = provider.getCondition();
-			DeleteResult result = db.deleteMany(condition.toBson());
+			DeleteResult result = provider.getDb().deleteMany(
+					MongoUtil.toBson(provider.getCondition()));
 			return result.toString();
 		}
 	});

@@ -1,7 +1,7 @@
 package vr.com.pojo;
 
 @Pojo
-public class VRParam {
+public class InterfaceParam {
 	private String key;
 	private String desc;
 	private String constraint;

@@ -3,11 +3,11 @@ package vr.com.pojo;
 import java.util.List;
 
 @Pojo
-public class VRInterface {
+public class InterfaceEntity {
 	
 	private String url;
 	private String desc;
-	private List<VRParam> params;
+	private List<InterfaceParam> params;
 	
 	public String getUrl() {
 		return url;
@@ -21,10 +21,10 @@ public class VRInterface {
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-	public List<VRParam> getParams() {
+	public List<InterfaceParam> getParams() {
 		return params;
 	}
-	public void setParams(List<VRParam> params) {
+	public void setParams(List<InterfaceParam> params) {
 		this.params = params;
 	}
 }
