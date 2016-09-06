@@ -79,13 +79,15 @@
 				</div>
 	    	</div>
 	    	<div class="row" id="sendContainer">
-	    		<div class="form-group col-sm-10">
+	    		<div class="form-group col-sm-8">
 					<a href="javascript:;" class="btn btn-success" id="doSubmit" role="button">发起请求</a>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<a href="javascript:;" class="btn btn-warning" role="button" id="clearParams">清空参数</a>
 	    		</div>
-	    		<div class="form-group col-sm-2 text-right">
-					<a href="javascript:;" class="btn btn-info" role="button" data-toggle="modal" data-target="#myModal">高级设置</a>
+	    		<div class="form-group col-sm-4 text-right">
+	    			<a href="javascript:;" class="btn btn-info" role="button" data-toggle="modal" data-target="#myModal">高级设置</a>
+	    			&nbsp;
+	    			<a href="javascript:;" class="btn btn-warning" role="button" data-toggle="modal" data-target="#myModal">接口管理</a>
 				</div>
 	    	</div>
     	</div>
@@ -131,8 +133,7 @@
         	<div class="clearfix"></div>
         	<div class="form-group col-sm-8">
         		<label for="clients">选择客户端类型</label>
-	        	<select class="form-control" id="clients">
-	        	</select>
+	        	<select class="form-control" id="clients"></select>
 			</div>
         	<div class="clearfix"></div>
 	      </div>
