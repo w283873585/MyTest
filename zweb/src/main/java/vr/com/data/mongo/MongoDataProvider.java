@@ -46,7 +46,11 @@ public class MongoDataProvider implements DataProvider{
 	
 	@Override
 	public String invoke(Command command) {
-		return command.exec(this);
+		String result = command.exec(this);
+		entitys.clear();
+		filters.clear();
+		conditions.clear();
+		return result;
 	}
 	
 	public MongoCollection<Document> getDb() {
