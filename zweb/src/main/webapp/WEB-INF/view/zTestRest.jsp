@@ -55,6 +55,15 @@
 				text-align: right;
 				
 			}
+			.interfaceBox {
+				border: 0;
+				height: 34px;
+				line-height: 34px;
+				margin-right: 25px;
+				margin-top: 20px;
+				border-radius: 4px;
+				color: #c7254e;
+			}
     	</style>
     </head>
     <body>
@@ -87,7 +96,7 @@
 	    		<div class="form-group col-sm-4 text-right">
 	    			<a href="javascript:;" class="btn btn-info" role="button" data-toggle="modal" data-target="#myModal">高级设置</a>
 	    			&nbsp;
-	    			<a href="javascript:;" class="btn btn-warning" role="button" data-toggle="modal" data-target="#myModal">接口管理</a>
+	    			<a href="javascript:;" class="btn btn-warning" role="button" data-toggle="modal" data-target="#interfaceManager">接口管理</a>
 				</div>
 	    	</div>
     	</div>
@@ -122,12 +131,14 @@
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	        	<span aria-hidden="true">&times;</span>
+	        </button>
 	        <h4 class="modal-title">高级设置</h4>
 	      </div>
 	      <div class="modal-body">
         	<div class="form-group col-sm-8">
-        		<label for="manualSetting">手动设置URL</label>
+        		<label for="manualServerUrl">手动设置URL</label>
         		<input type="text" class="form-control"  placeholder="输出接口名称" id="manualServerUrl">
         	</div>
         	<div class="clearfix"></div>
@@ -143,6 +154,41 @@
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div>
+	
+	<!-- 接口管理 -->
+   	<div class="modal fade" id="interfaceManager" >
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">接口管理</h4>
+	      </div>
+	      <div class="modal-body">
+        	<div class="form-group col-sm-4">
+        		<input type="text" class="form-control"  placeholder="输出接口名称" id="manualServerUrl">
+        	</div>
+        	<div class="form-group col-sm-2">
+        		<button type="button" class="btn btn-info">&nbsp;查找&nbsp;</button>
+        	</div>
+        	<div class="clearfix"></div>
+        	<div class="form-group col-sm-12" style="min-height: 200px">
+        		<div class="col-sm-2 bg-danger interfaceBox">下载</div>
+        		<div class="col-sm-2 bg-danger interfaceBox">资源预览</div>
+        		<div class="col-sm-2 bg-danger interfaceBox">天下之大</div>
+        		<div class="col-sm-2 bg-danger interfaceBox">四海之内</div>
+        		<div class="col-sm-2 bg-danger interfaceBox">刀锋之影</div>
+        		<div class="col-sm-2 bg-danger interfaceBox">放逐之刃</div>
+        		<div class="col-sm-2 bg-danger interfaceBox">心花路放</div>
+			</div>
+        	<div class="clearfix"></div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div>
+	
 <script type="text/javascript">
 $(function() {
 	var clients = $.parseJSON('${clients}');
