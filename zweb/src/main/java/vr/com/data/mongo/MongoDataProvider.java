@@ -11,6 +11,7 @@ import vr.com.data.Command;
 import vr.com.data.Condition;
 import vr.com.data.DataProvider;
 import vr.com.data.Filter;
+import vr.com.data.Result;
 
 public class MongoDataProvider implements DataProvider{
 
@@ -44,15 +45,6 @@ public class MongoDataProvider implements DataProvider{
 		return this;
 	}
 	
-	@Override
-	public String invoke(Command command) {
-		String result = command.exec(this);
-		entitys.clear();
-		filters.clear();
-		conditions.clear();
-		return result;
-	}
-	
 	public MongoCollection<Document> getDb() {
 		return db;
 	}
@@ -71,5 +63,10 @@ public class MongoDataProvider implements DataProvider{
 
 	public List<Object> getEntitys() {
 		return entitys;
+	}
+
+	@Override
+	public Result invoke(Command command) {
+		return command.exec(this);
 	}
 }

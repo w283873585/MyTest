@@ -44,11 +44,16 @@ public enum MongoResource implements DataResource{
 	 * 	接口
 	 * 	{
 	 * 		url: "",
+	 * 		name: "",
 	 * 		desc: "",
 	 * 		params: [{
 	 *			key: "",
 	 *			desc: ""
 	 *			constraint: ""
+	 * 		}],
+	 * 		result: [{
+	 * 			key: "",
+	 * 			desc: "",
 	 * 		}]
 	 * 	}
 	 * 	

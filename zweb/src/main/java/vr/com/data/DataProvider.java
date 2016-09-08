@@ -8,8 +8,7 @@ public interface DataProvider {
 	
 	DataProvider addEntity(Object o);
 	
-	String invoke(Command command);
-	
+	Result invoke(Command command);
 	/**
 	 * 	接口
 	 * 	{

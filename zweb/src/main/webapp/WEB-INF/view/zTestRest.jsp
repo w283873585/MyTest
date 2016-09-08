@@ -63,6 +63,36 @@
 				margin-top: 20px;
 				border-radius: 4px;
 				color: #c7254e;
+				cursor: pointer;
+			}
+			.interfaceBox:hover {
+				color: #c7254e;
+				text-decoration: none;
+			}
+			.table_container{
+				margin-top: 20px;
+				margin-right: 0;
+			    margin-left: 0;
+			    background-color: #fff;
+			    border-radius: 4px 4px 0 0;
+			    -webkit-box-shadow: none;
+			    box-shadow: none;
+		        padding: 15px 15px 5px;
+		        position: relative;
+				font-size: 12px;
+		        font-family: '微软雅黑';
+			}
+			.table_container .title{
+				font-family: '微软雅黑';
+				font-size: 12px;
+				position: absolute;
+			    top: -15px;
+			    left: 16px;
+			    font-size: 12px;
+			    font-weight: 700;
+			    color: #959595;
+			    text-transform: uppercase;
+			    letter-spacing: 1px;
 			}
     	</style>
     </head>
@@ -168,17 +198,36 @@
         		<input type="text" class="form-control"  placeholder="输出接口名称" id="manualServerUrl">
         	</div>
         	<div class="form-group col-sm-2">
-        		<button type="button" class="btn btn-info">&nbsp;查找&nbsp;</button>
+        		<button type="button" class="btn btn-info" id="queryInterface">&nbsp;查找&nbsp;</button>
         	</div>
         	<div class="clearfix"></div>
-        	<div class="form-group col-sm-12" style="min-height: 200px">
-        		<div class="col-sm-2 bg-danger interfaceBox">下载</div>
-        		<div class="col-sm-2 bg-danger interfaceBox">资源预览</div>
-        		<div class="col-sm-2 bg-danger interfaceBox">天下之大</div>
-        		<div class="col-sm-2 bg-danger interfaceBox">四海之内</div>
-        		<div class="col-sm-2 bg-danger interfaceBox">刀锋之影</div>
-        		<div class="col-sm-2 bg-danger interfaceBox">放逐之刃</div>
-        		<div class="col-sm-2 bg-danger interfaceBox">心花路放</div>
+        	<div class="form-group col-sm-12" id="interfaceBody" style="min-height: 200px; font-size:12px;">
+        		<a class="col-sm-2 bg-danger interfaceBox" id="hello" 
+        			tabindex="1" role="button" data-toggle="popover" 
+        			data-html="true" data-placement="bottom" 
+        			data-trigger="focus" title="<code>/api/resource/get/service</code>" 
+        			data-content="
+        				<div class='table_container bg-success'>
+        				<div class='title'>请求参数:</div>
+        				<table class='table table-condensed'>
+							 <tr><td>key</td><td>不多说</td></tr>
+							 <tr><td>key</td><td>desc</td></tr>
+						</table>
+						</div>
+						<div class='table_container bg-success'>
+						<div class='title'>结果:</div>
+        				<table class='table table-condensed'>
+							 <tr><td>key</td><td>不多说不多说不多说不多说不多说不多说不多说不多说不多说不多说</td></tr>
+							 <tr><td>key</td><td>desc</td></tr>
+						</table>
+						</div>
+						">下载</a>
+        		<a class="col-sm-2 bg-danger interfaceBox">资源预览</a>
+        		<a class="col-sm-2 bg-danger interfaceBox">天下之大</a>
+        		<a class="col-sm-2 bg-danger interfaceBox">四海之内</a>
+        		<a class="col-sm-2 bg-danger interfaceBox">刀锋之影</a>
+        		<a class="col-sm-2 bg-danger interfaceBox">放逐之刃</a>
+        		<a class="col-sm-2 bg-danger interfaceBox">心花路放</a>
 			</div>
         	<div class="clearfix"></div>
 	      </div>
@@ -461,6 +510,89 @@ $(function() {
 			resource: result ? result[2] : ""
 		};
  	}
+ 	/** -----------------------------------------接口管理------------------------------------------ **/
+ 	var interfaceManager = !function () {
+ 		/**
+		 * 	接口
+		 * 	{
+		 * 		url: "",
+		 * 		name: "",
+		 * 		desc: "",
+		 * 		params: [{
+		 *			key: "",
+		 *			desc: ""
+		 *			constraint: ""
+		 * 		}],
+		 * 		result: [{
+		 * 			key: "",
+		 * 			desc: "",
+		 * 		}]
+		 * 	}
+		 */
+		var container = null;
+		 
+		return {
+			init: init 
+		};
+		
+		function init() {
+			$("#queryInterface").click(query);
+			 
+			container = $("#interfaceBody");
+			
+			 // 事件委托
+			container.on("click", ".interfaceEntity", function() {
+				$(this).popover('toggle');
+			});	 
+		}
+		 
+		function query(keyword) {
+			$.ajax({
+				url: "",
+				type: "post",
+				data: {keywod: keyword},
+			}).done(function(data) {
+				for (var i in data) {
+					addInterface(data[i]);
+				}
+			});
+		}
+		
+ 		function addInterface(json) {
+ 			
+ 			var html = "<a class=\"col-sm-2 bg-danger interfaceBox\" class=\"interfaceEntity\""  
+    			+ "tabindex=\"1\" role=\"button\" data-toggle=\"popover\"" 
+    			+ "data-html=\"true\" data-placement=\"bottom\""
+    			+ "data-trigger=\"focus\" title=\"<code>" + json.url + "</code>\""
+    			+ "data-content=\""
+    			+ "<div class='table_container bg-success'>"
+	    			+ "<div class='title'>请求参数:</div>"
+	    			+ "<table class='table table-condensed'>"
+	    				+ getTableBody(json.params)
+	    			+ "</table>"
+    			+ "</div>"
+    			+ "<div class='table_container bg-success'>"
+    				+ "<div class='title'>结果:</div>"
+	    			+ "<table class='table table-condensed'>"
+	    				+ getTableBody(json.result)
+	    			+ "</table>"
+    			+ "</div>"
+    			+ "\">" + json.name + "</a>";
+    			
+ 			container.append(html);
+ 		}
+ 		
+ 		function getTableBody(arr) {
+ 			var result = "";
+ 			for (var i = 0; i < arr.length; i++) {
+ 				var cur = arr[i];
+ 				result += "<tr><td>" + cur.key + "</td><td>" + cur.desc + "</td></tr>"
+ 			}
+ 			return result;
+ 		}
+ 	}();
+ 	
+ 	interfaceManager.init();
 });
 </script>
 </body>

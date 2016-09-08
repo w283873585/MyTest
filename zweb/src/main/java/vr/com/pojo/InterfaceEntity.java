@@ -8,6 +8,7 @@ public class InterfaceEntity {
 	private String url;
 	private String desc;
 	private List<InterfaceParam> params;
+	private List<InterfaceParam> results;
 	
 	public String getUrl() {
 		return url;
@@ -26,5 +27,11 @@ public class InterfaceEntity {
 	}
 	public void setParams(List<InterfaceParam> params) {
 		this.params = params;
+	}
+	public List<InterfaceParam> getResults() {
+		return results;
+	}
+	public void setResults(List<InterfaceParam> results) {
+		this.results = results;
 	}
 }

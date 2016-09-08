@@ -19,6 +19,7 @@ public interface Condition {
 	 */
 	public enum ConditionType{
 		oid,		// 包装为ObjectId
+		regex,		// 正则
 		eq, 		// 等于
 		lt, 		// 小于
 		gt, 		// 大于
