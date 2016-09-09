@@ -28,7 +28,7 @@ public class ClassUtils {
 
 	private static List<Class> getClasses(String packageName) {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		String path = packageName.replaceAll(".", "/");
+		String path = packageName.replaceAll("\\.", "/");
 		Enumeration<URL> resources = null;
 		
 		try {

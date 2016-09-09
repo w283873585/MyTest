@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum CommandEnum {
-	ls("earn.pattern.client.LSCommand");
+	ls("learn.pattern.client.commandChain.LSCommand");
 	
 	private String value = "";
 	
