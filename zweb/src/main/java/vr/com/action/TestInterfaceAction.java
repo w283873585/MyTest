@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
+import vr.com.data.dao.InterfaceEntiyDao;
 import vr.com.kernel.processor.ValueProcessorFactory;
 import vr.com.kernel.processor.ValueProcessorUtil;
 import vr.com.kernel.request.Client;
@@ -34,7 +35,6 @@ public class TestInterfaceAction {
 		return "zTestRest";
 	}
 	
-
 	@ResponseBody
 	@RequestMapping(value="/send", produces = "text/html;charset=utf-8")
 	public Object send(HttpServletRequest request, HttpServletResponse response,
@@ -95,5 +95,12 @@ public class TestInterfaceAction {
 			System.out.println("记录失败, 持久化地址错误");
 		}
 		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/interface/query", produces = "text/html;charset=utf-8")
+	public Object query(HttpServletRequest request, HttpServletResponse response,
+			String keyword) {
+		return new InterfaceEntiyDao().query(keyword);
 	}
 }
