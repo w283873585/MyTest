@@ -548,9 +548,9 @@ $(function() {
 		 
 		function query(keyword) {
 			$.ajax({
-				url: "",
+				url: "${pageContext.request.contextPath}/my/interface/query",
 				type: "post",
-				data: {keywod: keyword},
+				data: {keyword: keyword},
 			}).done(function(data) {
 				for (var i in data) {
 					addInterface(data[i]);

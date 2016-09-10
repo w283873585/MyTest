@@ -3,6 +3,7 @@ package vr.com.data.dao;
 import java.util.List;
 
 import vr.com.data.Condition;
+import vr.com.data.Condition.ConditionType;
 import vr.com.data.DataProvider;
 import vr.com.data.mongo.MongoCondition;
 import vr.com.data.mongo.MongoDbCommand;
@@ -49,6 +50,7 @@ public class BaseDao<T> {
 		v.setUrl("http://127.0.0.1");
 		BaseDao<InterfaceEntity> dao = new BaseDao<InterfaceEntity>("foo");
 		System.out.println(dao.select(MongoCondition.noCondtion()));
-		dao.update(v, MongoCondition.build("bar", 1224));
+		System.out.println(dao.select(MongoCondition.build("bar", "b", ConditionType.regex), InterfaceEntity.class));
+		System.out.println(new InterfaceEntiyDao().query("123"));
 	}
 }
