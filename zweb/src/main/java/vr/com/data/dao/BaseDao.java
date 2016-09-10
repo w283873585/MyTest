@@ -11,6 +11,9 @@ import vr.com.data.mongo.MongoResource;
 import vr.com.pojo.InterfaceEntity;
 
 public class BaseDao<T> {
+	// Condition 不对外开放， 用于子类定制查询， 
+	// Provider非线程安全， 由mongoResource动态提供，
+	// 每次查询产生一个provider用来组装查询条件。（可将mongoResource实现为工厂，进行优化）
 	private String collectionName;
 	
 	public BaseDao(String collectionName) {
