@@ -54,11 +54,11 @@ public class InterfaceEntityCodec implements Codec<InterfaceEntity>{
 		Codec<InterfaceParam> raCodec = codecRegistry.get(InterfaceParam.class);
 		reader.readStartDocument();
 			 reader.readName();
-			 System.out.println(reader.readObjectId());
-	         reader.readName();
-	         result.setUrl(reader.readString());
+			 reader.readObjectId();
 	         reader.readName();
 	         result.setDesc(reader.readString());
+	         reader.readName();
+	         result.setName(reader.readString());
 	         reader.readStartArray();
 	         	List<InterfaceParam> params = new ArrayList<InterfaceParam>(); 
 	         	while (reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
@@ -66,14 +66,15 @@ public class InterfaceEntityCodec implements Codec<InterfaceEntity>{
 	            }
 	         	result.setParams(params);
 	         reader.readEndArray();
-	         
 	         reader.readStartArray();
-	         	List<InterfaceParam> results = new ArrayList<InterfaceParam>(); 
-	         	while (reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
-	         		results.add(raCodec.decode(reader, decoderContext));
-	            }
-	         	result.setResults(results);
+	         List<InterfaceParam> results = new ArrayList<InterfaceParam>(); 
+	         while (reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
+	        	 results.add(raCodec.decode(reader, decoderContext));
+	         }
+	         result.setResults(results);
 	         reader.readEndArray();
+	         reader.readName();
+	         result.setUrl(reader.readString());
 	    reader.readEndDocument();
 		return result;
 	}

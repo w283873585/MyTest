@@ -195,13 +195,14 @@
 	      </div>
 	      <div class="modal-body">
         	<div class="form-group col-sm-4">
-        		<input type="text" class="form-control"  placeholder="输出接口名称" id="manualServerUrl">
+        		<input type="text" class="form-control"  placeholder="输出接口名称" id="queryKeyword">
         	</div>
         	<div class="form-group col-sm-2">
         		<button type="button" class="btn btn-info" id="queryInterface">&nbsp;查找&nbsp;</button>
         	</div>
         	<div class="clearfix"></div>
         	<div class="form-group col-sm-12" id="interfaceBody" style="min-height: 200px; font-size:12px;">
+        		<!-- 
         		<a class="col-sm-2 bg-danger interfaceBox" id="hello" 
         			tabindex="1" role="button" data-toggle="popover" 
         			data-html="true" data-placement="bottom" 
@@ -228,6 +229,7 @@
         		<a class="col-sm-2 bg-danger interfaceBox">刀锋之影</a>
         		<a class="col-sm-2 bg-danger interfaceBox">放逐之刃</a>
         		<a class="col-sm-2 bg-danger interfaceBox">心花路放</a>
+        		 -->
 			</div>
         	<div class="clearfix"></div>
 	      </div>
@@ -511,7 +513,7 @@ $(function() {
 		};
  	}
  	/** -----------------------------------------接口管理------------------------------------------ **/
- 	var interfaceManager = !function () {
+ 	var interfaceManager = (function () {
  		/**
 		 * 	接口
 		 * 	{
@@ -537,7 +539,13 @@ $(function() {
 		
 		function init() {
 			$("#queryInterface").click(query);
-			 
+			
+			$("body").keydown(function(e){
+				if (e.keyCode==13) {
+					query();
+				}
+			});
+			
 			container = $("#interfaceBody");
 			
 			 // 事件委托
@@ -546,12 +554,15 @@ $(function() {
 			});	 
 		}
 		 
-		function query(keyword) {
+		function query() {
+			var keyword = $("#queryKeyword").val();
 			$.ajax({
 				url: "${pageContext.request.contextPath}/my/interface/query",
 				type: "post",
 				data: {keyword: keyword},
+				dataType: "json"
 			}).done(function(data) {
+				container.html("");
 				for (var i in data) {
 					addInterface(data[i]);
 				}
@@ -560,10 +571,10 @@ $(function() {
 		
  		function addInterface(json) {
  			
- 			var html = "<a class=\"col-sm-2 bg-danger interfaceBox\" class=\"interfaceEntity\""  
+ 			var html = "<a class=\"col-sm-2 bg-danger interfaceBox interfaceEntity\""  
     			+ "tabindex=\"1\" role=\"button\" data-toggle=\"popover\"" 
     			+ "data-html=\"true\" data-placement=\"bottom\""
-    			+ "data-trigger=\"focus\" title=\"<code>" + json.url + "</code>\""
+    			+ "data-trigger=\"manual\" title=\"<code>" + json.url + "</code>\""
     			+ "data-content=\""
     			+ "<div class='table_container bg-success'>"
 	    			+ "<div class='title'>请求参数:</div>"
@@ -574,7 +585,7 @@ $(function() {
     			+ "<div class='table_container bg-success'>"
     				+ "<div class='title'>结果:</div>"
 	    			+ "<table class='table table-condensed'>"
-	    				+ getTableBody(json.result)
+	    				+ getTableBody(json.results)
 	    			+ "</table>"
     			+ "</div>"
     			+ "\">" + json.name + "</a>";
@@ -590,7 +601,7 @@ $(function() {
  			}
  			return result;
  		}
- 	}();
+ 	})();
  	
  	interfaceManager.init();
 });

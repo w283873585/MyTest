@@ -31,11 +31,11 @@ public class InterfaceParamCodec implements Codec<InterfaceParam>{
 		InterfaceParam result = new InterfaceParam();
 		reader.readStartDocument();
 			reader.readName();
-			result.setKey(reader.readString());
+			result.setConstraint(reader.readString());
 			reader.readName();
 			result.setDesc(reader.readString());
 			reader.readName();
-			result.setConstraint(reader.readString());
+			result.setKey(reader.readString());
 		reader.readEndDocument();
 		return result;
 	}
