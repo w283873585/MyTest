@@ -24,6 +24,8 @@ public class InterfaceEntityCodec implements Codec<InterfaceEntity>{
 		writer.writeStartDocument();
 			writer.writeName("url");
 			writer.writeString(value.getUrl());
+			writer.writeName("name");
+			writer.writeString(value.getName());
 			writer.writeName("desc");
 			writer.writeString(value.getDesc());
 			writer.writeStartArray("params");

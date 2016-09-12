@@ -6,6 +6,7 @@ import java.util.List;
 public class InterfaceEntity {
 	
 	private String url;
+	private String name;
 	private String desc;
 	private List<InterfaceParam> params;
 	private List<InterfaceParam> results;
@@ -15,6 +16,12 @@ public class InterfaceEntity {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getDesc() {
 		return desc;
