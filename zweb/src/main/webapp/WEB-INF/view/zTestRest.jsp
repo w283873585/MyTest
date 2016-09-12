@@ -541,9 +541,8 @@ $(function() {
 			$("#queryInterface").click(query);
 			
 			$("body").keydown(function(e){
-				if (e.keyCode==13) {
+				if (e.keyCode==13)
 					query();
-				}
 			});
 			
 			container = $("#interfaceBody");
@@ -563,9 +562,8 @@ $(function() {
 				dataType: "json"
 			}).done(function(data) {
 				container.html("");
-				for (var i in data) {
+				for (var i in data)
 					addInterface(data[i]);
-				}
 			});
 		}
 		
