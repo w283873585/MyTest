@@ -18,6 +18,15 @@ public class InterfaceEntiyDao extends BaseDao<InterfaceEntity>{
 		return select(MongoCondition.build("name", keyword, ConditionType.regex), InterfaceEntity.class);
 	}
 	
+	public boolean existInterface(String url) {
+		long count = select(MongoCondition.build("url", url)).count();
+		return count != 0;
+	}
+	
+	public void updateByUrl(String url, InterfaceEntity entity) {
+		update(entity, MongoCondition.build("url", url));
+	}
+	
 	public static void main(String[] args) {
 		InterfaceEntity entity = new InterfaceEntity();
 		entity.setName("红包注册");

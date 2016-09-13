@@ -7,6 +7,7 @@ import vr.com.data.Condition.ConditionType;
 import vr.com.data.DataProvider;
 import vr.com.data.mongo.MongoCondition;
 import vr.com.data.mongo.MongoDbCommand;
+import vr.com.data.mongo.MongoDbCommand.MongoFindResult;
 import vr.com.data.mongo.MongoResource;
 import vr.com.pojo.InterfaceEntity;
 
@@ -24,24 +25,24 @@ public class BaseDao<T> {
 		getProvider().addEntity(t).invoke(MongoDbCommand.insert);
 	}
 	
-	public void delete(Condition c) {
+	protected void delete(Condition c) {
 		getProvider().addCondition(c).invoke(MongoDbCommand.delete);
 	}
 	
-	public void update(T t, Condition c) {
+	protected void update(T t, Condition c) {
 		getProvider().addEntity(t).addCondition(c).invoke(MongoDbCommand.update);
 	}
 	
-	public T selectOne(Condition c, Class<T> t) {
-		return getProvider().addCondition(c).invoke(MongoDbCommand.selectOne).getBean(t);
+	protected T selectOne(Condition c, Class<T> t) {
+		return getProvider().addCondition(c).invoke(MongoDbCommand.selectOne).toBean(t);
 	}
 	
-	public String select(Condition c) {
-		return getProvider().addCondition(c).invoke(MongoDbCommand.select).toString();
+	protected List<T> select(Condition c, Class<T> t) {
+		return getProvider().addCondition(c).invoke(MongoDbCommand.select).toList(t);
 	}
 	
-	public List<T> select(Condition c, Class<T> t) {
-		return getProvider().addCondition(c).invoke(MongoDbCommand.select).getList(t);
+	protected MongoFindResult select(Condition c) {
+		return (MongoFindResult) getProvider().addCondition(c).invoke(MongoDbCommand.select);
 	}
 
 	protected DataProvider getProvider() {

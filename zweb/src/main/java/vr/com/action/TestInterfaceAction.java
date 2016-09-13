@@ -1,6 +1,8 @@
 package vr.com.action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,11 +23,15 @@ import vr.com.kernel.processor.ValueProcessorUtil;
 import vr.com.kernel.request.Client;
 import vr.com.kernel.request.ClientFactory;
 import vr.com.kernel.request.Request;
+import vr.com.pojo.InterfaceEntity;
+import vr.com.pojo.InterfaceParam;
 import vr.com.util.CacheUtil;
 
 @Controller
 @RequestMapping("/my")
 public class TestInterfaceAction {
+	
+	private InterfaceEntiyDao interfaceEntityDao = new InterfaceEntiyDao();
 	
 	@RequestMapping("/testRest")
 	public String toTestRest(HttpServletRequest request, HttpServletResponse response) {
@@ -50,9 +56,50 @@ public class TestInterfaceAction {
 			processorKeys: "a,b,c"
 		}]
 		*/
+		
+		JSONArray paramArr = JSONArray.parseArray(paramsInfo);
+		
+		/*
+		 *	接口必须有name, 
+		 *	有name则作为接口实体, 存储在mongodb
+		 */
+		url = url.trim();
+		String separator = "\\s+";
+		String expression[] = url.split(separator);
+		if (expression.length > 1) {
+			InterfaceEntity entity = new InterfaceEntity();
+			
+			url = expression[0];
+			entity.setUrl(url);
+			entity.setName(expression[1]);
+			
+			if (expression.length > 2) entity.setDesc(expression[2]);
+			
+			List<InterfaceParam> iParams = new ArrayList<InterfaceParam>();
+			for (int i = 0; i < paramArr.size(); i++) {
+				InterfaceParam param = new InterfaceParam();
+				JSONObject obj = paramArr.getJSONObject(i);
+				String key = obj.getString("key");
+				String keyExpressions[] = key.trim().split(separator);
+				param.setKey(keyExpressions[0]);
+				param.setConstraint(obj.getString("processorKeys"));
+				if (keyExpressions.length > 1) {
+					obj.put("key", keyExpressions[0]);
+					param.setDesc(keyExpressions[1]);
+				}
+				iParams.add(param);
+			}
+			entity.setParams(iParams);
+			entity.setResults(new ArrayList<InterfaceParam>());
+			
+			if (!interfaceEntityDao.existInterface(url))
+				interfaceEntityDao.insert(entity);
+			else
+				interfaceEntityDao.updateByUrl(url, entity);
+		}
+		
 		//  获取加工后的参数信息
 		Map<String, Object> params = new HashMap<String, Object>();
-		JSONArray paramArr = JSONArray.parseArray(paramsInfo);
 		for (int i = 0; i < paramArr.size(); i++) {
 			JSONObject obj = paramArr.getJSONObject(i);
 			params.put(obj.getString("key"), 
@@ -101,6 +148,6 @@ public class TestInterfaceAction {
 	@RequestMapping(value="/interface/query", produces = "text/html;charset=utf-8")
 	public Object query(HttpServletRequest request, HttpServletResponse response,
 			String keyword) {
-		return new InterfaceEntiyDao().query(keyword);
+		return interfaceEntityDao.query(keyword);
 	}
 }

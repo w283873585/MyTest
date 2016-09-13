@@ -3,7 +3,7 @@ package vr.com.pojo;
 @Pojo
 public class InterfaceParam {
 	private String key;
-	private String desc;
+	private String desc = "";
 	private String constraint = "";
 	public String getKey() {
 		return key;

@@ -88,7 +88,7 @@ public enum MongoDbCommand implements Command{
 		}
 
 		@Override
-		public <T> T getBean(Class<T> c) {
+		public <T> T toBean(Class<T> c) {
 			if (command == MongoDbCommand.select) {
 				throw new RuntimeException("expert one but get more");
 			}
@@ -98,7 +98,7 @@ public enum MongoDbCommand implements Command{
 		}
 
 		@Override
-		public <T> List<T> getList(Class<T> c) {
+		public <T> List<T> toList(Class<T> c) {
 			if (command == MongoDbCommand.selectOne) {
 				throw new RuntimeException("can not change bean to list");
 			}
@@ -109,11 +109,15 @@ public enum MongoDbCommand implements Command{
 			return result;
 		}
 
+		public long count() {
+			return provider.getDb().count(
+					MongoUtil.toBson(provider.getCondition()));
+		}
+		
 		@Override
 		public boolean isSuccess() {
 			return true;
 		}
-		
 	}
 
 	
@@ -122,12 +126,12 @@ public enum MongoDbCommand implements Command{
 		private UpdateResult result;
 		public MongoUpdateResult(UpdateResult result) { this.result = result; }
 		@Override
-		public <T> T getBean(Class<T> c) {
+		public <T> T toBean(Class<T> c) {
 			return null;
 		}
 
 		@Override
-		public <T> List<T> getList(Class<T> c) {
+		public <T> List<T> toList(Class<T> c) {
 			return null;
 		}
 
@@ -141,12 +145,12 @@ public enum MongoDbCommand implements Command{
 	public static class MongoInsertResult implements Result{
 
 		@Override
-		public <T> T getBean(Class<T> c) {
+		public <T> T toBean(Class<T> c) {
 			return null;
 		}
 
 		@Override
-		public <T> List<T> getList(Class<T> c) {
+		public <T> List<T> toList(Class<T> c) {
 			return null;
 		}
 
@@ -166,12 +170,12 @@ public enum MongoDbCommand implements Command{
 		}
 		
 		@Override
-		public <T> T getBean(Class<T> c) {
+		public <T> T toBean(Class<T> c) {
 			return null;
 		}
 
 		@Override
-		public <T> List<T> getList(Class<T> c) {
+		public <T> List<T> toList(Class<T> c) {
 			return null;
 		}
 

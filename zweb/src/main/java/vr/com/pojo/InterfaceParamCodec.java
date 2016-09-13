@@ -30,12 +30,9 @@ public class InterfaceParamCodec implements Codec<InterfaceParam>{
 	public InterfaceParam decode(BsonReader reader, DecoderContext decoderContext) {
 		InterfaceParam result = new InterfaceParam();
 		reader.readStartDocument();
-			reader.readName();
-			result.setConstraint(reader.readString());
-			reader.readName();
-			result.setDesc(reader.readString());
-			reader.readName();
 			result.setKey(reader.readString());
+			result.setDesc(reader.readString());
+			result.setConstraint(reader.readString());
 		reader.readEndDocument();
 		return result;
 	}

@@ -7,7 +7,7 @@ public class InterfaceEntity {
 	
 	private String url;
 	private String name;
-	private String desc;
+	private String desc = "";
 	private List<InterfaceParam> params;
 	private List<InterfaceParam> results;
 	
