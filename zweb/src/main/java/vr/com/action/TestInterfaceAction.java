@@ -92,6 +92,7 @@ public class TestInterfaceAction {
 			entity.setParams(iParams);
 			entity.setResults(new ArrayList<InterfaceParam>());
 			
+			// 持久化数据
 			if (!interfaceEntityDao.existInterface(interfaceUrl))
 				interfaceEntityDao.insert(entity);
 			else
