@@ -12,12 +12,12 @@ public class InterfaceParamCodec implements Codec<InterfaceParam>{
 	public void encode(BsonWriter writer, InterfaceParam value, 
 			EncoderContext encoderContext) {
 		writer.writeStartDocument();
-			writer.writeName("key");
-			writer.writeString(value.getKey());
-			writer.writeName("desc");
-			writer.writeString(value.getDesc());
 			writer.writeName("constraint");
 			writer.writeString(value.getConstraint());
+			writer.writeName("desc");
+			writer.writeString(value.getDesc());
+			writer.writeName("key");
+			writer.writeString(value.getKey());
 		writer.writeEndDocument();
 	}
 
@@ -30,9 +30,9 @@ public class InterfaceParamCodec implements Codec<InterfaceParam>{
 	public InterfaceParam decode(BsonReader reader, DecoderContext decoderContext) {
 		InterfaceParam result = new InterfaceParam();
 		reader.readStartDocument();
-			result.setKey(reader.readString());
-			result.setDesc(reader.readString());
 			result.setConstraint(reader.readString());
+			result.setDesc(reader.readString());
+			result.setKey(reader.readString());
 		reader.readEndDocument();
 		return result;
 	}

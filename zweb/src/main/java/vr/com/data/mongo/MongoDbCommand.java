@@ -7,6 +7,7 @@ import org.bson.Document;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.InsertOneOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 

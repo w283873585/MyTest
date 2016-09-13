@@ -56,7 +56,6 @@ public class TestInterfaceAction {
 			processorKeys: "a,b,c"
 		}]
 		*/
-		
 		JSONArray paramArr = JSONArray.parseArray(paramsInfo);
 		
 		/*
@@ -70,7 +69,8 @@ public class TestInterfaceAction {
 			InterfaceEntity entity = new InterfaceEntity();
 			
 			url = expression[0];
-			entity.setUrl(url);
+			String interfaceUrl = url.replaceFirst(".*:[0-9]*", ""); 
+			entity.setUrl(interfaceUrl);
 			entity.setName(expression[1]);
 			
 			if (expression.length > 2) entity.setDesc(expression[2]);
@@ -92,10 +92,10 @@ public class TestInterfaceAction {
 			entity.setParams(iParams);
 			entity.setResults(new ArrayList<InterfaceParam>());
 			
-			if (!interfaceEntityDao.existInterface(url))
+			if (!interfaceEntityDao.existInterface(interfaceUrl))
 				interfaceEntityDao.insert(entity);
 			else
-				interfaceEntityDao.updateByUrl(url, entity);
+				interfaceEntityDao.updateByUrl(interfaceUrl, entity);
 		}
 		
 		//  获取加工后的参数信息
