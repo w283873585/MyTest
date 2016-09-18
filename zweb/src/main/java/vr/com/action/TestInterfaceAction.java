@@ -105,6 +105,7 @@ public class TestInterfaceAction {
 		return result;
 	}
 	
+	// 返回处理过的url
 	private String interfacePersist(String url, JSONArray paramArr) {
 		
 		/*
