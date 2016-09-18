@@ -57,47 +57,7 @@ public class TestInterfaceAction {
 		}]
 		*/
 		JSONArray paramArr = JSONArray.parseArray(paramsInfo);
-		
-		/*
-		 *	接口必须有name, 
-		 *	有name则作为接口实体, 存储在mongodb
-		 */
-		url = url.trim();
-		String separator = "\\s+";
-		String expression[] = url.split(separator);
-		if (expression.length > 1) {
-			InterfaceEntity entity = new InterfaceEntity();
-			
-			url = expression[0];
-			String interfaceUrl = url.replaceFirst(".*:[0-9]*", ""); 
-			entity.setUrl(interfaceUrl);
-			entity.setName(expression[1]);
-			
-			if (expression.length > 2) entity.setDesc(expression[2]);
-			
-			List<InterfaceParam> iParams = new ArrayList<InterfaceParam>();
-			for (int i = 0; i < paramArr.size(); i++) {
-				InterfaceParam param = new InterfaceParam();
-				JSONObject obj = paramArr.getJSONObject(i);
-				String key = obj.getString("key");
-				String keyExpressions[] = key.trim().split(separator);
-				param.setKey(keyExpressions[0]);
-				param.setConstraint(obj.getString("processorKeys"));
-				if (keyExpressions.length > 1) {
-					obj.put("key", keyExpressions[0]);
-					param.setDesc(keyExpressions[1]);
-				}
-				iParams.add(param);
-			}
-			entity.setParams(iParams);
-			entity.setResults(new ArrayList<InterfaceParam>());
-			
-			// 持久化数据
-			if (!interfaceEntityDao.existInterface(interfaceUrl))
-				interfaceEntityDao.insert(entity);
-			else
-				interfaceEntityDao.updateByUrl(interfaceUrl, entity);
-		}
+		url = interfacePersist(url, paramArr);
 		
 		//  获取加工后的参数信息
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -143,6 +103,59 @@ public class TestInterfaceAction {
 			System.out.println("记录失败, 持久化地址错误");
 		}
 		return result;
+	}
+	
+	private String interfacePersist(String url, JSONArray paramArr) {
+		
+		/*
+		 *	接口必须有name, 
+		 *	有name则作为接口实体, 存储在mongodb
+		 *	
+		 *	TODO 增加结果描述 
+		 *	<code>
+		 *		manager.process(url, paramArr);
+		 *		manager.addResult(obj);
+		 *		manager.exec();
+		 *	</code>
+		 */
+		url = url.trim();
+		String separator = "->";
+		String expression[] = url.split(separator);
+		if (expression.length > 1) {
+			InterfaceEntity entity = new InterfaceEntity();
+			
+			url = expression[0];
+			String interfaceUrl = url.replaceFirst(".*:[0-9]*", ""); 
+			entity.setUrl(interfaceUrl);
+			entity.setName(expression[1]);
+			
+			if (expression.length > 2) entity.setDesc(expression[2]);
+			
+			List<InterfaceParam> iParams = new ArrayList<InterfaceParam>();
+			for (int i = 0; i < paramArr.size(); i++) {
+				JSONObject obj = paramArr.getJSONObject(i);
+				InterfaceParam param = new InterfaceParam();
+				String keyExpressions[] = obj.getString("key").trim()
+						.split(separator);
+				param.setKey(keyExpressions[0]);
+				param.setConstraint(obj.getString("processorKeys"));
+				if (keyExpressions.length > 1) {
+					obj.put("key", keyExpressions[0]);
+					param.setDesc(keyExpressions[1]);
+				}
+				iParams.add(param);
+			}
+			entity.setParams(iParams);
+			entity.setResults(new ArrayList<InterfaceParam>());
+			
+			// 持久化数据
+			if (!interfaceEntityDao.existInterface(interfaceUrl))
+				interfaceEntityDao.insert(entity);
+			else
+				interfaceEntityDao.updateByUrl(interfaceUrl, entity);
+		}
+		
+		return url;
 	}
 	
 	@ResponseBody

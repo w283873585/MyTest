@@ -574,12 +574,20 @@ $(function() {
     			+ "data-html=\"true\" data-placement=\"bottom\""
     			+ "data-trigger=\"manual\" title=\"<code>" + json.url + "</code>\""
     			+ "data-content=\""
+    				
+    			+ "<div class='table_container'>"
+    				+ "<div class='title'>接口描述:</div>"
+    				+ (json.desc ? json.desc : "无")
+    				+ "<br/><br/>"
+    			+ "</div>"
+    			
     			+ "<div class='table_container bg-success'>"
 	    			+ "<div class='title'>请求参数:</div>"
 	    			+ "<table class='table table-condensed'>"
 	    				+ getTableBody(json.params)
 	    			+ "</table>"
     			+ "</div>"
+    			
     			+ "<div class='table_container bg-success'>"
     				+ "<div class='title'>结果:</div>"
 	    			+ "<table class='table table-condensed'>"
@@ -592,11 +600,15 @@ $(function() {
  		}
  		
  		function getTableBody(arr) {
+ 			if (!arr || !arr.length)
+ 				return "<tr><td>无</td><td>";
+ 				
  			var result = "";
  			for (var i = 0; i < arr.length; i++) {
  				var cur = arr[i];
  				result += "<tr><td>" + cur.key + "</td><td>" + cur.desc + "</td></tr>"
  			}
+ 			
  			return result;
  		}
  	})();
