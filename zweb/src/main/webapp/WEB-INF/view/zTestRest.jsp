@@ -531,7 +531,8 @@ $(function() {
 		 * 		}]
 		 * 	}
 		 */
-		var container = null;
+		var interfaceData = null,
+			container = null;
 		 
 		return {
 			init: init 
@@ -547,12 +548,54 @@ $(function() {
 			
 			container = $("#interfaceBody");
 			
-			 // 事件委托
+			// 延迟策略双击阻止单击事件
+			var timer = null;
+			
+			// 单击展示接口详情
 			container.on("click", ".interfaceEntity", function() {
-				$(this).popover('toggle');
-			});	 
+				clearTimeout(timer);
+				var that = this;
+				timer = setTimeout(function(){
+			    	$(that).popover('toggle');
+			    }, 200);
+			});
+			
+			// 双击接口调用
+			container.on("dblclick", ".interfaceEntity", function() {
+				
+				clearTimeout(timer);
+				
+				$('#interfaceManager').modal('hide');
+				
+				var index = $(this).index(".interfaceEntity");
+				var cur = interfaceData[index];
+				
+				// 设置资源地址	
+				// TODO 模块化不够彻底, url, results, params信息展示依赖了dom操作
+	   			$("#resourceUrl").val(cur.url);
+				
+				// 添加参数
+				var params = [];
+				for(var i in cur.params) {
+					var curParam = cur.params[i];
+					params.push({
+						key: curParam.key,
+						value: "",
+						processorKeys: curParam.constraint
+					});
+				}
+				manager.addParams(params);
+				
+				// 清空结果
+	   			$(".result").html("");
+				
+	   			// 清空参数
+	   			$(".params").html("");
+				
+				return false;
+			});	
 		}
-		 
+		
 		function query() {
 			var keyword = $("#queryKeyword").val();
 			$.ajax({
@@ -561,42 +604,49 @@ $(function() {
 				data: {keyword: keyword},
 				dataType: "json"
 			}).done(function(data) {
-				container.html("");
-				for (var i in data)
-					addInterface(data[i]);
+				renderInterfaceData(data);
 			});
 		}
 		
- 		function addInterface(json) {
+ 		function renderInterfaceData(data) {
  			
- 			var html = "<a class=\"col-sm-2 bg-danger interfaceBox interfaceEntity\""  
-    			+ "tabindex=\"1\" role=\"button\" data-toggle=\"popover\"" 
-    			+ "data-html=\"true\" data-placement=\"bottom\""
-    			+ "data-trigger=\"manual\" title=\"<code>" + json.url + "</code>\""
-    			+ "data-content=\""
-    				
-    			+ "<div class='table_container'>"
-    				+ "<div class='title'>接口描述:</div>"
-    				+ (json.desc ? json.desc : "无")
-    				+ "<br/><br/>"
-    			+ "</div>"
-    			
-    			+ "<div class='table_container bg-success'>"
-	    			+ "<div class='title'>请求参数:</div>"
-	    			+ "<table class='table table-condensed'>"
-	    				+ getTableBody(json.params)
-	    			+ "</table>"
-    			+ "</div>"
-    			
-    			+ "<div class='table_container bg-success'>"
-    				+ "<div class='title'>结果:</div>"
-	    			+ "<table class='table table-condensed'>"
-	    				+ getTableBody(json.results)
-	    			+ "</table>"
-    			+ "</div>"
-    			+ "\">" + json.name + "</a>";
-    			
- 			container.append(html);
+ 			// 保存接口数据
+ 			interfaceData = data;
+ 			
+ 			container.html("");
+ 			
+ 			for (var i in data) {
+ 				var json = data[i];
+	 			
+ 				var html = "<a class=\"col-sm-2 bg-danger interfaceBox interfaceEntity\""  
+	    			+ "tabindex=\"1\" role=\"button\" data-toggle=\"popover\"" 
+	    			+ "data-html=\"true\" data-placement=\"bottom\""
+	    			+ "data-trigger=\"manual\" title=\"<code>" + json.url + "</code>\""
+	    			+ "data-content=\""
+	    				
+	    			+ "<div class='table_container'>"
+	    				+ "<div class='title'>接口描述:</div>"
+	    				+ (json.desc ? json.desc : "无")
+	    				+ "<br/><br/>"
+	    			+ "</div>"
+	    			
+	    			+ "<div class='table_container bg-success'>"
+		    			+ "<div class='title'>请求参数:</div>"
+		    			+ "<table class='table table-condensed'>"
+		    				+ getTableBody(json.params)
+		    			+ "</table>"
+	    			+ "</div>"
+	    			
+	    			+ "<div class='table_container bg-success'>"
+	    				+ "<div class='title'>结果:</div>"
+		    			+ "<table class='table table-condensed'>"
+		    				+ getTableBody(json.results)
+		    			+ "</table>"
+	    			+ "</div>"
+	    			+ "\">" + json.name + "</a>";
+	    			
+	 			container.append(html);
+ 			}
  		}
  		
  		function getTableBody(arr) {
