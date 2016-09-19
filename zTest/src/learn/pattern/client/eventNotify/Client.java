@@ -2,6 +2,23 @@ package learn.pattern.client.eventNotify;
 
 public class Client {
 	public static void main(String[] args) {
+		/**
+		 * 首先是产生一个转发器， 作为定制者的发布方， 
+		 * 
+		 * 接着将各种定制者注册到转发器上，
+		 * 
+		 * 然后新建一个管理产品的管理者，
+		 * 
+		 * 管理者的所有动作会产生事件， 
+		 * 
+		 * 事件将作为转发器的发布者， 并立即通知转发器转发。
+		 * 
+		 * 		generate 	notify     	  notify
+		 * 管理者 ------> 事件 ------> 转发器 ------> 定制者
+		 * 
+		 * 事件容易与定制者会过度耦合， 所以转发器其实扮演的是中介者的角色。
+		 */
+		
 		EventDispatch dispatch = EventDispatch.getEventDispathc();
 		
 		dispatch.registerCustomer(new Begger());
