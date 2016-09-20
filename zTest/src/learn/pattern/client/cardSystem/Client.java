@@ -8,6 +8,24 @@ public class Client {
 
 	public static void main(String[] args) {
 		
+		/**
+		 * 初始化一张卡
+		 * 
+		 * 创建一个消费对象,
+		 * 
+		 * 用门面对象处理消费对象 {
+		 * 
+		 * 		根据消费对象id获取消费策略, (工厂 + 策略)
+		 * 
+		 * 		生成一个消费上下文, 
+		 * 
+		 * 		上下文执行消费策略		
+		 * }
+		 */
+		
+		
+		
+		
 		Card card = initIC();
 		
 		System.out.println("****************  初始卡信息    ******************");
