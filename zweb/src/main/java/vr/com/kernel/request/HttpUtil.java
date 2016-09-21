@@ -73,7 +73,6 @@ public class HttpUtil {
 			httpUrlConn.setRequestProperty("User-Agent",
 					"Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
 			
-			
 			// 设置header
 			if (header != null) {
 				Set<Entry<String, String>> set = header.entrySet();

@@ -1,10 +1,12 @@
 package vr.com.kernel.request;
 
+import vr.com.kernel.request.HttpUtil.MyResponse;
+
 public abstract class ClientWithProcessor implements Client{
 	private Client client = new ClientBase();
 	
 	
-	public String httpRequest(Request request) {
+	public MyResponse httpRequest(Request request) {
 		
 		Request req = getRequestProcessor().process(request);
 		
