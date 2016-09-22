@@ -3,6 +3,8 @@ package vr.com.kernel;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
+
 import vr.com.data.dao.InterfaceEntiyDao;
 import vr.com.pojo.InterfaceEntity;
 import vr.com.pojo.InterfaceParam;
@@ -49,8 +51,15 @@ public class InterfaceManager {
 	public void addResult(String result) {
 		if (disabled) return;
 		
-		// dosomething
-		entity.setResults(new ArrayList<InterfaceParam>());
+		List<InterfaceParam> resultParam = new ArrayList<InterfaceParam>();
+		JSONObject responseObj = JSONObject.parseObject(result);
+		for (String key : responseObj.keySet()) {
+			InterfaceParam param = new InterfaceParam();
+			param.setKey(key);
+			resultParam.add(param);
+		}
+		
+		entity.setResults(resultParam);
 	}
 	
 	public void start() {
