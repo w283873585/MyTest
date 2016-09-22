@@ -671,6 +671,7 @@ $(function() {
  					data: {},
  					type: "post",
  					success: function() {
+ 						
  						close();
  					}
  				});
@@ -681,6 +682,10 @@ $(function() {
 				close();
 			});
  			
+			return {
+ 				start: start
+ 			};
+			
  			function start(index) {
  				started = true;
  				container.show();
@@ -752,10 +757,6 @@ $(function() {
  	 			}
  	 			return result;
  			}
- 			
- 			return {
- 				start: start
- 			};
 		}
  	})();
  	
