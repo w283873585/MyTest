@@ -1,7 +1,5 @@
 package vr.com.action;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,17 +7,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import vr.com.data.dao.InterfaceEntiyDao;
 import vr.com.kernel.InterfaceManager;
+import vr.com.kernel.RequestBody;
 import vr.com.kernel.RequestManager;
-import vr.com.kernel.RequestedParam;
 import vr.com.kernel.processor.ValueProcessorFactory;
 import vr.com.kernel.request.ClientFactory;
 import vr.com.util.CacheUtil;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 
 @Controller
 @RequestMapping("/my")
@@ -48,14 +45,13 @@ public class TestInterfaceAction {
 			processorKeys: "a,b,c"
 		}]
 		*/
-		List<RequestedParam> paramArr = JSONArray.parseArray(paramsInfo, 
-				RequestedParam.class);
+		RequestBody requestBody = new RequestBody(url, clientName, paramsInfo);
 		
-		// 根据url或参数信息中包含的"描述信息"，来持久化接口相关信息 
-		url = InterfaceManager.process(url, paramArr, interfaceEntityDao);
+		// 根据url或参数信息中包含的"描述信息"，来存储接口相关信息 
+		InterfaceManager.process(requestBody);
 		
 		// 托管请求管理者，在构建过程中，已经发送请求。
-		RequestManager manager = new RequestManager(url, clientName, paramArr);
+		RequestManager manager = new RequestManager(requestBody);
 		
 		// 保存参数与响应结果
 		JSONObject result = new JSONObject();

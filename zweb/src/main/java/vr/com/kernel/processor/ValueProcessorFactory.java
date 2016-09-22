@@ -9,12 +9,7 @@ public class ValueProcessorFactory extends Factory<ValueProcessor> {
 	private static ValueProcessorFactory factory = new ValueProcessorFactory();
 	
 	static {
-		factory.initialize(new DevRsaEncodeProcessor(),
-				new RsaEncodeProcessor(), 
-				new UrlEncodeProcessor(),
-				new DesEncodeProcessor(),
-				new MD5Processor(),
-				new JsonProcessor());
+		factory.initialize(Processors.values());
 	}
 	
 	public static ValueProcessor getProcessor(String name) {

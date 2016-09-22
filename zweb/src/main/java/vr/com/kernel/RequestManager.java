@@ -1,7 +1,6 @@
 package vr.com.kernel;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
@@ -17,11 +16,7 @@ import vr.com.util.CacheUtil;
 
 public class RequestManager {
 	
-	private String url;
-	
-	private String clientName;
-	
-	private List<RequestedParam> paramArr;
+	private RequestBody box;
 	
 	private MyResponse response = null;
 	
@@ -29,11 +24,8 @@ public class RequestManager {
 	
 	private Map<String, Object> originParams = new HashMap<String, Object>();
 	
-	
-	public RequestManager(String url, String clientName, List<RequestedParam> paramArr) {
-		 this.url = url;
-		 this.paramArr = paramArr;
-		 this.clientName = clientName;
+	public RequestManager(RequestBody box) {
+		 this.box = box;
 		 
 		 doRequest();
 	}
@@ -52,15 +44,15 @@ public class RequestManager {
 	
 	private void doRequest() {
 		
-		Client client = ClientFactory.getClient(clientName);
+		Client client = ClientFactory.getClient(box.getClientName());
 		
-		for (RequestedParam rParam : paramArr) {
+		for (RequestBody_Param rParam : box.getParams()) {
 			params.put(rParam.getKey(), 
 					ValueProcessorUtil.process(rParam.getValue(), rParam.getProcessorKeys()));
 			originParams.put(rParam.getKey(), rParam.getValue());
 		}
 		
-		Request req = new Request(false, url, params);
+		Request req = new Request(false, box.getUrl(), params);
 		
 		response = client.httpRequest(req);
 		
@@ -81,9 +73,9 @@ public class RequestManager {
 		*/
 		try {
 			Map<String, Object> record = new HashMap<String, Object>();
-			record.put("url", url);
-			record.put("clientName", clientName);
-			record.put("paramsInfo", paramArr);
+			record.put("url", box.getUrl());
+			record.put("clientName", box.getClientName());
+			record.put("paramsInfo", box.getParams());
 			record.put("params", originParams);
 			record.put("result", JSON.parse(getResponseText()));
 			CacheUtil.add(JSON.toJSONString(record));

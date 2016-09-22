@@ -1,6 +1,6 @@
 package vr.com.kernel;
 
-public class RequestedParam {
+public class RequestBody_Param {
 	private String key;
 	private String value;
 	private String processorKeys;
