@@ -7,12 +7,12 @@ import com.alibaba.fastjson.JSONArray;
 public class RequestBody {
 	private String url;
 	private String clientName;
-	private List<RequestBody_Param> params;
+	private List<RequestBodyParam> params;
 	
 	public RequestBody(String url, String clientName, String paramsInfo) {
 		this.url = url;
 		this.clientName = clientName;
-		this.params = JSONArray.parseArray(paramsInfo, RequestBody_Param.class);
+		this.params = JSONArray.parseArray(paramsInfo, RequestBodyParam.class);
 	}
 
 	public String getUrl() {
@@ -31,11 +31,11 @@ public class RequestBody {
 		this.clientName = clientName;
 	}
 
-	public List<RequestBody_Param> getParams() {
+	public List<RequestBodyParam> getParams() {
 		return params;
 	}
 
-	public void setParams(List<RequestBody_Param> params) {
+	public void setParams(List<RequestBodyParam> params) {
 		this.params = params;
 	}
 }

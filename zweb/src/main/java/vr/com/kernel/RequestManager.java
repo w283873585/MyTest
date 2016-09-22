@@ -46,7 +46,7 @@ public class RequestManager {
 		
 		Client client = ClientFactory.getClient(box.getClientName());
 		
-		for (RequestBody_Param rParam : box.getParams()) {
+		for (RequestBodyParam rParam : box.getParams()) {
 			params.put(rParam.getKey(), 
 					ValueProcessorUtil.process(rParam.getValue(), rParam.getProcessorKeys()));
 			originParams.put(rParam.getKey(), rParam.getValue());

@@ -13,7 +13,7 @@ public class InterfaceManager {
 	
 	public static void process(RequestBody box) {
 		String url = box.getUrl();
-		List<RequestBody_Param> paramArr = box.getParams();
+		List<RequestBodyParam> paramArr = box.getParams();
 		
 		url = url.trim();
 		String expression[] = url.split(separator);
@@ -29,7 +29,7 @@ public class InterfaceManager {
 			if (expression.length > 2) entity.setDesc(expression[2]);
 			
 			List<InterfaceParam> iParams = new ArrayList<InterfaceParam>();
-			for (RequestBody_Param obj : paramArr) {
+			for (RequestBodyParam obj : paramArr) {
 				InterfaceParam param = new InterfaceParam();
 				String keyExpressions[] = obj.getKey().trim()
 						.split(separator);
