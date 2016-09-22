@@ -48,15 +48,20 @@ public class TestInterfaceAction {
 		RequestBody requestBody = new RequestBody(url, clientName, paramsInfo);
 		
 		// 根据url或参数信息中包含的"描述信息"，来存储接口相关信息 
-		InterfaceManager.process(requestBody);
+		InterfaceManager interfaceManager = new InterfaceManager();
+		interfaceManager.process(requestBody);
 		
 		// 托管请求管理者，在构建过程中，已经发送请求。
-		RequestManager manager = new RequestManager(requestBody);
+		RequestManager requestManager = new RequestManager(requestBody);
+		
+		// 搜集请求结果
+		interfaceManager.addResult(requestManager.getResponseText());
+		interfaceManager.start();
 		
 		// 保存参数与响应结果
 		JSONObject result = new JSONObject();
-		result.put("params", manager.getParamsInfo());
-		result.put("result", manager.getResponseText());
+		result.put("params", requestManager.getParamsInfo());
+		result.put("result", requestManager.getResponseText());
 		return result;
 	}
 	

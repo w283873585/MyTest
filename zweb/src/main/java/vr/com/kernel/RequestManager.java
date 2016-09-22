@@ -16,7 +16,7 @@ import vr.com.util.CacheUtil;
 
 public class RequestManager {
 	
-	private RequestBody box;
+	private RequestBody requestBody;
 	
 	private MyResponse response = null;
 	
@@ -24,8 +24,8 @@ public class RequestManager {
 	
 	private Map<String, Object> originParams = new HashMap<String, Object>();
 	
-	public RequestManager(RequestBody box) {
-		 this.box = box;
+	public RequestManager(RequestBody requestBody) {
+		 this.requestBody = requestBody;
 		 
 		 doRequest();
 	}
@@ -44,15 +44,15 @@ public class RequestManager {
 	
 	private void doRequest() {
 		
-		Client client = ClientFactory.getClient(box.getClientName());
+		Client client = ClientFactory.getClient(requestBody.getClientName());
 		
-		for (RequestBodyParam rParam : box.getParams()) {
-			params.put(rParam.getKey(), 
-					ValueProcessorUtil.process(rParam.getValue(), rParam.getProcessorKeys()));
+		for (RequestBodyParam rParam : requestBody.getParams()) {
 			originParams.put(rParam.getKey(), rParam.getValue());
+			params.put(rParam.getKey(), ValueProcessorUtil
+					.process(rParam.getValue(), rParam.getProcessorKeys()));
 		}
 		
-		Request req = new Request(false, box.getUrl(), params);
+		Request req = new Request(false, requestBody.getUrl(), params);
 		
 		response = client.httpRequest(req);
 		
@@ -73,9 +73,9 @@ public class RequestManager {
 		*/
 		try {
 			Map<String, Object> record = new HashMap<String, Object>();
-			record.put("url", box.getUrl());
-			record.put("clientName", box.getClientName());
-			record.put("paramsInfo", box.getParams());
+			record.put("url", requestBody.getUrl());
+			record.put("clientName", requestBody.getClientName());
+			record.put("paramsInfo", requestBody.getParams());
 			record.put("params", originParams);
 			record.put("result", JSON.parse(getResponseText()));
 			CacheUtil.add(JSON.toJSONString(record));

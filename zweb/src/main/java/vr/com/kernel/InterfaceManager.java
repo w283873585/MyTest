@@ -9,47 +9,80 @@ import vr.com.pojo.InterfaceParam;
 
 public class InterfaceManager {
 	
-	private static final String separator = "->";
+	private boolean disabled = true;
 	
-	public static void process(RequestBody box) {
-		String url = box.getUrl();
-		List<RequestBodyParam> paramArr = box.getParams();
+	private InterfaceEntity entity = new InterfaceEntity();
+	
+	public void process(RequestBody box) {
+		SplitHelper util = new SplitHelper(box.getUrl());
 		
-		url = url.trim();
-		String expression[] = url.split(separator);
+		if (!util.isCommon()) {
+			
+			disabled = false;
+			
+			box.setUrl(util.next());
+			entity.setUrl(box.getUrl().replaceFirst(".*:[0-9]*", ""));
+			entity.setName(util.next());
+			entity.setDesc(util.next());
+			
+			addParams(box.getParams());
+		}
+	}
+	
+	private void addParams(List<RequestBodyParam> params) {
+		List<InterfaceParam> iParams = new ArrayList<InterfaceParam>();
 		
-		if (expression.length > 1) {
-			InterfaceEntity entity = new InterfaceEntity();
+		for (RequestBodyParam obj : params) {
+			SplitHelper util = new SplitHelper(obj.getKey());
+			obj.setKey(util.next());
 			
-			box.setUrl(expression[0]);
-			String interfaceUrl = url.replaceFirst(".*:[0-9]*", ""); 
-			entity.setUrl(interfaceUrl);
-			entity.setName(expression[1]);
-			
-			if (expression.length > 2) entity.setDesc(expression[2]);
-			
-			List<InterfaceParam> iParams = new ArrayList<InterfaceParam>();
-			for (RequestBodyParam obj : paramArr) {
-				InterfaceParam param = new InterfaceParam();
-				String keyExpressions[] = obj.getKey().trim()
-						.split(separator);
-				param.setKey(keyExpressions[0]);
-				param.setConstraint(obj.getProcessorKeys());
-				if (keyExpressions.length > 1) {
-					obj.setKey(keyExpressions[0]);
-					param.setDesc(keyExpressions[1]);
-				}
-				iParams.add(param);
+			InterfaceParam param = new InterfaceParam();
+			param.setKey(obj.getKey());
+			param.setDesc(util.next());
+			param.setConstraint(obj.getProcessorKeys());
+			iParams.add(param);
+		}
+		
+		entity.setParams(iParams);
+	}
+	
+	public void addResult(String result) {
+		if (disabled) return;
+		
+		// dosomething
+		entity.setResults(new ArrayList<InterfaceParam>());
+	}
+	
+	public void start() {
+		if (disabled) return;
+		
+		// 持久化数据
+		InterfaceEntiyDao interfaceEntityDao = new InterfaceEntiyDao();
+		if (!interfaceEntityDao.existInterface(entity.getUrl()))
+			interfaceEntityDao.insert(entity);
+		else
+			interfaceEntityDao.updateByUrl(entity.getUrl(), entity);
+	}
+	
+	public static class SplitHelper{
+		private static final String separator = "->";
+		private int index;
+		private String body[];
+		
+		public SplitHelper(String origin) {
+			origin = origin.trim();
+			this.body = origin.split(separator);
+		}
+		
+		public String next() {
+			if (index < body.length) {
+				return body[index++];
 			}
-			entity.setParams(iParams);
-			entity.setResults(new ArrayList<InterfaceParam>());
-			
-			// 持久化数据
-			InterfaceEntiyDao interfaceEntityDao = new InterfaceEntiyDao();
-			if (!interfaceEntityDao.existInterface(interfaceUrl))
-				interfaceEntityDao.insert(entity);
-			else
-				interfaceEntityDao.updateByUrl(interfaceUrl, entity);
+			return "";
+		}
+		
+		public boolean isCommon() {
+			return body.length <= 1;
 		}
 	}
 }
