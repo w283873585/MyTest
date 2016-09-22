@@ -15,7 +15,7 @@ public class InterfaceEntiyDao extends BaseDao<InterfaceEntity>{
 	}
 
 	public List<InterfaceEntity> query(String keyword) {
-		return select(MongoCondition.build("name", keyword, ConditionType.regex), InterfaceEntity.class);
+		return select(MongoCondition.build("name", keyword, ConditionType.regex).or("url", keyword, ConditionType.regex), InterfaceEntity.class);
 	}
 	
 	public boolean existInterface(String url) {

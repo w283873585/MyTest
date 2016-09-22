@@ -74,7 +74,7 @@ public class InterfaceManager {
 	}
 	
 	public static class SplitHelper{
-		private static final String separator = "->";
+		private static final String separator = "\\s+";
 		private int index;
 		private String body[];
 		
