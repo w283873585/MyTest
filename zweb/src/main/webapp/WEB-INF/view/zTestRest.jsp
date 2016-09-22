@@ -94,6 +94,9 @@
 			    text-transform: uppercase;
 			    letter-spacing: 1px;
 			}
+			.param_kv {
+				margin-bottom: 15px;
+			}
     	</style>
     </head>
     <body>
@@ -194,44 +197,23 @@
 	        <h4 class="modal-title">接口管理</h4>
 	      </div>
 	      <div class="modal-body">
-        	<div class="form-group col-sm-4">
-        		<input type="text" class="form-control"  placeholder="输出接口名称" id="queryKeyword">
-        	</div>
-        	<div class="form-group col-sm-2">
-        		<button type="button" class="btn btn-info" id="queryInterface">&nbsp;查找&nbsp;</button>
-        	</div>
-        	<div class="clearfix"></div>
-        	<div class="form-group col-sm-12" id="interfaceBody" style="min-height: 200px; font-size:12px;">
-        		<!-- 
-        		<a class="col-sm-2 bg-danger interfaceBox" id="hello" 
-        			tabindex="1" role="button" data-toggle="popover" 
-        			data-html="true" data-placement="bottom" 
-        			data-trigger="focus" title="<code>/api/resource/get/service</code>" 
-        			data-content="
-        				<div class='table_container bg-success'>
-        				<div class='title'>请求参数:</div>
-        				<table class='table table-condensed'>
-							 <tr><td>key</td><td>不多说</td></tr>
-							 <tr><td>key</td><td>desc</td></tr>
-						</table>
-						</div>
-						<div class='table_container bg-success'>
-						<div class='title'>结果:</div>
-        				<table class='table table-condensed'>
-							 <tr><td>key</td><td>不多说不多说不多说不多说不多说不多说不多说不多说不多说不多说</td></tr>
-							 <tr><td>key</td><td>desc</td></tr>
-						</table>
-						</div>
-						">下载</a>
-        		<a class="col-sm-2 bg-danger interfaceBox">资源预览</a>
-        		<a class="col-sm-2 bg-danger interfaceBox">天下之大</a>
-        		<a class="col-sm-2 bg-danger interfaceBox">四海之内</a>
-        		<a class="col-sm-2 bg-danger interfaceBox">刀锋之影</a>
-        		<a class="col-sm-2 bg-danger interfaceBox">放逐之刃</a>
-        		<a class="col-sm-2 bg-danger interfaceBox">心花路放</a>
-        		 -->
-			</div>
-        	<div class="clearfix"></div>
+	      
+	      	<!-- 接口修改 -->
+        	<div id="interfaceModify" style="padding: 0 10px;display: none"></div>
+        	
+        	
+        	<div id="interfaceSearch">
+	        	<div class="form-group col-sm-4">
+	        		<input type="text" class="form-control"  placeholder="输出接口名称" id="queryKeyword">
+	        	</div>
+	        	<div class="form-group col-sm-2">
+	        		<button type="button" class="btn btn-info" id="queryInterface">&nbsp;查找&nbsp;</button>
+	        	</div>
+	        	<div class="clearfix"></div>
+	        	<div class="form-group col-sm-12" id="interfaceBody" style="min-height: 200px; font-size:12px;"></div>
+	        	<div class="clearfix"></div>
+	        </div>
+	      
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
@@ -661,6 +643,120 @@ $(function() {
  			
  			return result;
  		}
+ 		
+ 		// 修改者
+		function modifier() {
+			
+ 			var started = false;
+ 			
+ 			var container = $("#interfaceModify");
+ 			
+ 			container.on("click", "#doModify", function() {
+ 				if (!started) return;
+ 				
+ 				$("#m_interfaceName").val();
+ 				
+ 				$("#m_interfaceDesc").val();
+ 				
+ 				$("#m_interfaceParam .param_v").each(function() {
+ 					
+ 				});
+ 				
+ 				$("#m_interfaceResult .param_v").each(function() {
+ 					
+ 				});
+ 				
+ 				$.ajax({
+ 					url: "",
+ 					data: {},
+ 					type: "post",
+ 					success: function() {
+ 						close();
+ 					}
+ 				});
+ 			});
+ 			
+			container.on("click", "#doClose", function() {
+				if (!started) return;
+				close();
+			});
+ 			
+ 			function start(index) {
+ 				started = true;
+ 				container.show();
+ 				$("#interfaceSearch").hide();
+ 				renderHtml(index);
+ 			}
+ 			
+ 			function close() {
+ 				started = false;
+ 				container.html("");
+ 				container.hide();
+ 				$("#interfaceSearch").show();
+ 			}
+ 			
+ 			function renderHtml(index) {
+ 			  var data = interfaceData[index];
+ 			  var html = "<div class='row' style='margin-left: -100px'>"
+	        	  + "<div class='form-group col-md-12'>"
+	        	  + "<code>" + data.url + "</code>"
+	        	  + "</div>"
+	        	  + "</div>"
+	        	  + "<div class='row form-group' style='margin-left: -100px'>"
+	        	  + "<div class='col-md-12'>"
+	        	  + "<label>接口</label>"
+	        	  + "</div>"
+	        	  + "<div class='col-md-6 param_kv'>"
+	        	  + "<input type='text' class='form-control' placeholder='名称' id='m_interfaceName' value='" + data.name + "'>"
+	        	  + "</div>"
+	        	  + "<div class='col-md-6 param_kv'>"
+	        	  + "<input type='text' class='form-control' placeholder='描述' id='m_interfaceDesc' value='" + data.desc + "'>"
+	        	  + "</div>"
+	        	  + "</div>"
+	        	  + "<div class='row form-group' style='margin-left: -100px' id='m_interfaceParam'>"
+	        	  + "<div class='col-md-12'>"
+	        	  + "<label>参数</label>"
+	        	  + "</div>"
+	        	  + getHtml(data.params)
+	        	  + "</div>"
+	        	  + "<div class='row form-group' style='margin-left: -100px' id='m_interfaceResult'>"
+	        	  + "<div class='col-md-12'>"
+	        	  + "<label>结果</label>"
+	        	  + "</div>"
+				  + getHtml(data.results)
+	        	  + "</div>"
+	        	  + "<div class='row' style='margin-left: -100px; margin-top: 30px;'>"
+	        	  + "<div class='col-md-6'>"
+	        	  + "<a href='javascript:;' class='btn btn-success' id='doModify' role='button'>&nbsp;&nbsp;&nbsp;&nbsp;保存&nbsp;&nbsp;&nbsp;&nbsp;</a>"
+	        	  + "&nbsp;&nbsp;&nbsp;"
+	        	  + "<a href='javascript:;' class='btn btn-default' id='doClose' role='button'>&nbsp;&nbsp;返回&nbsp;&nbsp;</a>"
+	        	  + "</div>"
+	        	  + "</div>";
+	        	  
+ 			 	container.html(html);
+ 			}
+ 			
+ 			function getHtml(arr) {
+ 				if (!arr || !arr.length)
+ 	 				return "无";
+ 	 				
+ 	 			var result = "";
+ 	 			for (var i = 0; i < arr.length; i++) {
+ 	 				var cur = arr[i];
+ 	 				result += + "<div class='col-md-6 param_kv'>"
+ 		        	  + "<input type='text' class='form-control'  placeholder='名称' value='" + cur.key + "' readonly>"
+ 		        	  + "</div>"
+ 		        	  + "<div class='col-md-6 param_kv'>"
+ 		        	  + "<input type='text' class='form-control param_v' placeholder='描述' value='" + cur.desc + "'>"
+ 		        	  + "</div>";
+ 	 			}
+ 	 			return result;
+ 			}
+ 			
+ 			return {
+ 				start: start
+ 			};
+		}
  	})();
  	
  	interfaceManager.init();
