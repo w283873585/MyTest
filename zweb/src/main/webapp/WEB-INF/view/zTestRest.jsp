@@ -530,15 +530,18 @@ $(function() {
 			
 			container = $("#interfaceBody");
 			
+			var modifier = getModifier();
+			
 			// 延迟策略双击阻止单击事件
 			var timer = null;
 			
-			// 单击展示接口详情
+			// 单击修改接口信息
 			container.on("click", ".interfaceEntity", function() {
 				clearTimeout(timer);
-				var that = this;
+				var that = $(this);
 				timer = setTimeout(function(){
-			    	$(that).popover('toggle');
+					var index = that.index(".interfaceEntity");
+					modifier.start(index);
 			    }, 200);
 			});
 			
@@ -597,13 +600,15 @@ $(function() {
  			
  			container.html("");
  			
+ 			$(".interfaceEntity").popover("destroy");
+ 			
  			for (var i in data) {
  				var json = data[i];
 	 			
  				var html = "<a class=\"col-sm-2 bg-danger interfaceBox interfaceEntity\""  
 	    			+ "tabindex=\"1\" role=\"button\" data-toggle=\"popover\"" 
 	    			+ "data-html=\"true\" data-placement=\"bottom\""
-	    			+ "data-trigger=\"manual\" title=\"<code>" + json.url + "</code>\""
+	    			+ "data-trigger=\"hover\" title=\"<code>" + json.url + "</code>\""
 	    			+ "data-content=\""
 	    				
 	    			+ "<div class='table_container'>"
@@ -628,6 +633,8 @@ $(function() {
 	    			+ "\">" + json.name + "</a>";
 	    			
 	 			container.append(html);
+	 			
+	 			$(".interfaceEntity").popover();
  			}
  		}
  		
@@ -645,33 +652,37 @@ $(function() {
  		}
  		
  		// 修改者
-		function modifier() {
+		function getModifier() {
 			
  			var started = false;
  			
  			var container = $("#interfaceModify");
  			
+ 			var data = null;
+ 			
  			container.on("click", "#doModify", function() {
  				if (!started) return;
  				
- 				$("#m_interfaceName").val();
+ 				var iName = $("#m_interfaceName").val();
  				
- 				$("#m_interfaceDesc").val();
+ 				var iDesc = $("#m_interfaceDesc").val();
  				
- 				$("#m_interfaceParam .param_v").each(function() {
- 					
+ 				data.name = iName || data.name;
+ 				data.desc = iDesc;
+ 				
+ 				$("#m_interfaceParam .param_v").each(function(index) {
+ 					data.params[index].desc = $(this).val();
  				});
  				
- 				$("#m_interfaceResult .param_v").each(function() {
- 					
+ 				$("#m_interfaceResult .param_v").each(function(index) {
+ 					data.results[index].desc = $(this).val();
  				});
  				
  				$.ajax({
- 					url: "",
- 					data: {},
+ 					url: "${pageContext.request.contextPath}/my/interface/update",
+ 					data: {entityStr: JSON.stringify(data)},
  					type: "post",
  					success: function() {
- 						
  						close();
  					}
  				});
@@ -690,18 +701,19 @@ $(function() {
  				started = true;
  				container.show();
  				$("#interfaceSearch").hide();
- 				renderHtml(index);
+ 				data = interfaceData[index];
+ 				renderHtml();
  			}
  			
  			function close() {
+ 				data = null;
  				started = false;
  				container.html("");
  				container.hide();
  				$("#interfaceSearch").show();
  			}
  			
- 			function renderHtml(index) {
- 			  var data = interfaceData[index];
+ 			function renderHtml() {
  			  var html = "<div class='row' style='margin-left: -100px'>"
 	        	  + "<div class='form-group col-md-12'>"
 	        	  + "<code>" + data.url + "</code>"
@@ -743,12 +755,12 @@ $(function() {
  			
  			function getHtml(arr) {
  				if (!arr || !arr.length)
- 	 				return "无";
+ 	 				return "<div class='col-md-12'>无</div>";
  	 				
  	 			var result = "";
  	 			for (var i = 0; i < arr.length; i++) {
  	 				var cur = arr[i];
- 	 				result += + "<div class='col-md-6 param_kv'>"
+ 	 				result += "<div class='col-md-6 param_kv'>"
  		        	  + "<input type='text' class='form-control'  placeholder='名称' value='" + cur.key + "' readonly>"
  		        	  + "</div>"
  		        	  + "<div class='col-md-6 param_kv'>"

@@ -16,6 +16,7 @@ import vr.com.kernel.RequestBody;
 import vr.com.kernel.RequestManager;
 import vr.com.kernel.processor.ValueProcessorFactory;
 import vr.com.kernel.request.ClientFactory;
+import vr.com.pojo.InterfaceEntity;
 import vr.com.util.CacheUtil;
 
 @Controller
@@ -70,5 +71,14 @@ public class TestInterfaceAction {
 	public Object query(HttpServletRequest request, HttpServletResponse response,
 			String keyword) {
 		return interfaceEntityDao.query(keyword);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/interface/update", produces = "text/html;charset=utf-8")
+	public Object update(HttpServletRequest request, HttpServletResponse response,
+			String entityStr) {
+		InterfaceEntity entity = JSONObject.parseObject(entityStr, InterfaceEntity.class);
+		interfaceEntityDao.updateByUrl(entity.getUrl(), entity);
+		return "";
 	}
 }
