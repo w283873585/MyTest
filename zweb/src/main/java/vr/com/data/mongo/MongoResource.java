@@ -15,10 +15,16 @@ import vr.com.data.DataProvider;
 import vr.com.data.DataResource;
 import vr.com.pojo.InterfaceEntityCodec;
 import vr.com.pojo.InterfaceParamCodec;
+import vr.com.util.PropertiesUtil;
 
 public enum MongoResource implements DataResource{
 	
 	Instance;
+	
+	private static final String FILENAME = "mongo.properties";
+	
+	private static final String URL = PropertiesUtil.getProperty(FILENAME, "url");
+	private static final String DATABASE = PropertiesUtil.getProperty(FILENAME, "database");
 	
 	private MongoDatabase db = null;
 	private MongoClient mongoClient = null;
@@ -37,8 +43,8 @@ public enum MongoResource implements DataResource{
 		MongoClientOptions options = MongoClientOptions.builder()
 	                .codecRegistry(registry).build();
 		
-		mongoClient = new MongoClient("127.0.0.1:27017", options);
-		db = mongoClient.getDatabase("test");
+		mongoClient = new MongoClient(URL, options);
+		db = mongoClient.getDatabase(DATABASE);
 	}
 
 	@Override
