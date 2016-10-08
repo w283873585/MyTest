@@ -8,17 +8,20 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
   
-  	<!-- 错误页面 -->
-	<error-page>
-		<error-code>404</error-code>
-		<location>/WEB-INF/view/404.jsp</location>
-	</error-page>
+  	<!-- spring -->
+  	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring.xml</param-value>
+	</context-param>
+  	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 
-	<error-page>
-		<error-code>500</error-code>
-		<location>/WEB-INF/view/404.jsp</location>
-	</error-page>
-
+	<!-- 防止spring内存溢出监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+  
   	<!-- springMVC配置 -->
 	<servlet>
 		<description>springMVC</description>
@@ -58,4 +61,15 @@
 	  <servlet-name>default</servlet-name>    
 	  <url-pattern>*.map</url-pattern>   
 	</servlet-mapping>
+
+	<!-- 错误页面 -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/view/404.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/view/404.jsp</location>
+	</error-page>
 </web-app>
