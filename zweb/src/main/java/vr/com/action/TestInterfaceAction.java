@@ -3,6 +3,7 @@ package vr.com.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import vr.com.data.dao.InterfaceEntiyDao;
+import vr.com.data.springData.repository.InterfaceEntityRepository;
 import vr.com.kernel.InterfaceManager;
 import vr.com.kernel.RequestBody;
 import vr.com.kernel.RequestManager;
@@ -23,7 +24,10 @@ import vr.com.util.CacheUtil;
 @RequestMapping("/my")
 public class TestInterfaceAction {
 	
-	private InterfaceEntiyDao interfaceEntityDao = new InterfaceEntiyDao();
+	// private InterfaceEntiyDao interfaceEntityDao = new InterfaceEntiyDao();
+	@Autowired
+	private InterfaceEntityRepository interfaceEntityDao;
+	
 	
 	@RequestMapping("/testRest")
 	public String toTestRest(HttpServletRequest request, HttpServletResponse response) {

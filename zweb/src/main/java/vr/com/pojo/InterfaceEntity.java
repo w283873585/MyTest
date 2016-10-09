@@ -2,7 +2,10 @@ package vr.com.pojo;
 
 import java.util.List;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 @Pojo
+@Document(collection="InterfaceEntity")
 public class InterfaceEntity {
 	
 	private String url;

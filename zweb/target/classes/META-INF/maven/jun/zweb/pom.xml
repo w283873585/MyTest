@@ -31,6 +31,12 @@
         <groupId>org.springframework.data</groupId>
         <artifactId>spring-data-mongodb</artifactId>
         <version>1.9.4.RELEASE</version>
+        <exclusions>
+        	<exclusion>
+        		<artifactId>mongo-java-driver</artifactId>
+        		<groupId>org.mongodb</groupId>
+        	</exclusion>
+        </exclusions>
     </dependency>
     
     <dependency>
@@ -42,17 +48,17 @@
     <dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-beans</artifactId>
-	    <version>4.3.2.RELEASE</version>
+	    <version>4.2.8.RELEASE</version>
 	</dependency>
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
-        <version>4.3.2.RELEASE</version>
+        <version>4.2.8.RELEASE</version>
     </dependency>
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
-        <version>4.3.2.RELEASE</version>
+        <version>4.2.8.RELEASE</version>
     </dependency>
     <dependency>
 	    <groupId>com.alibaba</groupId>
