@@ -11,7 +11,8 @@ public class ClientFactory extends Factory<Client>{
 	static {
 		factory.initialize(new Client_vrshow(),
 				new Client_vrdev(), 
-				new ClientBase());
+				new ClientBase(),
+				new Client_vrsoft());
 	}
 	
 	public static Client getClient(String name) {

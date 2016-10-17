@@ -14,9 +14,9 @@
 			http://www.springframework.org/schema/data/mongo 
 			http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
-	<!--引入配置属性文件
+	<!--引入配置属性文件 -->
 	<context:property-placeholder location="classpath:config.properties" />
-	 -->
+	
 	<!--自动扫描含有@Service将其注入为bean -->
 	<context:component-scan base-package="com.vr.show.service" />
 	
@@ -25,11 +25,11 @@
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	-->
 	<!-- mongo配置 -->
-	<mongo:mongo id="mongo" />
+	<mongo:mongo id="mongo" host="${mongoUrl}" port="${mongoPort}"/>
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg ref="mongo" />
-		<constructor-arg value="test" />
+		<constructor-arg value="${mongoDatabase}" />
 	</bean>
 	
 	<mongo:repositories base-package="vr.com.data.springData.repository" />

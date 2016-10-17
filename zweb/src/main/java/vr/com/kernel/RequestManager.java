@@ -57,7 +57,7 @@ public class RequestManager {
 		response = client.httpRequest(req);
 		
 		// record the history of request
-		recordHistory();
+		// recordHistory();
 	}
 	
 	private void recordHistory() {
