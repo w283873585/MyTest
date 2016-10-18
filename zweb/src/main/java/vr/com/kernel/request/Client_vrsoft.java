@@ -34,7 +34,7 @@ public class Client_vrsoft extends ClientWithProcessor {
 				String jsonData = JSON.toJSONString(parmsMap);
 				
 				try {
-					// 对业务参数进行MD5鉴权加密
+					// 对业务参数进行aes加密
 					String msg = VR_Encrypt_Util.aesAndBase16Encode(jsonData, CommonConstant.AES_key, CommonConstant.AES_iv);
 					
 					params.put("packageId", packageId);
