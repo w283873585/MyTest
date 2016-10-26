@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
+import vr.com.kernel.request.HttpUtil.MyResponse;
 import vr.com.util.security.CommonConstant;
 import vr.com.util.security.VR_Encrypt_Util;
+import vr.com.util.security.VR_Security_Util;
 
 public class Client_vrsoft extends ClientWithProcessor {
 	private String packageId = "1271";
@@ -52,5 +55,22 @@ public class Client_vrsoft extends ClientWithProcessor {
 	@Override
 	public String getName() {
 		return "vrsoft";
+	}
+	
+	@Override
+	protected MyResponse processResponse(MyResponse res) {
+		MyResponse result = new MyResponse();
+		result.e = res.e;
+		result.code = res.code;
+		result.header = res.header;
+		try {
+			String data = JSONObject.parseObject(res.toString()).getString("msg");
+			data = VR_Encrypt_Util.aesDecode(data, CommonConstant.AES_key, CommonConstant.AES_iv);
+			result.data = data.getBytes("utf-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return res;
+		}
+		return result;
 	}
 }
