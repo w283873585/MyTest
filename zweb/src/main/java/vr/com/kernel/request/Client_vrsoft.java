@@ -9,7 +9,6 @@ import com.alibaba.fastjson.JSONObject;
 import vr.com.kernel.request.HttpUtil.MyResponse;
 import vr.com.util.security.CommonConstant;
 import vr.com.util.security.VR_Encrypt_Util;
-import vr.com.util.security.VR_Security_Util;
 
 public class Client_vrsoft extends ClientWithProcessor {
 	private String packageId = "1271";
