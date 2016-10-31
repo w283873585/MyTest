@@ -65,7 +65,16 @@ public class ClientForTestThread2 {
 		
 		public void run() {
 			try {
-				
+				/**
+				 * TODO forFuture
+				 * 
+				 * 场景描述, 
+				 * 
+				 * A,B,C线程分别负责打印10次"A","B","C"
+				 * 
+				 * 要求输出结果为"ABCABCABC...."
+				 * 
+				 */
 				
 				
 				int i = 10;
