@@ -13,7 +13,7 @@ import vr.com.util.security.VR_Encrypt_Util;
 public class Client_vrsoft extends ClientWithProcessor {
 	private String packageId = "1271";
 	private String equ = "02719220951061609410839358932208";
-	private String clientType = "6";
+	private String clientType = "11";
 	
 	@Override
 	public RequestProcessor getRequestProcessor() {
