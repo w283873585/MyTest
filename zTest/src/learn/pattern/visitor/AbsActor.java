@@ -2,14 +2,13 @@ package learn.pattern.visitor;
 
 public class AbsActor {
 	public void act(Role role) {
-		System.out.println("演员可以演任何角色");
+		role.accept(this);
+		// System.out.println("演员可以演任何角色");
 	}
 	
 	public void act(KungFuRole role) {
-		
 		System.out.println("演员都可以演功夫角色");
 	}
-	
 	
 	public static class YoungActor extends AbsActor {
 		public void act(KungFuRole role) {
@@ -31,9 +30,12 @@ public class AbsActor {
 		act.act(new KungFuRole());
 		
 		// vs
-		AbsActor act1 = new OldActor();
+		AbsActor act1 = new AbsActor();
 		Role role1 = new KungFuRole();
-		role1.accept(act1);
+		act1.act(role1);
+		
+		new YoungActor().act(role1);
+		// role1.accept(act1);
 	}
 }
 
