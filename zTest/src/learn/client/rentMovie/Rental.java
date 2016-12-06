@@ -1,4 +1,4 @@
-package learn.client.client1;
+package learn.client.rentMovie;
 
 public class Rental {
 	private Movie _movie;

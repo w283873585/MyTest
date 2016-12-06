@@ -1,4 +1,4 @@
-package learn.client.client1;
+package learn.client.rentMovie;
 
 import java.util.Enumeration;
 import java.util.Vector;

@@ -1,4 +1,4 @@
-package learn.client.client1;
+package learn.client.rentMovie;
 
 public abstract class Price {
 	public abstract double getCharge(int daysRented);

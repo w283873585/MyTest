@@ -1,4 +1,4 @@
-package learn.client.client1;
+package learn.client.rentMovie;
 
 public class Price_Childrens extends Price{
 
