@@ -4,8 +4,9 @@ import vr.com.commandRe.core.CommandResult;
 import vr.com.util.JsonUtil;
 
 public class CommandResultImpl implements CommandResult {
-	private final boolean isSuccess;
 	private final String data;
+	private final boolean isSuccess;
+	private String rollbackCommand;
 	
 	private CommandResultImpl(boolean isSuccess, String data) {
 		this.data = data;
@@ -20,10 +21,17 @@ public class CommandResultImpl implements CommandResult {
 		return data;
 	}
 	
+	public CommandResult setRollbackCommand(String command) {
+		this.rollbackCommand = command;
+		return this;
+	}
+	
 	public String toString() {
 		return JsonUtil
 				.putA("state", isSuccess ? "执行成功" : "执行失败")
-				.putA("data", data).toJSONString();
+				.putA("data", data)
+				.putA("rollbackCommand", rollbackCommand)
+				.toJSONString();
 	}
 	
 	public static CommandResult error(String data) {
@@ -33,5 +41,5 @@ public class CommandResultImpl implements CommandResult {
 	public static CommandResult success(String data) {
 		return new CommandResultImpl(true, data);
 	}
-	
+
 }

@@ -8,11 +8,11 @@ public interface Command {
 	
 	/**
 	 * for rollback
-	 */
 	boolean canRollback();
 	
 	CommandResult rollback(CommandInfo info);
 	
+	*/
 	/**
 	 * 依赖流程, 依赖数据
 	 */

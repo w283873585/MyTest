@@ -5,4 +5,6 @@ public interface CommandResult {
 	String getResult();
 	
 	boolean isSuccess();
+	
+	CommandResult setRollbackCommand(String command);
 }
