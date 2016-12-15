@@ -20,7 +20,7 @@ public class DbCommandVO {
 		return "CommonDb " 
 				+ "name=" + name
 				+ "&type=" + type
-				+ "&param" + param.toJSONString();
+				+ "&param=" + param.toJSONString();
 	}
 	
 	public DbCommandVO addParam(String key, String value) {
