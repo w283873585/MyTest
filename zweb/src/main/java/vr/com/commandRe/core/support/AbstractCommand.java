@@ -8,13 +8,14 @@ public abstract class AbstractCommand implements Command{
 
 	public abstract String getName();
 
-	protected boolean check(CommandInfo info) {
-		return true;
+	protected CommandResult check(CommandInfo info) {
+		return CommandResultSupport.success("");
 	}
 
 	public CommandResult invoke(CommandInfo info) {
-		if (!check(info)) 
-			return CommandResultSupport.error("格式不合法");
+		CommandResult checkResult = check(info);
+		if (!checkResult.isSuccess()) 
+			return checkResult;
 		return this.exec(info);
 	}
 	
