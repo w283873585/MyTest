@@ -18,7 +18,7 @@ public enum CommandManager {
 	/**	 commandReslover  */
 	private CommandReslover	commandReslover = new CommandResloverSupport();
 	
-	/** mongo db util */
+	/**  mongodb util */
 	private BaseDao<CommandResult> dao = new BaseDao<CommandResult>("commandResult"); 
 	
 	/**
