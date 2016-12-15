@@ -7,6 +7,7 @@ public class CommandResultSupport implements CommandResult {
 	private final String data;
 	private final boolean isSuccess;
 	private String rollbackCommand;
+	private String originCommand;
 	
 	private CommandResultSupport(boolean isSuccess, String data) {
 		this.data = data;
@@ -25,9 +26,16 @@ public class CommandResultSupport implements CommandResult {
 		return this.rollbackCommand;
 	}
 	
-	public CommandResult setRollbackCommand(String command) {
+	public void setRollbackCommand(String command) {
 		this.rollbackCommand = command;
-		return this;
+	}
+	
+	public void setOriginCommand(String command) {
+		this.originCommand = command;
+	}
+
+	public String getOriginCommand() {
+		return originCommand;
 	}
 	
 	public String toString() {

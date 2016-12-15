@@ -6,5 +6,7 @@ public interface CommandResult {
 	
 	boolean isSuccess();
 	
-	CommandResult setRollbackCommand(String command);
+	void setRollbackCommand(String command);
+	
+	void setOriginCommand(String command);
 }

@@ -19,10 +19,10 @@ public class ClearUserCommand extends AbstractCommand{
 		
 		DbCommandVO dbCommandVO = DbCommandVO.build("user.delUser", QueryType.update);
 		
-		String key = info.contains("email") ? "email" : "mobile";
+		String key = info.containsKey("email") ? "email" : "mobile";
 		String newKey = "new" + key;
 		String value = info.get(key);
-		String newValue = info.contains(newKey) ? info.get(newKey) : UUID.randomUUID().toString();
+		String newValue = info.containsKey(newKey) ? info.get(newKey) : UUID.randomUUID().toString();
 		
 		dbCommandVO.addParam(key, value);
 		dbCommandVO.addParam(newKey, newValue);

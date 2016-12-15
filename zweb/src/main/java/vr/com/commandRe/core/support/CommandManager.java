@@ -34,6 +34,8 @@ public enum CommandManager {
 
 		CommandResult result = command.invoke(cInfo);
 		
+		result.setOriginCommand(commandInfo);
+		
 		dao.insert(result);
 		
 		return result;
