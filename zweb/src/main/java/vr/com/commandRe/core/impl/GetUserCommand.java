@@ -13,7 +13,7 @@ public class GetUserCommand extends AbstractCommand{
 	}
 
 	@Override
-	protected vr.com.commandRe.core.CommandResult exec(CommandInfo info) {
+	protected CommandResult exec(CommandInfo info) {
 		DbCommandVO dbCommandVO = DbCommandVO.build("user.getUser", QueryType.selectOne);
 		
 		String key = info.containsKey("email") ? "email" : "mobile";
