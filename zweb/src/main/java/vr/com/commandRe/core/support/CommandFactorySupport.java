@@ -6,8 +6,9 @@ import java.util.Map;
 
 import vr.com.commandRe.core.Command;
 import vr.com.commandRe.core.CommandFactory;
-import vr.com.commandRe.core.impl.ClearUserCommand;
 import vr.com.commandRe.core.impl.BaseDbCommand;
+import vr.com.commandRe.core.impl.ClearUserCommand;
+import vr.com.commandRe.core.impl.GetUserCommand;
 import vr.com.commandRe.core.impl.NoneCommand;
 
 public class CommandFactorySupport implements CommandFactory{
@@ -17,6 +18,7 @@ public class CommandFactorySupport implements CommandFactory{
 		register(new NoneCommand());
 		register(new ClearUserCommand());
 		register(new BaseDbCommand());
+		register(new GetUserCommand());
 	}
 	
 	private static void register(Command command) {
