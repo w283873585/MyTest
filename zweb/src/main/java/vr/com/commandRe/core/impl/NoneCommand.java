@@ -2,18 +2,19 @@ package vr.com.commandRe.core.impl;
 
 import vr.com.commandRe.core.CommandInfo;
 import vr.com.commandRe.core.CommandResult;
+import vr.com.commandRe.core.support.AbstractCommand;
+import vr.com.commandRe.core.support.CommandResultSupport;
 
-public class DbCommand extends AbstractCommand{
+public class NoneCommand extends AbstractCommand{
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "NONE";
 	}
 
 	@Override
 	protected CommandResult exec(CommandInfo info) {
-		// TODO Auto-generated method stub
-		return null;
+		return CommandResultSupport.error("不支持的命令");
 	}
+	
 }

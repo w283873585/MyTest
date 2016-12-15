@@ -1,4 +1,4 @@
-package vr.com.commandRe.core.impl;
+package vr.com.commandRe.core.support;
 
 import vr.com.commandRe.core.Command;
 import vr.com.commandRe.core.CommandInfo;
@@ -14,19 +14,13 @@ public abstract class AbstractCommand implements Command{
 
 	public CommandResult invoke(CommandInfo info) {
 		if (!check(info)) 
-			return null;
-		
-		
-		return null;
+			return CommandResultSupport.error("格式不合法");
+		return this.exec(info);
+	}
+	
+	public CommandManager getManager() {
+		return CommandManager.instance;
 	}
 	
 	protected abstract CommandResult exec(CommandInfo info);
-
-	public boolean canRollback() {
-		return false;
-	}
-
-	public CommandResult rollback(CommandInfo info) {
-		throw new RuntimeException("no support rollback");
-	}
 }

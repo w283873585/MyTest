@@ -1,4 +1,4 @@
-package vr.com.commandRe.core.impl;
+package vr.com.commandRe.core.support;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,13 +10,13 @@ public class CommandInfoImpl implements CommandInfo{
 
 	private String command;
 	
-	private Map<String, Object> param = new HashMap<String, Object>();
+	private Map<String, String> param = new HashMap<String, String>();
 	
 	public CommandInfoImpl(String commnadName) {
 		this.command = commnadName;
 	}
 	
-	public void put(String key, Object value) {
+	public void put(String key, String value) {
 		this.param.put(key, value);
 	}
 	
@@ -24,15 +24,19 @@ public class CommandInfoImpl implements CommandInfo{
 		return this.command;
 	}
 	
-	public Map<String, Object> getParam() {
+	public Map<String, String> getParam() {
 		return this.param;
 	}
 
-	public Object get(String key) {
+	public String get(String key) {
 		return param.get(key);
 	}
 
 	public Iterator<String> iterator() {
 		return param.keySet().iterator();
+	}
+
+	public boolean contains(String key) {
+		return param.containsKey(key);
 	}
 }

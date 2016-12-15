@@ -7,9 +7,11 @@ public interface CommandInfo extends Iterable<String>{
 	
 	public String getCommandName();
 	
-	public Object get(String key);
+	public String get(String key);
+	
+	public boolean contains(String key);
 	
 	public Iterator<String> iterator();
 	
-	public Map<String, Object> getParam();
+	public Map<String, String> getParam();
 }

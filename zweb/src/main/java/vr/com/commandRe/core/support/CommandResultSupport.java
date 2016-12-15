@@ -1,14 +1,14 @@
-package vr.com.commandRe.core.impl;
+package vr.com.commandRe.core.support;
 
 import vr.com.commandRe.core.CommandResult;
 import vr.com.util.JsonUtil;
 
-public class CommandResultImpl implements CommandResult {
+public class CommandResultSupport implements CommandResult {
 	private final String data;
 	private final boolean isSuccess;
 	private String rollbackCommand;
 	
-	private CommandResultImpl(boolean isSuccess, String data) {
+	private CommandResultSupport(boolean isSuccess, String data) {
 		this.data = data;
 		this.isSuccess = isSuccess;
 	}
@@ -19,6 +19,10 @@ public class CommandResultImpl implements CommandResult {
 	
 	public String getResult() {
 		return data;
+	}
+	
+	public String getRollbackCommand() {
+		return this.rollbackCommand;
 	}
 	
 	public CommandResult setRollbackCommand(String command) {
@@ -35,11 +39,10 @@ public class CommandResultImpl implements CommandResult {
 	}
 	
 	public static CommandResult error(String data) {
-		return new CommandResultImpl(false, data);
+		return new CommandResultSupport(false, data);
 	}
 	
 	public static CommandResult success(String data) {
-		return new CommandResultImpl(true, data);
+		return new CommandResultSupport(true, data);
 	}
-
 }

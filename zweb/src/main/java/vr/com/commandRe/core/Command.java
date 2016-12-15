@@ -1,10 +1,14 @@
 package vr.com.commandRe.core;
 
+import vr.com.commandRe.core.support.CommandManager;
+
 public interface Command {
 
 	String getName();
 	
 	CommandResult invoke(CommandInfo info);
+	
+	CommandManager getManager();
 	
 	/**
 	 * for rollback
