@@ -10,7 +10,7 @@ import vr.com.commandRe.core.impl.ClearUserCommand;
 import vr.com.commandRe.core.impl.BaseDbCommand;
 import vr.com.commandRe.core.impl.NoneCommand;
 
-public class CommandFactoryImpl implements CommandFactory{
+public class CommandFactorySupport implements CommandFactory{
 	
 	private static Map<String, Command> commands = new HashMap<String, Command>();
 	static {

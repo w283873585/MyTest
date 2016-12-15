@@ -6,13 +6,13 @@ import java.util.Map;
 
 import vr.com.commandRe.core.CommandInfo;
 
-public class CommandInfoImpl implements CommandInfo{
+public class CommandInfoSupport implements CommandInfo{
 
 	private String command;
 	
 	private Map<String, String> param = new HashMap<String, String>();
 	
-	public CommandInfoImpl(String commnadName) {
+	public CommandInfoSupport(String commnadName) {
 		this.command = commnadName;
 	}
 	

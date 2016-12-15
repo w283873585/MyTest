@@ -13,10 +13,10 @@ public enum CommandManager {
 	instance;
 	
 	/**	 commandFactory  */
-	private CommandFactory commandFactory = new CommandFactoryImpl();
+	private CommandFactory commandFactory = new CommandFactorySupport();
 	
 	/**	 commandReslover  */
-	private CommandReslover	commandReslover = new CommandResloverImpl();
+	private CommandReslover	commandReslover = new CommandResloverSupport();
 	
 	/** mongo db util */
 	private BaseDao<CommandResult> dao = new BaseDao<CommandResult>("commandResult"); 
