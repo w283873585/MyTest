@@ -20,9 +20,7 @@ public class GetUserCommand extends AbstractCommand{
 		String key = info.keySet().iterator().next();
 		String value = info.get(key);
 		
-		dbCommandVO.addParam(key, value);
-		CommandResult result = getManager().exec(dbCommandVO);
-		
+		CommandResult result = dbCommandVO.addParam(key, value).execute(getManager());;
 		return result;
 	}
 }

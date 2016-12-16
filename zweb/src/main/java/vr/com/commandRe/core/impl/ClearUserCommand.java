@@ -17,23 +17,17 @@ public class ClearUserCommand extends AbstractCommand{
 
 	@Override
 	protected CommandResult exec(CommandInfo info) {
-		
-		DbCommandVO dbCommandVO = DbCommandVO.build("user.delUser", QueryType.update);
-		
+
 		String key = info.containsKey("email") ? "email" : "mobile";
 		String newKey = "new" + key;
 		String value = info.get(key);
 		String newValue = info.containsKey(newKey) ? info.get(newKey) : UUID.randomUUID().toString();
 		
-		dbCommandVO.addParam(key, value);
-		dbCommandVO.addParam(newKey, newValue);
-		CommandResult result = getManager().exec(dbCommandVO);
+		DbCommandVO dbCommandVO = DbCommandVO.build("user.delUser", QueryType.update);
+		CommandResult result = dbCommandVO.addParam(key, value, newKey, newValue).execute(getManager());
 		
 		if (result.isSuccess()) {
-			DbCommandVO rollbackCommand = DbCommandVO.build("user.delUser", QueryType.update);
-			rollbackCommand.addParam(key, newValue);
-			rollbackCommand.addParam(newKey, value);
-			result.setRollbackCommand(rollbackCommand.toString());
+			result.setRollbackCommand(dbCommandVO.addParam(key, newValue, newKey, value).toString());
 		}
 		
 		return result;

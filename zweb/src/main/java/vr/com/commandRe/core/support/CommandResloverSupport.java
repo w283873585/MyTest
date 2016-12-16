@@ -1,5 +1,8 @@
 package vr.com.commandRe.core.support;
 
+import java.util.HashMap;
+
+import vr.com.commandRe.core.CommandInfo;
 import vr.com.commandRe.core.CommandReslover;
 
 public class CommandResloverSupport implements CommandReslover{
@@ -24,5 +27,20 @@ public class CommandResloverSupport implements CommandReslover{
 		}
 		
 		return cInfo;
+	}
+	
+	private static class CommandInfoSupport extends HashMap<String, String> implements CommandInfo{
+
+		private static final long serialVersionUID = 5213576145292256136L;
+		private String command;
+		
+		private CommandInfoSupport(String commnadName) {
+			this.command = commnadName;
+		}
+
+		@Override
+		public String getCommandName() {
+			return command;
+		}
 	}
 }

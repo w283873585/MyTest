@@ -40,10 +40,6 @@ public enum CommandManager {
 		return result;
 	}
 	
-	public CommandResult exec(DbCommandVO dbCommand) {
-		return exec(dbCommand.toString());
-	}
-	
 	public static CommandResult execute(String commandInfo) {
 		return CommandManager.instance.exec(commandInfo);
 	}
