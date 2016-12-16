@@ -5,7 +5,6 @@ import vr.com.commandRe.core.CommandFactory;
 import vr.com.commandRe.core.CommandInfo;
 import vr.com.commandRe.core.CommandReslover;
 import vr.com.commandRe.core.CommandResult;
-import vr.com.commandRe.core.impl.DbCommandVO;
 import vr.com.data.dao.BaseDao;
 
 public enum CommandManager {
@@ -19,7 +18,7 @@ public enum CommandManager {
 	private CommandReslover	commandReslover = new CommandResloverSupport();
 	
 	/**  mongodb util */
-	private BaseDao<CommandResult> dao = new BaseDao<CommandResult>("commandResult"); 
+	private BaseDao<CommandResult> dao = new BaseDao<CommandResult>("CommandResult"); 
 	
 	/**
 	 *	parse the string to CommandInfo object,
@@ -43,5 +42,9 @@ public enum CommandManager {
 	
 	public CommandResult exec(DbCommandVO dbCommand) {
 		return exec(dbCommand.toString());
+	}
+	
+	public static CommandResult execute(String commandInfo) {
+		return CommandManager.instance.exec(commandInfo);
 	}
 }

@@ -12,15 +12,15 @@ public abstract class AbstractCommand implements Command{
 		return CommandResultSupport.success("");
 	}
 
+	public CommandManager getManager() {
+		return CommandManager.instance;
+	}
+	
 	public CommandResult invoke(CommandInfo info) {
 		CommandResult checkResult = check(info);
 		if (!checkResult.isSuccess()) 
 			return checkResult;
 		return this.exec(info);
-	}
-	
-	public CommandManager getManager() {
-		return CommandManager.instance;
 	}
 	
 	protected abstract CommandResult exec(CommandInfo info);

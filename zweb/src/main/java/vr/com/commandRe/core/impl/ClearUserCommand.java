@@ -6,6 +6,7 @@ import vr.com.commandRe.core.CommandInfo;
 import vr.com.commandRe.core.CommandResult;
 import vr.com.commandRe.core.impl.BaseDbCommand.QueryType;
 import vr.com.commandRe.core.support.AbstractCommand;
+import vr.com.commandRe.core.support.DbCommandVO;
 
 public class ClearUserCommand extends AbstractCommand{
 

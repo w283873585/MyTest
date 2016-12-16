@@ -1,27 +1,41 @@
 package vr.com.commandRe.core.support;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import vr.com.commandRe.core.CommandResult;
 import vr.com.util.JsonUtil;
 
+@Document(collection="CommandResult")
 public class CommandResultSupport implements CommandResult {
-	private final String data;
-	private final boolean isSuccess;
+	
+	private String result;
+	private boolean success;
 	private String rollbackCommand;
 	private String originCommand;
 	
-	private CommandResultSupport(boolean isSuccess, String data) {
-		this.data = data;
-		this.isSuccess = isSuccess;
-	}
+	public CommandResultSupport() {}
 	
-	public boolean isSuccess() {
-		return isSuccess;
+	public CommandResultSupport(boolean isSuccess, String data) {
+		this.result = data;
+		this.success = isSuccess;
 	}
 	
 	public String getResult() {
-		return data;
+		return result;
 	}
-	
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
 	public String getRollbackCommand() {
 		return this.rollbackCommand;
 	}
@@ -40,17 +54,17 @@ public class CommandResultSupport implements CommandResult {
 	
 	public String toString() {
 		return JsonUtil
-				.putA("state", isSuccess ? "执行成功" : "执行失败")
-				.putA("data", data)
+				.putA("state", success ? "执行成功" : "执行失败")
+				.putA("data", result)
 				.putA("rollbackCommand", rollbackCommand)
 				.toJSONString();
 	}
 	
-	public static CommandResult error(String data) {
+	public static CommandResultSupport error(String data) {
 		return new CommandResultSupport(false, data);
 	}
 	
-	public static CommandResult success(String data) {
+	public static CommandResultSupport success(String data) {
 		return new CommandResultSupport(true, data);
 	}
 }

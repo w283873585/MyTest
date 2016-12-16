@@ -6,10 +6,11 @@ import com.alibaba.fastjson.JSONObject;
 
 import vr.com.commandRe.core.CommandInfo;
 import vr.com.commandRe.core.CommandResult;
+import vr.com.commandRe.core.support.AbstractCommand;
 import vr.com.commandRe.core.support.CommandResultSupport;
-import vr.com.commandRe.core.support.DbCommand;
+import vr.com.db.StaticFactory;
 
-public class BaseDbCommand extends DbCommand{
+public class BaseDbCommand extends AbstractCommand{
 
 	@Override
 	public String getName() {
@@ -17,6 +18,22 @@ public class BaseDbCommand extends DbCommand{
 	}
 
 	@Override
+	protected CommandResult exec(CommandInfo info) {
+		CommandResult result = null;
+		SqlSession sqlSession = StaticFactory.getSqlSession();
+		
+		try {
+			result = exec(info, sqlSession);
+			sqlSession.commit();
+		} catch(Exception e) {
+			result = CommandResultSupport.error(e.toString());
+			sqlSession.rollback();
+		} finally {
+			sqlSession.close();
+		}
+		return result;
+	}
+	
 	protected CommandResult exec(CommandInfo info, SqlSession sqlSession) {
 		String name = info.get("name");
 		String type = info.get("type");

@@ -9,11 +9,11 @@
     		<if test="user_id!=null">
     			user_id = #{user_id}
     		</if>
-    		<if test="user_email!=null">
-    			user_email = #{user_email}
+    		<if test="email!=null">
+    			user_email = #{email}
     		</if>
-    		<if test="user_mobile!=null">
-    			user_mobile = #{user_mobile}
+    		<if test="mobile!=null">
+    			user_mobile = #{email}
     		</if>
     	</where>
     </select>
@@ -21,34 +21,23 @@
     <update id="delUser" parameterType="map">
     	update user_info_tb 
     	<set>
-    		<if test="user_email!=null">
-    			user_email = #{newEmail}
+    		<if test="email!=null">
+    			email = #{newemail}
 	    	</if>
-	    	<if test="user_mobile!=null">
-	    		user_mobile = #{newMobile}
+	    	<if test="mobile!=null">
+	    		mobile = #{newmobile}
 	    	</if>
     	</set>
     	<where>
-	    	<if test="user_email!=null">
-	    		user_email = #{user_email}
+	    	<if test="email!=null">
+	    		user_email = #{email}
 	    	</if>
-	    	<if test="user_mobile!=null">
-	    		user_mobile = #{user_mobile}
+	    	<if test="mobile!=null">
+	    		user_mobile = #{mobile}
 	    	</if>
 	    	<if test="user_id!=null">
 	    		user_id = #{user_id}
 	    	</if>
     	</where>
-    	<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE">  
-    		select user_id from user_info_tb 
-    		<where>
-		    	<if test="user_email!=null">
-		    		user_email = #{user_email}
-		    	</if>
-		    	<if test="user_mobile!=null">
-		    		user_mobile = #{user_mobile}
-		    	</if>
-    		</where> 
-	    </selectKey>
     </update>
 </mapper>

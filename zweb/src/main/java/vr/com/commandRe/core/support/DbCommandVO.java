@@ -1,4 +1,4 @@
-package vr.com.commandRe.core.impl;
+package vr.com.commandRe.core.support;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -10,10 +10,14 @@ public class DbCommandVO {
 	private QueryType type;
 	private JSONObject param = new JSONObject();
 	
-	
 	private DbCommandVO(String name, QueryType type) {
 		this.name = name;
 		this.type = type;
+	}
+	
+	public DbCommandVO addParam(String key, String value) {
+		param.put(key, value);
+		return this;
 	}
 	
 	public String toString() {
@@ -21,11 +25,6 @@ public class DbCommandVO {
 				+ "name=" + name
 				+ "&type=" + type
 				+ "&param=" + param.toJSONString();
-	}
-	
-	public DbCommandVO addParam(String key, String value) {
-		param.put(key, value);
-		return this;
 	}
 	
 	public static DbCommandVO build(String name, QueryType type) {
