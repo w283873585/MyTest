@@ -27,6 +27,18 @@ public enum CommandManager {
 	 */
 	public CommandResult exec(String commandInfo) {
 		
+		
+		/**
+		 * CommandReslover 解析命令字符串, 返回CommandInfo(一个标识了commandName的map, map中存储的是参数信息)
+		 * 
+		 * CommandFactory 生成对应的Command, (command作为无状态的策略类, 只具有消费CommandInfo的能力.)
+		 * 
+		 * Command根据CommandInfo参数执行, 并返回结果CommandResult.
+		 * 
+		 * CommandResult具有设置回滚命令和记录原始命令的功能.
+		 */
+		
+		
 		CommandInfo cInfo = commandReslover.reslove(commandInfo);
 
 		Command command = commandFactory.create(cInfo.getCommandName());
