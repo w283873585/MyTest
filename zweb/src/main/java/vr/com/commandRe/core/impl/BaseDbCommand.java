@@ -16,6 +16,29 @@ public class BaseDbCommand extends AbstractCommand{
 	public String getName() {
 		return "CommonDb";
 	}
+	
+	public CommandResult check(CommandInfo info) {
+		String name = info.get("name");
+		String type = info.get("type");
+		String params = info.get("param");
+		
+		if (name == null)
+			return CommandResultSupport.error("命令名称不能为空");
+		
+		if (type == null)
+			return CommandResultSupport.error("查询类型不能为空");
+		
+		try {
+			QueryType.valueOf(type);
+		} catch (Exception e) {
+			return CommandResultSupport.error("不存在的查询类型");
+		}
+		
+		if (params == null)
+			return CommandResultSupport.error("参数不为空");
+		
+		return CommandResultSupport.success("验证通过");
+	}
 
 	@Override
 	protected CommandResult exec(CommandInfo info) {
