@@ -8,7 +8,7 @@ public abstract class AbstractCommand implements Command{
 
 	public abstract String getName();
 
-	protected CommandResult check(CommandInfo info) {
+	protected CommandResult preHandle(CommandInfo info) {
 		return CommandResultSupport.success("");
 	}
 
@@ -17,7 +17,7 @@ public abstract class AbstractCommand implements Command{
 	}
 	
 	public CommandResult invoke(CommandInfo info) {
-		CommandResult checkResult = check(info);
+		CommandResult checkResult = preHandle(info);
 		if (!checkResult.isSuccess()) 
 			return checkResult;
 		return this.exec(info);
