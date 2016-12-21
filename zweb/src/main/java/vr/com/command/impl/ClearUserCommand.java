@@ -23,14 +23,14 @@ public class ClearUserCommand extends AbstractCommand{
 
 		String key = info.containsKey("email") ? "email" : "mobile";
 		String newKey = "new" + key;
-		String value = info.get(key);
-		String newValue = info.containsKey(newKey) ? info.get(newKey) : UUID.randomUUID().toString();
+		String value = des_encrypt.process(info.get(key));
+		String newValue = des_encrypt.process(info.containsKey(newKey) ? info.get(newKey) : UUID.randomUUID().toString());
 		
 		DbCommandVO dbCommandVO = DbCommandVO.build("user.delUser", QueryType.update);
-		CommandResult result = dbCommandVO.addParam(key, des_encrypt.process(value), newKey, des_encrypt.process(newValue)).execute(getManager());
+		CommandResult result = dbCommandVO.addParam(key, value, newKey, newValue).execute(getManager());
 		
 		if (result.isSuccess()) {
-			result.setRollbackCommand(dbCommandVO.addParam(key, des_encrypt.process(newValue), newKey, des_encrypt.process(value)).toString());
+			result.setRollbackCommand(dbCommandVO.addParam(key, newValue, newKey, value).toString());
 		}
 		
 		return result;
