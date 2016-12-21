@@ -1,4 +1,4 @@
-package vr.com.util;
+package vr.com.util.text.encrypt;
 
 public final class VR_Base64 {
 

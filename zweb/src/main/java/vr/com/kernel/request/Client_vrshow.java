@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 
-import vr.com.util.VR_MD5Util;
 import vr.com.util.rsa.RSA_vrshow;
+import vr.com.util.text.encrypt.VR_MD5Util;
 
 public class Client_vrshow extends ClientWithProcessor {
 	private String authMd5 = "92A864886F70D010101050101010500048202613082025D02010002818";

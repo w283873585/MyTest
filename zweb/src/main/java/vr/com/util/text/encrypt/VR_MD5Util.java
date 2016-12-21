@@ -1,4 +1,4 @@
-package vr.com.util;
+package vr.com.util.text.encrypt;
 
 import java.security.MessageDigest;
 

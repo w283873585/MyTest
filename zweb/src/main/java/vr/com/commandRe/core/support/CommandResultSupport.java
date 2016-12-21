@@ -3,7 +3,7 @@ package vr.com.commandRe.core.support;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vr.com.commandRe.core.CommandResult;
-import vr.com.util.JsonUtil;
+import vr.com.util.JSONMapUtil;
 
 @Document(collection="CommandResult")
 public class CommandResultSupport implements CommandResult {
@@ -53,7 +53,7 @@ public class CommandResultSupport implements CommandResult {
 	}
 	
 	public String toString() {
-		return JsonUtil
+		return JSONMapUtil
 				.putA("state", success ? "执行成功" : "执行失败")
 				.putA("data", result)
 				.putA("rollbackCommand", rollbackCommand)

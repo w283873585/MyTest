@@ -1,6 +1,6 @@
 package vr.com.util.rsa;
 
-import vr.com.util.VR_RSACoder;
+import vr.com.util.text.encrypt.VR_RSACoder;
 
 public class RSA_vrshow {
 	private static String key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDQ9mIWe63OiIDRh9invj8PL+xQoKIcn3zlu08GCqBzCwPxcMzSfDgzPrW22VCax30sqZnycMMWXesCZLHMW7gJYyVjfGo5/dsE0rKFJ7lExJfUNOBC7fkAzoz07qpkgDHHSKc11edT7cxCh/UrEEzjeQ4/6enixYzDoWfA8upL1QIDAQAB";

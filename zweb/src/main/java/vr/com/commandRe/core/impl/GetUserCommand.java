@@ -5,6 +5,7 @@ import vr.com.commandRe.core.CommandResult;
 import vr.com.commandRe.core.impl.BaseDbCommand.QueryType;
 import vr.com.commandRe.core.support.AbstractCommand;
 import vr.com.commandRe.core.support.DbCommandVO;
+import vr.com.util.text.StringProcessors;
 
 public class GetUserCommand extends AbstractCommand{
 
@@ -19,6 +20,8 @@ public class GetUserCommand extends AbstractCommand{
 		
 		String key = info.keySet().iterator().next();
 		String value = info.get(key);
+		if (!"user_id".equals(key))
+			value = StringProcessors.des_encrypt.process(value);
 		
 		CommandResult result = dbCommandVO.addParam(key, value).execute(getManager());;
 		return result;

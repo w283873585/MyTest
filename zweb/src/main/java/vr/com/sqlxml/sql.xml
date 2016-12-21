@@ -13,7 +13,7 @@
     			user_email = #{email}
     		</if>
     		<if test="mobile!=null">
-    			user_mobile = #{email}
+    			user_mobile = #{mobile}
     		</if>
     	</where>
     </select>
@@ -22,10 +22,10 @@
     	update user_info_tb 
     	<set>
     		<if test="email!=null">
-    			email = #{newemail}
+    			user_email = #{newemail}
 	    	</if>
 	    	<if test="mobile!=null">
-	    		mobile = #{newmobile}
+	    		user_mobile = #{newmobile}
 	    	</if>
     	</set>
     	<where>

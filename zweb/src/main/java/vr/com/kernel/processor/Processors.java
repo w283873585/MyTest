@@ -5,9 +5,9 @@ import java.net.URLEncoder;
 
 import com.alibaba.fastjson.JSON;
 
-import vr.com.util.VR_DesUtils;
-import vr.com.util.VR_MD5Util;
-import vr.com.util.VR_RSACoder;
+import vr.com.util.text.encrypt.VR_DesUtils;
+import vr.com.util.text.encrypt.VR_MD5Util;
+import vr.com.util.text.encrypt.VR_RSACoder;
 
 public enum Processors implements ValueProcessor{
 	json {

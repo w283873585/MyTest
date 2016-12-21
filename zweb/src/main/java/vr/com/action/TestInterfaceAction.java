@@ -18,7 +18,6 @@ import vr.com.kernel.RequestManager;
 import vr.com.kernel.processor.ValueProcessorFactory;
 import vr.com.kernel.request.ClientFactory;
 import vr.com.pojo.InterfaceEntity;
-import vr.com.util.CacheUtil;
 
 @Controller
 @RequestMapping("/my")
@@ -33,7 +32,7 @@ public class TestInterfaceAction {
 	public String toTestRest(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("clients", JSON.toJSONString(ClientFactory.keySet()));
 		request.setAttribute("processors", JSON.toJSONString(ValueProcessorFactory.keySet()));
-		request.setAttribute("cache", CacheUtil.toJson());
+		request.setAttribute("cache", "{}");
 		return "zTestRest";
 	}
 	

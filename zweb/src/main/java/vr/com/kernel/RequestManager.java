@@ -3,8 +3,6 @@ package vr.com.kernel;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 import vr.com.kernel.processor.ValueProcessorUtil;
@@ -12,7 +10,6 @@ import vr.com.kernel.request.Client;
 import vr.com.kernel.request.ClientFactory;
 import vr.com.kernel.request.HttpUtil.MyResponse;
 import vr.com.kernel.request.Request;
-import vr.com.util.CacheUtil;
 
 public class RequestManager {
 	
@@ -60,6 +57,7 @@ public class RequestManager {
 		// recordHistory();
 	}
 	
+	/*
 	private void recordHistory() {
 		/**
 	 	record : {
@@ -70,7 +68,6 @@ public class RequestManager {
 	 		params: "",
 	 		result: ""
 	 	}
-		*/
 		try {
 			Map<String, Object> record = new HashMap<String, Object>();
 			record.put("url", requestBody.getUrl());
@@ -85,4 +82,5 @@ public class RequestManager {
 			System.out.println("记录失败, 持久化地址错误");
 		}
 	}
+	*/
 }

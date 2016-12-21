@@ -21,8 +21,8 @@ public class CommandResloverSupport implements CommandReslover{
 			String params = commandInfo.substring(index + 1);
 			String keyVals[] = params.split("&");
 			for (String str : keyVals) {
-				String[] keys = str.split("=");
-				cInfo.put(keys[0], keys[1]);
+				index = str.indexOf("=");
+				cInfo.put(str.substring(0, index), str.substring(index + 1));
 			}
 		}
 		
