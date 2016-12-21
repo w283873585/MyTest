@@ -1,9 +1,9 @@
-package vr.com.commandRe.core.support;
+package vr.com.command.support;
 
 import java.util.HashMap;
 
-import vr.com.commandRe.core.CommandInfo;
-import vr.com.commandRe.core.CommandReslover;
+import vr.com.command.CommandInfo;
+import vr.com.command.CommandReslover;
 
 public class CommandResloverSupport implements CommandReslover{
 	

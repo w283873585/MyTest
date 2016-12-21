@@ -1,4 +1,4 @@
-package vr.com.commandRe.core;
+package vr.com.command;
 
 import java.util.Map;
 

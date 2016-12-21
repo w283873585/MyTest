@@ -1,10 +1,10 @@
-package vr.com.commandRe.core.support;
+package vr.com.command.support;
 
-import vr.com.commandRe.core.Command;
-import vr.com.commandRe.core.CommandFactory;
-import vr.com.commandRe.core.CommandInfo;
-import vr.com.commandRe.core.CommandReslover;
-import vr.com.commandRe.core.CommandResult;
+import vr.com.command.Command;
+import vr.com.command.CommandFactory;
+import vr.com.command.CommandInfo;
+import vr.com.command.CommandReslover;
+import vr.com.command.CommandResult;
 import vr.com.data.dao.BaseDao;
 
 public enum CommandManager {

@@ -1,6 +1,6 @@
-package vr.com.commandRe.core;
+package vr.com.command;
 
-import vr.com.commandRe.core.support.CommandManager;
+import vr.com.command.support.CommandManager;
 
 public interface Command {
 

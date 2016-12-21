@@ -1,8 +1,8 @@
-package vr.com.commandRe.core.support;
+package vr.com.command.support;
 
-import vr.com.commandRe.core.Command;
-import vr.com.commandRe.core.CommandInfo;
-import vr.com.commandRe.core.CommandResult;
+import vr.com.command.Command;
+import vr.com.command.CommandInfo;
+import vr.com.command.CommandResult;
 
 public abstract class AbstractCommand implements Command{
 

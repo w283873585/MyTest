@@ -1,15 +1,15 @@
-package vr.com.commandRe.core.support;
+package vr.com.command.support;
 
 
 import java.util.HashMap;
 import java.util.Map;
 
-import vr.com.commandRe.core.Command;
-import vr.com.commandRe.core.CommandFactory;
-import vr.com.commandRe.core.impl.BaseDbCommand;
-import vr.com.commandRe.core.impl.ClearUserCommand;
-import vr.com.commandRe.core.impl.GetUserCommand;
-import vr.com.commandRe.core.impl.NoneCommand;
+import vr.com.command.Command;
+import vr.com.command.CommandFactory;
+import vr.com.command.impl.BaseDbCommand;
+import vr.com.command.impl.ClearUserCommand;
+import vr.com.command.impl.GetUserCommand;
+import vr.com.command.impl.NoneCommand;
 
 public class CommandFactorySupport implements CommandFactory{
 	

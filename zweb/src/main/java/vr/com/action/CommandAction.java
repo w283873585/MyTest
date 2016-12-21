@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import vr.com.commandRe.core.CommandResult;
-import vr.com.commandRe.core.support.CommandManager;
+import vr.com.command.CommandResult;
+import vr.com.command.support.CommandManager;
 import vr.com.data.springData.repository.CommandResultRepository;
 
 @Controller

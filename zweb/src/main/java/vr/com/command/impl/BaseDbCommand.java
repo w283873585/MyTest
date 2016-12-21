@@ -1,13 +1,13 @@
-package vr.com.commandRe.core.impl;
+package vr.com.command.impl;
 
 import org.apache.ibatis.session.SqlSession;
 
 import com.alibaba.fastjson.JSONObject;
 
-import vr.com.commandRe.core.CommandInfo;
-import vr.com.commandRe.core.CommandResult;
-import vr.com.commandRe.core.support.AbstractCommand;
-import vr.com.commandRe.core.support.CommandResultSupport;
+import vr.com.command.CommandInfo;
+import vr.com.command.CommandResult;
+import vr.com.command.support.AbstractCommand;
+import vr.com.command.support.CommandResultSupport;
 import vr.com.db.StaticFactory;
 
 public class BaseDbCommand extends AbstractCommand{

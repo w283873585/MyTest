@@ -1,10 +1,10 @@
-package vr.com.commandRe.core.impl;
+package vr.com.command.impl;
 
-import vr.com.commandRe.core.CommandInfo;
-import vr.com.commandRe.core.CommandResult;
-import vr.com.commandRe.core.impl.BaseDbCommand.QueryType;
-import vr.com.commandRe.core.support.AbstractCommand;
-import vr.com.commandRe.core.support.DbCommandVO;
+import vr.com.command.CommandInfo;
+import vr.com.command.CommandResult;
+import vr.com.command.impl.BaseDbCommand.QueryType;
+import vr.com.command.support.AbstractCommand;
+import vr.com.command.support.DbCommandVO;
 import vr.com.util.text.StringProcessors;
 
 public class GetUserCommand extends AbstractCommand{

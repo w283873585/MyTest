@@ -1,8 +1,8 @@
-package vr.com.commandRe.core.support;
+package vr.com.command.support;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import vr.com.commandRe.core.CommandResult;
+import vr.com.command.CommandResult;
 import vr.com.util.JSONMapUtil;
 
 @Document(collection="CommandResult")

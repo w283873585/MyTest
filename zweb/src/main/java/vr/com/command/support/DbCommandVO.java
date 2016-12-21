@@ -1,9 +1,9 @@
-package vr.com.commandRe.core.support;
+package vr.com.command.support;
 
 import com.alibaba.fastjson.JSONObject;
 
-import vr.com.commandRe.core.CommandResult;
-import vr.com.commandRe.core.impl.BaseDbCommand.QueryType;
+import vr.com.command.CommandResult;
+import vr.com.command.impl.BaseDbCommand.QueryType;
 
 public class DbCommandVO {
 	
