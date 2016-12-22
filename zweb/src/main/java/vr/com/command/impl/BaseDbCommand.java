@@ -62,7 +62,7 @@ public class BaseDbCommand extends AbstractCommand{
 		QueryType query = QueryType.valueOf(type);
 		try {
 			Object result = query.invoke(name, JSONObject.parse(params), sqlSession);
-			return CommandResultSupport.success(result == null ? "no data" : result.toString());
+			return CommandResultSupport.success(result == null ? "no data" : JSONObject.toJSONString(result));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return CommandResultSupport.error(e.getMessage());

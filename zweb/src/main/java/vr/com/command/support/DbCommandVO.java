@@ -47,7 +47,7 @@ public class DbCommandVO {
 		}
 		
 		public CommandResult execute(CommandManager manager) {
-			return manager.exec(this.toString());
+			return manager.exec(this.toString(), true);
 		}
 		
 		public String toString() {

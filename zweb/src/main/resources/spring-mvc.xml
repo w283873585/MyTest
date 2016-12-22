@@ -13,8 +13,8 @@
 	
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
-		    <ref bean="mappingJacksonHttpMessageConverter"/>
 		    <ref bean="StringConverter"/>
+		    <ref bean="mappingJacksonHttpMessageConverter"/>
 	    </mvc:message-converters>
 	</mvc:annotation-driven>
 	
@@ -23,7 +23,6 @@
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
-				<value>text/html;charset=UTF-8</value>
 				<value>application/json;charset=UTF-8</value>
 			</list>
 		</property>
@@ -34,6 +33,7 @@
 		class="org.springframework.http.converter.StringHttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
+				<value>text/html;charset=UTF-8</value>
 				<value>*/*;charset=utf-8</value>
 			</list>
 		</property>

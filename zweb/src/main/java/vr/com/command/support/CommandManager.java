@@ -25,7 +25,7 @@ public enum CommandManager {
 	 *	then invoke the command
 	 *	finally return result
 	 */
-	public CommandResult exec(String commandInfo) {
+	CommandResult exec(String commandInfo, boolean internal) {
 		
 		
 		/**
@@ -47,9 +47,13 @@ public enum CommandManager {
 		
 		result.setOriginCommand(commandInfo);
 		
-		dao.insert(result);
+		if (!internal)	dao.insert(result);
 		
 		return result;
+	}
+	
+	public CommandResult exec(String commandInfo) {
+		return exec(commandInfo, false);
 	}
 	
 	public static CommandResult execute(String commandInfo) {
