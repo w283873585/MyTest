@@ -18,7 +18,7 @@
 	<context:property-placeholder location="classpath:config.properties" />
 	
 	<!-- 激活自动代理功能 -->
-	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<aop:aspectj-autoproxy proxy-target-class="false" />
 	
 	<!--自动扫描含有@Service将其注入为bean -->
 	<context:component-scan base-package="vr.com.aop" />
