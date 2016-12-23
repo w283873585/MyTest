@@ -22,6 +22,14 @@
    -->
   <dependencies>
   	
+  	<!-- https://mvnrepository.com/artifact/aopalliance/aopalliance -->
+	<dependency>
+	    <groupId>aopalliance</groupId>
+	    <artifactId>aopalliance</artifactId>
+	    <version>1.0</version>
+	</dependency>
+	  	
+  	
   	<!-- https://mvnrepository.com/artifact/aspectj/aspectjweaver -->
 	<dependency>
 	    <groupId>aspectj</groupId>
