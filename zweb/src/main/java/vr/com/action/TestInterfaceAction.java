@@ -70,14 +70,14 @@ public class TestInterfaceAction {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/interface/query", produces = "text/html;charset=utf-8")
+	@RequestMapping("/interface/query")
 	public Object query(HttpServletRequest request, HttpServletResponse response,
 			String keyword) {
 		return interfaceEntityDao.query(keyword);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/interface/update", produces = "text/html;charset=utf-8")
+	@RequestMapping("/interface/update")
 	public Object update(HttpServletRequest request, HttpServletResponse response,
 			String entityStr) {
 		InterfaceEntity entity = JSONObject.parseObject(entityStr, InterfaceEntity.class);

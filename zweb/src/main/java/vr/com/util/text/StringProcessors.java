@@ -95,6 +95,6 @@ public enum StringProcessors {
 	public abstract String process(String str);
 	
 	public static void main(String[] args) {
-		System.out.println(des_encrypt.process("15019434615"));
+		System.out.println(vrdev_rsa_encrypt.process("-1"));
 	}
 }

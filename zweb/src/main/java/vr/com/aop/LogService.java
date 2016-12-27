@@ -12,8 +12,8 @@ public class LogService {
 	@Pointcut("execution(* *())")
 	private void log() {}
 	
-	@Before("execution(* *())")
+	@Before("execution(* *()) && within(vr.com.aop.*)")
 	public void beforeLog() {
 		System.out.println("天下之大");
-	} 
+	}
 }
