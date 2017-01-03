@@ -3,14 +3,13 @@ package jun.learn.scene.softChain.kernel;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import com.alibaba.fastjson.JSONObject;
+import java.util.Map;
 
 import jun.learn.scene.softChain.annotation.ReqEncryption;
 import jun.learn.scene.softChain.annotation.ReqParamRestrict;
 import jun.learn.scene.softChain.annotation.ReqParamRestrictType;
-import jun.learn.scene.softChain.annotation.ReqParamRestricts;
 import jun.learn.scene.softChain.annotation.ReqParamRestrictType.Result;
+import jun.learn.scene.softChain.annotation.ReqParamRestricts;
 
 public class MetaData {
 	
@@ -30,7 +29,7 @@ public class MetaData {
 		return reqEncryption != null && reqEncryption.responseEncrypt();
 	}
 	
-	public void checkParams(JSONObject data, ReqResult result) {
+	public void checkParams(Map<String, Object> data, ReqResult result) {
 		for (ReqParamRestrict restrict : restricts.value()) {
 			Object paramValue = data.get(restrict.key());
 			ReqParamRestrictType[] reqParamRestrictTypes = restrict.value();
