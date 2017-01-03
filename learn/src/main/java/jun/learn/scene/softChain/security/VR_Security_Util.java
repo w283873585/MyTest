@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import jun.learn.scene.softChain.kernel.ReqResult;
+
 public class VR_Security_Util {
 	
 	
@@ -17,14 +19,12 @@ public class VR_Security_Util {
 	 * 
 	 * aes解密msg
 	 */
-	public static BaseResponse decode(Map<String, Object> reqParam) {
-		
-		BaseResponse result = new BaseResponse();
+	public static void decode(Map<String, Object> reqParam, ReqResult result) {
 		
 		if (reqParam == null || reqParam.size() == 0) {
-			result.setResCode(ResCodeConstans.parmsIsNull);
-			result.setResDesc("未获取到任何请求参数");
-            return result;
+			result.failed("未获取到任何请求参数");
+			result.attach("resCode", ResCodeConstans.parmsIsNull);
+            return;
         }
 		
 		String msg = "", 
@@ -32,6 +32,7 @@ public class VR_Security_Util {
 			aeskey = "", 
 			packageId = "";
 		
+		JSONObject data = null;
 		
 		// 验证并获取相关参数
 		try {
@@ -40,9 +41,9 @@ public class VR_Security_Util {
 			aeskey = checkAndGetValue("aeskey", reqParam);
 			packageId = checkAndGetValue("packageId", reqParam);
 		} catch (Exception e) {
-			result.setResCode(ResCodeConstans.parmsIsNull);
-			result.setResDesc("[" + e.getMessage() + "]参数为空或者不合法");
-			return result;
+			result.failed("[" + e.getMessage() + "]参数为空或者不合法");
+			result.attach("resCode", ResCodeConstans.parmsIsNull);
+            return;
 		}
 		
 		
@@ -53,9 +54,9 @@ public class VR_Security_Util {
 			log("############请求报文解密后aeskey="  + aeskey);
 			log("############请求报文解密后aesIv="  + aesIv);
 		} catch (Exception e) {
-			result.setResCode(ResCodeConstans.parmsIsNull);
-			result.setResDesc("rsa解密失败");
-			return result;
+			result.failed("rsa解密失败");
+			result.attach("resCode", ResCodeConstans.parmsIsNull);
+            return;
 		}
 		
 		
@@ -64,27 +65,25 @@ public class VR_Security_Util {
 			msg = VR_Encrypt_Util.aesDecode(msg, aeskey, aesIv);
 			log("############请求报文 解密后msg"  + msg + "\n\n");
 		} catch (Exception e) {
-			result.setResCode(ResCodeConstans.parmsIsNull);
-			result.setResDesc("aes解密失败");
-			return result;
+			result.failed("aes解密失败");
+			result.attach("resCode", ResCodeConstans.parmsIsNull);
+            return;
 		}
 		
 		// 主体json解析
 		try {
-			result.setBody(JSON.parseObject(msg));
+			data = JSON.parseObject(msg);
 		}  catch (Exception e) {
-			result.setResCode(ResCodeConstans.parmsIsNull);
-			result.setResDesc("参数主体不是json格式.");
-			return result;
+			result.failed("参数主体不是json格式.");
+			result.attach("resCode", ResCodeConstans.parmsIsNull);
+            return;
 		}
 		
-		// 解密成功
-		result.setAesIv(aesIv);
-		result.setAeskey(aeskey);
-		result.setPackageId(packageId);
-		result.setResCode(ResCodeConstans.success);
-		
-		return result;
+		reqParam.clear();
+		reqParam.put("aesIv", aesIv);
+		reqParam.put("aesKey", aeskey);
+		reqParam.put("packageId", packageId);
+		reqParam.put("paramsMap", data);
 	}
 	
 	// TODO 异常传递
@@ -148,55 +147,5 @@ public class VR_Security_Util {
 		result.put("packageId", request.getAttribute("packageId"));
 		
 		return result;
-	}
-	
-	
-	
-	public static class BaseResponse {
-		private String resCode;
-		private String resDesc;
-		
-		private String aeskey;
-		private String aesIv;
-		private String packageId;
-		
-		private JSONObject body;
-		
-		public String getResCode() {
-			return resCode;
-		}
-		public void setResCode(String resCode) {
-			this.resCode = resCode;
-		}
-		public String getResDesc() {
-			return resDesc;
-		}
-		public void setResDesc(String resDesc) {
-			this.resDesc = resDesc;
-		}
-		public JSONObject getBody() {
-			return body;
-		}
-		public void setBody(JSONObject body) {
-			this.body = body;
-		}
-		public String getAeskey() {
-			return aeskey;
-		}
-		public void setAeskey(String aeskey) {
-			this.aeskey = aeskey;
-		}
-		public String getAesIv() {
-			return aesIv;
-		}
-		public void setAesIv(String aesIv) {
-			this.aesIv = aesIv;
-		}
-		public String getPackageId() {
-			return packageId;
-		}
-		public void setPackageId(String packageId) {
-			this.packageId = packageId;
-		}
 	}
 }
