@@ -12,7 +12,7 @@ public enum ReqParamRestrictType {
 	optional("可选") {
 		@Override
 		protected boolean isPass(Object c) {
-			return true;
+			return c == null || "".equals(c);
 		}
 	},
 	

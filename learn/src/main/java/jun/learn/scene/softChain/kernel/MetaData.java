@@ -33,13 +33,23 @@ public class MetaData {
 		for (ReqParamRestrict restrict : restricts.value()) {
 			Object paramValue = data.get(restrict.key());
 			ReqParamRestrictType[] reqParamRestrictTypes = restrict.value();
+			
+			/**	
+			 * sort the restricts for restrict priority	
+			 **/
 			sort(reqParamRestrictTypes);
+			
+			/**
+			 * check the request parameter restrict
+			 */
 			for (ReqParamRestrictType type : reqParamRestrictTypes) {
 				Result r = type.check(paramValue);
-				if (!r.isSuccess()) {
+				if (type == ReqParamRestrictType.optional) {
+					if (r.isSuccess())	break;
+				} else if (!r.isSuccess()) {
 					result.failed("[" + restrict.key() + "]" + r.getResult());
 					return;
-				} else if (type == ReqParamRestrictType.Rsa){
+				} else if (type == ReqParamRestrictType.Rsa) {
 					data.put(restrict.key(), r.getResult());
 				}
 			}
