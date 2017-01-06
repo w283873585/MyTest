@@ -12,6 +12,7 @@
         <script src="../js/jquery.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/md5.js"></script>
+        <script src="../js/jsonToHtml.js"></script>
     	<style type="text/css">
     		body {font-family: '微软雅黑'}
     		.row {padding-left: 100px;}
@@ -259,12 +260,11 @@ $(function() {
 			type: "post",
 			data: data,
 			success: function(res) {
-				res = $.parseJSON(res);
+				isBusy = false;
 				$(".result").html("");
 				$(".params").html("");
-				$(".result").html(res.result);
+				$(".result").html(toJsonHtml($.parseJSON(res.result)));
 				$(".params").html(res.params);
-				isBusy = false;
 			},
 			error: function(a, b, c, d) {
 				$(".result").html("ajax请求出现了一点小错误。。。<br/>" + JSON.stringify(a));
