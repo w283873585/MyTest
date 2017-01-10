@@ -2,8 +2,9 @@ package jun.learn.scene.softChain.annotation;
 
 import com.alibaba.fastjson.JSONArray;
 
-import jun.learn.scene.softChain.annotation.Chain.Node;
-import jun.learn.scene.softChain.annotation.Chain.Result;
+import jun.learn.scene.softChain.kernel.ReqParamCheckChain;
+import jun.learn.scene.softChain.kernel.ReqParamCheckChain.Node;
+import jun.learn.scene.softChain.kernel.ReqParamCheckChain.Result;
 
 public enum ReqParamRestrictType implements Node{
 	
@@ -43,7 +44,7 @@ public enum ReqParamRestrictType implements Node{
 			return true;
 		}
 		
-		public Result exec(Object target, Chain chain) {
+		public Result exec(Object target, ReqParamCheckChain chain) {
 			Result r = this.check(target);
 			if (r.isSuccess() == expect())	
 				return r;
@@ -124,7 +125,7 @@ public enum ReqParamRestrictType implements Node{
 		return false;
 	}
 	
-	public Result exec(Object target, Chain chain) {
+	public Result exec(Object target, ReqParamCheckChain chain) {
 		Result r = this.check(target);
 		if (r.isSuccess() == expect())	
 			return r;

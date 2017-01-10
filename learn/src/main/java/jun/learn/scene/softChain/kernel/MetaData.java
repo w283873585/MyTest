@@ -3,11 +3,10 @@ package jun.learn.scene.softChain.kernel;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import jun.learn.scene.softChain.annotation.Chain;
-import jun.learn.scene.softChain.annotation.Chain.Result;
 import jun.learn.scene.softChain.annotation.ReqEncryption;
 import jun.learn.scene.softChain.annotation.ReqParamRestrict;
 import jun.learn.scene.softChain.annotation.ReqParamRestricts;
+import jun.learn.scene.softChain.kernel.ReqParamCheckChain.Result;
 
 public class MetaData {
 	
@@ -30,7 +29,7 @@ public class MetaData {
 	public void checkParams(Map<String, Object> data, ReqResult result) {
 		for (ReqParamRestrict restrict : restricts.value()) {
 			String key = restrict.key();
-			Chain chain = Chain.bulidChain(restrict.value(), data.get(key));
+			ReqParamCheckChain chain = ReqParamCheckChain.bulidChain(restrict.value(), data.get(key));
 			Result r = chain.proceed();
 			if (!r.isSuccess()) {
 				result.failed(r.getResult().toString());
