@@ -13,16 +13,16 @@ public class Chain{
 		this.nodes = nodes;
 	}
 	
-	public static Chain bulidChain(ReqParamRestrictType2[] type, Object target) {
-		ReqParamRestrictType2[] types = Arrays.copyOf(type, type.length);
+	public static Chain bulidChain(ReqParamRestrictType[] type, Object target) {
+		ReqParamRestrictType[] types = Arrays.copyOf(type, type.length);
 		sort(types);
 		return new Chain(types, target);
 	}
 	
-	private static void sort(ReqParamRestrictType2[] types) {
-		Arrays.sort(types, new Comparator<ReqParamRestrictType2>() {
+	private static void sort(ReqParamRestrictType[] types) {
+		Arrays.sort(types, new Comparator<ReqParamRestrictType>() {
 			@Override
-			public int compare(ReqParamRestrictType2 o1, ReqParamRestrictType2 o2) {
+			public int compare(ReqParamRestrictType o1, ReqParamRestrictType o2) {
 				return o1.ordinal() - o2.ordinal();
 			}
 		});

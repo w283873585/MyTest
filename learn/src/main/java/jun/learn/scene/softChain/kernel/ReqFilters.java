@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import jun.learn.scene.softChain.security.VR_Security_Util;
 
-public enum Interceptors implements Interceptor{
+public enum ReqFilters implements ReqFilter{
 	decrypt {
-		public void intercept(MetaData metaData, ReqData reqData, ReqResult result) {
+		public void filter(MetaData metaData, ReqData reqData, ReqResult result) {
 			if (result.hasCommit())
 				return;
 			
@@ -16,7 +16,7 @@ public enum Interceptors implements Interceptor{
 	},
 	
 	adapt {
-		public void intercept(MetaData metaData, ReqData reqData, ReqResult result) {
+		public void filter(MetaData metaData, ReqData reqData, ReqResult result) {
 			if (result.hasCommit())
 				return;
 			
@@ -35,7 +35,7 @@ public enum Interceptors implements Interceptor{
 	},
 	
 	check {
-		public void intercept(MetaData metaData, ReqData reqData, ReqResult result) {
+		public void filter(MetaData metaData, ReqData reqData, ReqResult result) {
 			if (result.hasCommit())
 				return;
 			

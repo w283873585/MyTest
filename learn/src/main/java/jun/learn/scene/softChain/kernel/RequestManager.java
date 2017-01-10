@@ -14,8 +14,8 @@ public class RequestManager{
 		final ReqResult result = new ReqResult();
 		MetaData metaData = new MetaData(handle);
 		ReqData reqData = new ReqData(getParamJson(request));
-		for (Interceptor invoker : Interceptors.values()) {
-			invoker.intercept(metaData, reqData, result);
+		for (ReqFilter invoker : ReqFilters.values()) {
+			invoker.filter(metaData, reqData, result);
 		}
 		
 		if (!result.hasCommit()) {

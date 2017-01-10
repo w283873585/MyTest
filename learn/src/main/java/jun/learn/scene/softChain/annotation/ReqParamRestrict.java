@@ -16,5 +16,5 @@ public @interface ReqParamRestrict {
 	
 	String key();
 	
-	ReqParamRestrictType[] value() default ReqParamRestrictType.NoEmpty;
+	ReqParamRestrictType[] value() default ReqParamRestrictType.noEmpty;
 }

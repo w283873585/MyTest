@@ -5,7 +5,7 @@ import jun.learn.scene.softChain.annotation.Chain.Result;
 public class Client {
 	public static void main(String[] args) {
 		Object value = "";
-		Chain chain = Chain.bulidChain(ReqParamRestrictType2.values(), value);
+		Chain chain = Chain.bulidChain(ReqParamRestrictType.values(), value);
 		Result r = chain.proceed();
 		if (!r.isSuccess()) {
 			return;
