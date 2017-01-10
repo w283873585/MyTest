@@ -1,22 +1,22 @@
-package jun.learn.scene.softChain.kernel;
+package jun.learn.scene.softChain.annotation;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class ReqParamCheckChain{
+public class ReqParamVerifyChain{
 	private int index = -1;
 	private Node[] nodes = null;
 	private Object target = null;
 	
-	private ReqParamCheckChain(Node[] nodes, Object target) {
+	private ReqParamVerifyChain(Node[] nodes, Object target) {
 		this.target = target;
 		this.nodes = nodes;
 	}
 	
-	public static ReqParamCheckChain bulidChain(Node[] type, Object target) {
+	public static ReqParamVerifyChain bulidChain(Node[] type, Object target) {
 		Node[] types = Arrays.copyOf(type, type.length);
 		sort(types);
-		return new ReqParamCheckChain(types, target);
+		return new ReqParamVerifyChain(types, target);
 	}
 	
 	private static void sort(Node[] types) {
@@ -42,7 +42,7 @@ public class ReqParamCheckChain{
 	}
 	
 	public interface Node{
-		public Result exec(Object target, ReqParamCheckChain chain);
+		public Result exec(Object target, ReqParamVerifyChain chain);
 		
 		public int ordinal();
 	}
