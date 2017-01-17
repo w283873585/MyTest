@@ -1,4 +1,4 @@
-package jun.learn.tools.netty.discard;
+package jun.learn.tools.netty.bootstrap;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -14,6 +14,7 @@ public class DiscardServer {
 	private int port;
 	
 	public DiscardServer(int port) {
+		
 		this.port = port;
 	}
 	
@@ -31,8 +32,8 @@ public class DiscardServer {
 
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
-					// TODO Auto-generated method stub
-					ch.pipeline().addLast(new DiscardServerHandler());
+					// ch.pipeline().addLast(new DiscardServerHandler());
+					ch.pipeline().addLast(new TimeServerHandler());
 				}
 			})
 			.option(ChannelOption.SO_BACKLOG, 128)
@@ -48,9 +49,5 @@ public class DiscardServer {
 			workerGroup.shutdownGracefully();
 			bossGroup.shutdownGracefully();
 		}
-	}
-	
-	public static void main(String[] args) throws Exception {
-		new DiscardServer(8088).run();
 	}
 }
