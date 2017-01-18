@@ -9,7 +9,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-public class Client {
+public class TimeClient {
 	public static void main(String[] args) throws Exception {
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
 		
@@ -22,7 +22,7 @@ public class Client {
 
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
-					  ch.pipeline().addLast(new TimeClientHandler());
+					  ch.pipeline().addLast(new TimeDecoder(), new TimeClientHandler());
 				}
 			});
 			
