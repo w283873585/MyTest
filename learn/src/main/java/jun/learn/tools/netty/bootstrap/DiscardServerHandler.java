@@ -5,7 +5,6 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.ReferenceCountUtil;
 
 @SuppressWarnings("deprecation")
 public class DiscardServerHandler extends ChannelInboundHandlerAdapter{
