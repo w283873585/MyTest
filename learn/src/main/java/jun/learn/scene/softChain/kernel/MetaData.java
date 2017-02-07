@@ -1,25 +1,23 @@
 package jun.learn.scene.softChain.kernel;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Map;
 
 import jun.learn.scene.softChain.annotation.ReqEncryption;
 import jun.learn.scene.softChain.annotation.ReqParamRestrict;
-import jun.learn.scene.softChain.annotation.ReqParamRestrictType;
-import jun.learn.scene.softChain.annotation.ReqParamRestrictType.Result;
 import jun.learn.scene.softChain.annotation.ReqParamRestricts;
+import jun.learn.scene.softChain.annotation.ReqParamVerifyChain;
+import jun.learn.scene.softChain.annotation.ReqParamVerifyChain.Result;
 
 public class MetaData {
+	
+	private ReqParamRestricts restricts  = null;
+	private ReqEncryption reqEncryption = null;
 	
 	public MetaData(Method method) {
 		this.restricts = method.getDeclaredAnnotation(ReqParamRestricts.class);
 		this.reqEncryption = method.getDeclaredAnnotation(ReqEncryption.class);
 	}
-	
-	private ReqParamRestricts restricts  = null;
-	private ReqEncryption reqEncryption = null;
 	
 	public boolean reqEncrypt() {
 		return reqEncryption != null && reqEncryption.requestEncrypt();
@@ -31,37 +29,16 @@ public class MetaData {
 	
 	public void checkParams(Map<String, Object> data, ReqResult result) {
 		for (ReqParamRestrict restrict : restricts.value()) {
-			Object paramValue = data.get(restrict.key());
-			ReqParamRestrictType[] reqParamRestrictTypes = restrict.value();
-			
-			/**	
-			 * sort the restricts for restrict priority	
-			 **/
-			sort(reqParamRestrictTypes);
-			
-			/**
-			 * check the request parameter restrict
-			 */
-			for (ReqParamRestrictType type : reqParamRestrictTypes) {
-				Result r = type.check(paramValue);
-				if (type == ReqParamRestrictType.optional) {
-					if (r.isSuccess())	break;
-				} else if (!r.isSuccess()) {
-					result.failed("[" + restrict.key() + "]" + r.getResult());
-					return;
-				} else if (type == ReqParamRestrictType.Rsa) {
-					data.put(restrict.key(), r.getResult());
-				}
+			String key = restrict.key();
+			ReqParamVerifyChain chain = ReqParamVerifyChain.bulidChain(restrict.value(), data.get(key));
+			Result r = chain.proceed();
+			if (!r.isSuccess()) {
+				result.failed(r.getResult().toString());
+				return;
 			}
+			
+			// update the target value
+			data.put(key, chain.getTarget());
 		}
-	}
-	
-	private void sort(ReqParamRestrictType[] types) {
-		Arrays.sort(types, new Comparator<ReqParamRestrictType>() {
-			@Override
-			public int compare(ReqParamRestrictType o1, ReqParamRestrictType o2) {
-				return o1.ordinal() - o2.ordinal();
-			}
-		});
 	}
 }
