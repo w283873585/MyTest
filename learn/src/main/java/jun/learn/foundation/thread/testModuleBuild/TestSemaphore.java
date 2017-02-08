@@ -10,10 +10,15 @@ import java.util.concurrent.Semaphore;
 
 
 /**
- * 线程信号量
+ * 线程信号量 
+ * 		acquire获取资源("资源"是在初始化为正数则默认有, 为负数时则没有), 获取不到才阻塞, 
+ * 		release释放资源
+ * 		例: 	
+ * 			Semaphore sem = new Semaphore(1);
+ * 			sem.acquire();
+ * 			sem.acquire();		// 此时会发生阻塞, 直到其他线程sem.release();
  * Semaphore
  * 阻塞时不释放锁
- * @author Administrator
  *
  */
 public class TestSemaphore<T>{
