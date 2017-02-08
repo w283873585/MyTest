@@ -103,5 +103,48 @@ public class AQS {
 		test(new Counter_lock_wrong());
 		test(new Counter_sync());
 		test(new Counter_atomic());
+		
+		/**
+		 * 多线程调试
+		 * 
+		 * 首先获取互斥锁的人，会独占锁，直到调用release方法，
+		 * （
+		 * 	该行为在AQS的内部表现为  compareAndSetState(1) -> setState(0), 
+		 * 	即更改AQS的state属性，为0时则相当于放弃占有权
+		 * ） 
+		 * 最后再查看AQS的队列，查看是否有等待的线程，如果有则唤醒首部的线程
+		 * 
+		 * 在互斥锁被别人占有时，进来的线程会被存储在AQS的队列中，阻塞等待唤醒。
+		 * 
+		 * 
+		 * head节点的作用：
+		 * 
+		 * waitStatus：
+		 * 		CANCELLED： 1	中断，直接抛弃
+		 * 		SIGNAL： -1		等待唤醒
+		 * 		CONDITION： -2	
+		 * 		PROPAGATE： -3
+		 */
+		ThreadUtil.exec(AQS::exec);
+		ThreadUtil.exec(AQS::exec);
+		/**
+		 * 	AQS重点：
+		 * 		维护线程队列，
+		 * 		获取(acquire), 释放(release)
+		 * 		悬停等待
+		 * 		独占模式 和 共享模式
+		 * 
+		 * 	核心是用CAS无阻塞算法替代多线程调度，减少开销，提高性能。 
+		 */
+	}
+	
+	private static final Lock lock = new ReentrantLock();
+	public static void exec() {
+		try {
+			lock.lock();
+			System.out.println("i come here" + Thread.currentThread().getName());
+		} finally {
+			lock.unlock();
+		}
 	}
 }
