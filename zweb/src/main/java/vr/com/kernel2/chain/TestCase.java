@@ -12,13 +12,15 @@ import com.alibaba.fastjson.JSONObject;
 import vr.com.data.springData.pojo.TestCaseEntity;
 import vr.com.data.springData.repository.InterfaceEntityRepository;
 import vr.com.data.springData.repository.TestCaseRepository;
-import vr.com.kernel.processor.ValueProcessorUtil;
+import vr.com.kernel.processor.ValueProcessorFactory;
 import vr.com.kernel.request.Client;
 import vr.com.kernel.request.ClientFactory;
 import vr.com.kernel.request.Request;
 import vr.com.kernel2.Permanent;
 import vr.com.pojo.InterfaceEntity;
 import vr.com.pojo.InterfaceParam;
+import vr.com.util.text.SplitUtil;
+import vr.com.util.text.SplitUtil.FragProvider;
 
 public class TestCase implements Permanent<TestCaseEntity>{
 
@@ -50,8 +52,8 @@ public class TestCase implements Permanent<TestCaseEntity>{
 			imagine.addNode(subExp);
 	}
 	
-	public void invoke() {
-		imagine.invoke();
+	public Context invoke() {
+		return imagine.invoke();
 	}
 	
 	private static <T> T getSpringBean(Class<T> clazz) {
@@ -64,10 +66,10 @@ public class TestCase implements Permanent<TestCaseEntity>{
 		@Override
 		public void resolve(String expression, Context ctx) {
 			
-			String[] exps = expression.split("\\s+");
-			String interfaceId = exps[0];
-			String parameters = exps[1];
-			String expect = exps[2];
+			FragProvider provider = SplitUtil.split(expression, "\\s+");
+			String interfaceId = provider.get();
+			String parameters = provider.get();
+			String expect = provider.get();
 			
 			JSONObject result = doRequest(interfaceId, parameters, ctx);
 			if (!getExpecter(expect).match(result)) {
@@ -101,13 +103,15 @@ public class TestCase implements Permanent<TestCaseEntity>{
 			InterfaceEntity entity = interfaceEntityDao.findOne(interfaceId);
 			
 			Client client = ClientFactory.getClient("vrsoft");
-			SplitHelper util = new SplitHelper(param);
+			
+			FragProvider provider = SplitUtil.split(param, ",");
 			Map<String, Object> paramsMap = new HashMap<String, Object>();
 			for (InterfaceParam iParam : entity.getParams())
-				paramsMap.put(iParam.getKey(), ValueProcessorUtil
-						.process(extract(util.next(), ctx), iParam.getConstraint()));
+				paramsMap.put(iParam.getKey(), 
+					ValueProcessorFactory.getProcessor(iParam.getConstraint())
+						.process(extract(provider.get(), ctx)));
 			
-			Request req = new Request(false, entity.getUrl(), paramsMap);
+			Request req = new Request(false, "http://192.168.200.148:8090/" + entity.getUrl(), paramsMap);
 			return JSONObject.parseObject(client.httpRequest(req).toString());
 		}
 		
@@ -119,24 +123,6 @@ public class TestCase implements Permanent<TestCaseEntity>{
 			if (key.startsWith("{") && key.endsWith("}"))
 				return ctx.get(key.substring(1, key.length() - 1)).toString();
 			return key;
-		}
-	}
-	
-	private static class SplitHelper{
-		private static final String separator = ",";
-		private int index;
-		private String body[];
-		
-		public SplitHelper(String origin) {
-			origin = origin.trim();
-			this.body = origin.split(separator);
-		}
-		
-		public String next() {
-			if (index < body.length) {
-				return body[index++];
-			}
-			return "";
 		}
 	}
 }

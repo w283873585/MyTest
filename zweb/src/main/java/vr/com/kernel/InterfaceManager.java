@@ -8,24 +8,24 @@ import com.alibaba.fastjson.JSONObject;
 import vr.com.data.dao.InterfaceEntiyDao;
 import vr.com.pojo.InterfaceEntity;
 import vr.com.pojo.InterfaceParam;
+import vr.com.util.text.SplitUtil;
+import vr.com.util.text.SplitUtil.FragProvider;
 
 public class InterfaceManager {
 	
 	private boolean disabled = true;
-	
 	private InterfaceEntity entity = new InterfaceEntity();
 	
 	public void process(RequestBody box) {
-		SplitHelper util = new SplitHelper(box.getUrl());
+		FragProvider provider = SplitUtil.split(box.getUrl(), "\\s+");
 		
-		if (!util.isCommon()) {
-			
+		if (provider.size() > 1) {
 			disabled = false;
 			
-			box.setUrl(util.next());
+			box.setUrl(provider.get());
 			entity.setUrl(box.getUrl().replaceFirst(".*:[0-9]*", ""));
-			entity.setName(util.next());
-			entity.setDesc(util.next());
+			entity.setName(provider.get());
+			entity.setDesc(provider.get());
 			
 			addParams(box.getParams());
 		}
@@ -35,16 +35,14 @@ public class InterfaceManager {
 		List<InterfaceParam> iParams = new ArrayList<InterfaceParam>();
 		
 		for (RequestBodyParam obj : params) {
-			SplitHelper util = new SplitHelper(obj.getKey());
-			obj.setKey(util.next());
-			
+			FragProvider provider = SplitUtil.split(obj.getKey(), "\\s+");
+			obj.setKey(provider.get());
 			InterfaceParam param = new InterfaceParam();
 			param.setKey(obj.getKey());
-			param.setDesc(util.next());
+			param.setDesc(provider.get());
 			param.setConstraint(obj.getProcessorKeys());
 			iParams.add(param);
 		}
-		
 		entity.setParams(iParams);
 	}
 	
@@ -58,12 +56,7 @@ public class InterfaceManager {
 			param.setKey(key);
 			resultParam.add(param);
 		}
-		
 		entity.setResults(resultParam);
-	}
-	
-	public void start() {
-		if (disabled) return;
 		
 		// 持久化数据
 		InterfaceEntiyDao interfaceEntityDao = new InterfaceEntiyDao();
@@ -71,27 +64,5 @@ public class InterfaceManager {
 			interfaceEntityDao.insert(entity);
 		else
 			interfaceEntityDao.updateByUrl(entity.getUrl(), entity);
-	}
-	
-	public static class SplitHelper{
-		private static final String separator = "\\s+";
-		private int index;
-		private String body[];
-		
-		public SplitHelper(String origin) {
-			origin = origin.trim();
-			this.body = origin.split(separator);
-		}
-		
-		public String next() {
-			if (index < body.length) {
-				return body[index++];
-			}
-			return "";
-		}
-		
-		public boolean isCommon() {
-			return body.length <= 1;
-		}
 	}
 }

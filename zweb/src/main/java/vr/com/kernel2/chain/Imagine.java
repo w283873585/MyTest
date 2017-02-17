@@ -21,8 +21,9 @@ public class Imagine {
 		expressions.add(expression);
 	}
 
-	public void invoke() {
+	public Context invoke() {
 		Context ctx = new SimpleContext();
+		
 		// parse the expression list ordinally
 		for (String exp : expressions) {
 			try {
@@ -39,6 +40,8 @@ public class Imagine {
 		// submit success finally
 		if (!ctx.hasCommitted()) 
 			ctx.commit("test passed!");
+		
+		return ctx;
 	}
 	
 	public Resolver getResolver() {

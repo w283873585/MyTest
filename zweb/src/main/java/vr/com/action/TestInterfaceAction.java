@@ -60,7 +60,6 @@ public class TestInterfaceAction {
 		
 		// 搜集请求结果
 		interfaceManager.addResult(requestManager.getResponseText());
-		interfaceManager.start();
 		
 		// 保存参数与响应结果
 		JSONObject result = new JSONObject();

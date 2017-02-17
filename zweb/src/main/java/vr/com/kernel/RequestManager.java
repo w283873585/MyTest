@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 
+import vr.com.kernel.processor.ValueProcessorFactory;
 import vr.com.kernel.processor.ValueProcessorUtil;
 import vr.com.kernel.request.Client;
 import vr.com.kernel.request.ClientFactory;
@@ -45,8 +46,9 @@ public class RequestManager {
 		
 		for (RequestBodyParam rParam : requestBody.getParams()) {
 			originParams.put(rParam.getKey(), rParam.getValue());
-			params.put(rParam.getKey(), ValueProcessorUtil
-					.process(rParam.getValue(), rParam.getProcessorKeys()));
+			params.put(rParam.getKey(), ValueProcessorFactory
+				.getProcessor(rParam.getProcessorKeys())
+					.process(rParam.getValue()));
 		}
 		
 		Request req = new Request(false, requestBody.getUrl(), params);

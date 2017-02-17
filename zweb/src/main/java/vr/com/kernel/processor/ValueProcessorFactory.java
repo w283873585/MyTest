@@ -13,7 +13,10 @@ public class ValueProcessorFactory extends Factory<ValueProcessor> {
 	}
 	
 	public static ValueProcessor getProcessor(String name) {
-		return factory.get(name);
+		ValueProcessor processor = factory.get(name);
+		if (processor == null) 
+			processor = MixinProcessor.newMixinProcess(name);
+		return processor;
 	}
 	
 	public static Set<String> keySet() {
