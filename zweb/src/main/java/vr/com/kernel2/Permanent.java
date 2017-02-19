@@ -11,11 +11,22 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface Permanent<T> {
 	T toPojo();
 	
-	Permanent<T> parse(T t);
+	Permanent<T> cloneFrom(T t);
 	
 	MongoRepository<T, String> getRepository();
 	
 	default void persist() {
 		getRepository().insert(toPojo());
+	}
+	
+	static <T> Permanent<T> cloneFrom(T t, Class<? extends Permanent<T>> clazz) {
+		try {
+			return clazz.newInstance().cloneFrom(t);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

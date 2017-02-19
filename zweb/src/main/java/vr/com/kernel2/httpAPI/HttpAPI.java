@@ -1,4 +1,4 @@
-package vr.com.kernel2;
+package vr.com.kernel2.httpAPI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,15 +6,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import vr.com.data.springData.repository.InterfaceEntityRepository;
 import vr.com.kernel.processor.ValueProcessor;
 import vr.com.kernel.processor.ValueProcessorFactory;
 import vr.com.kernel.request.Client;
 import vr.com.kernel.request.ClientFactory;
 import vr.com.kernel.request.Request;
+import vr.com.kernel2.Permanent;
 import vr.com.pojo.InterfaceEntity;
 import vr.com.pojo.InterfaceParam;
+import vr.com.util.SpringUtil;
 
-public class HttpAPI {
+/**
+ *	TODO :
+ *		url相对路径与绝对路径的转换
+ * 		客户端类型的注入
+ * 		持久化的实现
+ */
+public class HttpAPI implements Permanent<InterfaceEntity>{
 	
 	public HttpAPI(String name, String url, String clientName) {
 		this.url = url;
@@ -40,7 +51,11 @@ public class HttpAPI {
 		processors.add(ValueProcessorFactory.getProcessor(processorName));
 	}
 	
-	public String invoke(String... params) {
+	/**
+	 * send http request to the server with some special parameter
+	 * and return the result 
+	 */
+	public HttpAPIResult execute(String... params) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		
 		forEach(new BiConsumer<String, ValueProcessor>() {
@@ -51,9 +66,22 @@ public class HttpAPI {
 			}
 		});
 		
-		return client.httpRequest(new Request(false, url, param)).toString();
+		return new HttpApIResultAdapter(client.httpRequest(new Request(false, url, param)));
 	}
 	
+	/**
+	 * the convenient method for iterate the keys and processors
+	 */
+	private void forEach(BiConsumer<String, ValueProcessor> consumer) {
+		for (int i = 0; i < keys.size(); i++) {
+			consumer.accept(keys.get(i), processors.get(i));
+		}
+	}
+	
+	/**
+	 * 
+	 * implement the Permanent interface
+	 */
 	public InterfaceEntity toPojo() {
 		InterfaceEntity entity = new InterfaceEntity();
 		
@@ -76,17 +104,16 @@ public class HttpAPI {
 		return entity;
 	}
 	
-	private void forEach(BiConsumer<String, ValueProcessor> consumer) {
-		for (int i = 0; i < keys.size(); i++) {
-			consumer.accept(keys.get(i), processors.get(i));
-		}
-	}
-	
-	public static HttpAPI cloneFrom(InterfaceEntity entity) {
+	public HttpAPI cloneFrom(InterfaceEntity entity) {
 		HttpAPI api = new HttpAPI(entity.getName(), entity.getUrl(), "");
 		for (InterfaceParam iParam : entity.getParams()) {
 			api.add(iParam.getKey(), iParam.getConstraint(), iParam.getDesc());
 		}
 		return api;
+	}
+
+	@Override
+	public MongoRepository<InterfaceEntity, String> getRepository() {
+		return SpringUtil.getSpringBean(InterfaceEntityRepository.class);
 	}
 }

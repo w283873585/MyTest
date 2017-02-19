@@ -1,4 +1,4 @@
-package vr.com.kernel2.chain;
+package vr.com.kernel2.testCase;
 
 
 public interface Resolver{

@@ -9,21 +9,24 @@ import vr.com.util.text.SplitUtil.FragProvider;
 public class MixinProcessor implements ValueProcessor{
 	
 	static MixinProcessor newMixinProcess(String expression) {
-		return new MixinProcessor(expression);
+		MixinProcessor mixinProcess = new MixinProcessor(expression);
+		mixinProcess.addProcessors(expression);
+		return mixinProcess;
 	}
 	
 	private String expression;
 	public List<ValueProcessor> processors = new ArrayList<ValueProcessor>();
 	
-	private MixinProcessor(String expression) {
-		addProcessors(expression);
-	};
+	private MixinProcessor(String expression) {};
 	
 	private void addProcessors(String expression) {
 		this.expression = expression;
 		FragProvider provider = SplitUtil.split(expression, ",");
-		while (provider.hasNext()) 
-			processors.add(ValueProcessorFactory.getProcessor(provider.get()));
+		while (provider.hasNext()) {
+			ValueProcessor processor = ValueProcessorFactory.doGetProcessor(provider.get());
+			if (processor != null)
+				processors.add(processor);
+		}
 	}
 	
 	@Override

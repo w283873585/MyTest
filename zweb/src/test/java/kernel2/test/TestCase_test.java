@@ -5,7 +5,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import vr.com.kernel2.chain.TestCase;
+import vr.com.kernel2.testCase.TestCase;
 
 public class TestCase_test {
 	TestCase test = new TestCase();
