@@ -207,13 +207,74 @@
 	        	<div class="form-group col-sm-4">
 	        		<input type="text" class="form-control"  placeholder="输出接口名称" id="queryKeyword">
 	        	</div>
-	        	<div class="form-group col-sm-2">
+	        	<div class="form-group col-sm-6">
 	        		<button type="button" class="btn btn-info" id="queryInterface">&nbsp;查找&nbsp;</button>
 	        	</div>
+	        	<div class="form-group col-sm-1">
+	        		<button type="button" class="btn btn-success" id="toInterfaceTestCase">&nbsp;+&nbsp;测试用例&nbsp;</button>
+	        	</div>
 	        	<div class="clearfix"></div>
-	        	<div class="form-group col-sm-12" id="interfaceBody" style="min-height: 200px; font-size:12px;"></div>
+        		<div class="form-group col-sm-12" id="interfaceBody" style="min-height: 200px; font-size:12px;"></div>
 	        	<div class="clearfix"></div>
 	        </div>
+	        
+	        <!-- 接口测试用例 -->
+        	<div id="interfaceTestCase" style="padding: 0 10px;display: none;overflow:hidden;">
+        		<div class="form-group col-sm-12" style="min-height: 50px;">
+        			<h5>接口：</h5>
+       				<button type="button" class="btn btn-primary" id="selectInterface">&nbsp;选择接口&nbsp;</button>
+        		</div>
+        		<div class="form-group col-sm-12" style="min-height: 200px;">
+        			<h5>参数：</h5>
+        			<div class="form-group">
+					    <div class="input-group">
+					      <div class="input-group-addon" style="width: initial;">username</div>
+					      <input type="text" class="form-control" id="exampleInputAmount" placeholder="用户名">
+					      <div class="input-group-addon" style="width: initial;">非空，字符串</div>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="input-group">
+					      <div class="input-group-addon" style="width: initial;">password</div>
+					      <input type="text" class="form-control" id="exampleInputAmount" placeholder="密码">
+					      <div class="input-group-addon" style="width: initial;">非空，正整数</div>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="input-group">
+					      <div class="input-group-addon" style="width: initial;">username</div>
+					      <input type="text" class="form-control" id="exampleInputAmount" placeholder="用户名">
+					      <div class="input-group-addon" style="width: initial;">非空，字符串</div>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="input-group">
+					      <div class="input-group-addon" style="width: initial;">password</div>
+					      <input type="text" class="form-control" id="exampleInputAmount" placeholder="密码">
+					      <div class="input-group-addon" style="width: initial;">非空，正整数</div>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="input-group">
+					      <div class="input-group-addon" style="width: initial;">username</div>
+					      <input type="text" class="form-control" id="exampleInputAmount" placeholder="用户名">
+					      <div class="input-group-addon" style="width: initial;">非空，字符串</div>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="input-group">
+					      <div class="input-group-addon" style="width: initial;">password</div>
+					      <input type="text" class="form-control" id="exampleInputAmount" placeholder="密码">
+					      <div class="input-group-addon" style="width: initial;">非空，正整数</div>
+					    </div>
+					</div>
+        		</div>
+        		<div class="form-group col-sm-12">
+        			<button type="button" class="btn btn-info" id="testCase_nextStep">&nbsp;下一步&nbsp;</button>
+        			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        			<button type="button" class="btn btn-success" id="testCase_complete">&nbsp;完成&nbsp;</button>
+        		</div>
+        	</div>
 	        
 	      </div>
 	      <div class="modal-footer">
@@ -494,6 +555,7 @@ $(function() {
 			resource: result ? result[2] : ""
 		};
  	}
+ 	
  	/** -----------------------------------------接口管理------------------------------------------ **/
  	var interfaceManager = (function () {
  		/**
@@ -579,6 +641,12 @@ $(function() {
 				
 				return false;
 			});	
+			
+			// 进入测试用例模式
+			$("#toInterfaceTestCase").on("click", function() {
+				$("#interfaceTestCase").show();
+ 				$("#interfaceSearch").hide();
+			});
 		}
 		
 		function query() {
