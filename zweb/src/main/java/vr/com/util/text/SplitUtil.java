@@ -14,6 +14,7 @@ public class SplitUtil {
 		public static final int skipEmpty = 1;
 		public static final int returnEmptyForOverstep = 2;
 		
+		@SuppressWarnings("unused")
 		private int model;
 		private int index;
 		private String body[];
