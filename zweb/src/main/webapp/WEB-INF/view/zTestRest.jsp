@@ -287,7 +287,7 @@
 <script type="text/javascript">
 $(function() {
 	/**
-		
+		请求管理器
 	*/
 	var requestManager = new RequestManager({
 		basePath: "${pageContext.request.contextPath}",
@@ -551,12 +551,36 @@ $(function() {
 		 * 		}]
 		 * 	}
 		 */
-		var interfaceData = null,
-			container = null;
+		var container = null,
+			interfaceData = null,
+			eventHandler = {};
 		 
 		return {
-			init: init 
+			init: init,
+			search: function(callback) {
+				$("#interfaceTestCase").hide();
+				$("#interfaceSearch").show();
+				query();
+				
+				var originDipatch = dispatch;
+				dispatch = function() {
+					var index = $(this).index(".interfaceEntity");
+					var cur = interfaceData[index];
+					callback(cur);
+					dispatch = originDipatch;
+					$("#interfaceTestCase").show();
+					$("#interfaceSearch").hide();
+				}
+			}
 		};
+		
+		/**
+			利用一个引用函数中转一次事件绑定函数,
+			然后通过修改此引用, 来改变事件绑定的指向
+		*/
+		function dispatch(callback) {
+			callback.call(this);
+		}
 		
 		function init() {
 			$("#queryInterface").click(query);
@@ -575,17 +599,23 @@ $(function() {
 			
 			// 单击修改接口信息
 			container.on("click", ".interfaceEntity", function() {
-				clearTimeout(timer);
-				var that = $(this);
-				timer = setTimeout(function(){
-					var index = that.index(".interfaceEntity");
-					modifier.start(index);
-			    }, 200);
+				dispatch.call(this, modifyInterface);
 			});
 			
 			// 双击接口调用
 			container.on("dblclick", ".interfaceEntity", function() {
-				
+				dispatch.call(this, loadInterface);
+				return false;
+			});	
+			
+			// 进入测试用例模式
+			$("#toInterfaceTestCase").on("click", function() {
+				$("#interfaceTestCase").show();
+ 				$("#interfaceSearch").hide();
+			});
+			
+			// 将接口数据加载如请求器
+			function loadInterface() {
 				clearTimeout(timer);
 				$('#interfaceManager').modal('hide');
 				
@@ -604,16 +634,18 @@ $(function() {
 				}
 				
 				// 请求器导入接口数据
-				requestManager.initialize(cur.url, params)
-				
-				return false;
-			});	
+				requestManager.initialize(cur.url, params);
+			}
 			
-			// 进入测试用例模式
-			$("#toInterfaceTestCase").on("click", function() {
-				$("#interfaceTestCase").show();
- 				$("#interfaceSearch").hide();
-			});
+			// 修改接口相关信息
+			function modifyInterface() {
+				clearTimeout(timer);
+				var that = $(this);
+				timer = setTimeout(function(){
+					var index = that.index(".interfaceEntity");
+					modifier.start(index);
+			    }, 200);
+			}
 		}
 		
 		function query() {
@@ -629,7 +661,6 @@ $(function() {
 		}
 		
  		function renderInterfaceData(data) {
- 			
  			// 保存接口数据
  			interfaceData = data;
  			
@@ -807,7 +838,32 @@ $(function() {
 		}
  	})();
  	
+ 	// 初始化
  	interfaceManager.init();
+ 	
+ 	/** -----------------------------------------测试相关------------------------------------------ **/
+ 	var testManager = (function(){
+ 		/**
+ 			查询用例
+ 			用例详情 -> 可以修改
+ 			新增用例
+ 		*/
+ 		return {
+ 			init: init
+ 		};
+ 		
+ 		function init() {
+ 			// 选择接口
+ 			$("#selectInterface").click(function() {
+	 	 		interfaceManager.search(function(data) {
+	 	 			alert(JSON.stringify(data));
+	 	 		});
+	 	 	});
+ 		}
+ 	})();
+ 	
+ 	// 初始化
+ 	testManager.init();
 });
 </script>
 </body>
