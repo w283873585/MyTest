@@ -237,12 +237,12 @@
         		<div id="testCaseAdd" style="display: none;">
         			<div class="form-group col-sm-12" style="min-height: 50px;">
 						<h5>接口：</h5>
-							<button type="button" class="btn btn-primary" id="selectInterface">&nbsp;选择接口&nbsp;</button>
+							<button type="button" class="btn btn-primary" id="selectInterface">选择接口</button>
 					</div>
 					<div class="form-group col-sm-12" id="testCase_param" style="display: none;">
 						<h5>参数：</h5>
 					</div>
-					<div class="form-group col-sm-12" id="testCase_expect" style="display: none;">
+					<div class="form-group col-sm-12" id="testCase_expect">
 						<h5>期望：</h5>
 						<div class="form-group">
 					      <input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入你的期望表达式">
