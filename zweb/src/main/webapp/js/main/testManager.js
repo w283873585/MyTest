@@ -177,7 +177,7 @@ var testManager = (function(){
 			if (cur = testCaseData[index]) {
 				// 获取接口数据
 				getInterfaceData(cur.interfaceId, function(data) {
-					inject(data.params, cur.params, cur.expectExp);
+					inject(data, cur.params, cur.expectExp);
 				});
 			}
 		}
