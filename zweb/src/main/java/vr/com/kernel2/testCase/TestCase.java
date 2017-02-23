@@ -75,7 +75,7 @@ public class TestCase implements Permanent<TestCaseEntity>{
 			InterfaceEntityRepository interfaceEntityDao = SpringUtil.getSpringBean(InterfaceEntityRepository.class);
 			InterfaceEntity entity = interfaceEntityDao.findOne(interfaceId);
 			
-			HttpAPI api = (HttpAPI) Permanent.cloneFrom(entity, HttpAPI.class);
+			HttpAPI api = Permanent.cloneFrom(entity, HttpAPI.class);
 			return api.execute(format(param, ctx));
 		}
 		
