@@ -5,13 +5,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import vr.com.data.springData.pojo.TestCaseEntity;
 import vr.com.data.springData.repository.InterfaceEntityRepository;
+import vr.com.data.springData.repository.TestCaseRepository;
 import vr.com.kernel.InterfaceManager;
 import vr.com.kernel.RequestBody;
 import vr.com.kernel.RequestManager;
@@ -26,6 +29,9 @@ public class TestInterfaceAction {
 	// private InterfaceEntiyDao interfaceEntityDao = new InterfaceEntiyDao();
 	@Autowired
 	private InterfaceEntityRepository interfaceEntityDao;
+	
+	@Autowired
+	private TestCaseRepository testCaseRepository;
 	
 	
 	@RequestMapping("/testRest")
@@ -82,5 +88,33 @@ public class TestInterfaceAction {
 		InterfaceEntity entity = JSONObject.parseObject(entityStr, InterfaceEntity.class);
 		interfaceEntityDao.updateByUrl(entity.getUrl(), entity);
 		return "";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/testCase/query")
+	public Object testQuery(HttpServletRequest request, HttpServletResponse response,
+			String keyword) {
+		return JSONObject.toJSONString(testCaseRepository.findAll());
+	}
+	
+	@ResponseBody
+	@RequestMapping("/testCase/update")
+	public Object query(HttpServletRequest request, HttpServletResponse response,
+			String id,
+			String name,
+			String exp) {
+		TestCaseEntity entity = new TestCaseEntity();
+		entity.setId(id);
+		entity.setName(name == null ? "地球村民" : name);
+		entity.setExpression(exp);
+		testCaseRepository.save(entity);
+		return "success";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/interface/{id}")
+	public Object queryByID(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable String id) {
+		return interfaceEntityDao.findOne(id);
 	}
 }

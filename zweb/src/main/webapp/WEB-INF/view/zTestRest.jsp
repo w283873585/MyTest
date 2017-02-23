@@ -98,6 +98,27 @@
 			.param_kv {
 				margin-bottom: 15px;
 			}
+			
+			.testCaseBox {
+				border: 0;
+				height: 34px;
+				line-height: 34px;
+				margin-right: 25px;
+				margin-top: 20px;
+				border-radius: 4px;
+				color: #c7254e;
+				cursor: pointer;
+			}
+			.testCase_process_body {
+				padding: 20px;
+			    padding-top: 0px;
+			    margin: 20px 0;
+			    border: 1px solid #eee;
+				border-left-color: #1b809e;
+			    border-left-width: 5px;
+			    border-radius: 3px;
+			    overflow: hidden;
+			}
     	</style>
     </head>
     <body>
@@ -222,7 +243,7 @@
         	<div id="interfaceTestCase" style="padding: 0 10px;display: none;overflow:hidden;">
         		<div id="testCaseList">
         			<div class="form-group col-sm-4">
-		        		<input type="text" class="form-control"  placeholder="输出测试用例名称" id="queryTestCase">
+		        		<input type="text" class="form-control"  placeholder="输出测试用例名称" id="queryTestCaseInput">
 		        	</div>
 		        	<div class="form-group col-sm-6">
 		        		<button type="button" class="btn btn-info" id="queryTestCase">&nbsp;查找&nbsp;</button>
@@ -233,11 +254,27 @@
 	        		<div class="form-group col-sm-12" id="testCaseBody" style="min-height: 200px; font-size:12px;"></div>
 		        	<div class="clearfix"></div>
         		</div>
-        		<div id="testCaseDetail" style="display: none;"></div>
+        		<div id="testCaseDetail"  style="display: none;">
+        			<div class="form-group col-sm-12" id="testCase_name">
+						<h5>名称：</h5>
+						<div class="form-group">
+					      <input type="text" class="form-control" placeholder="名称">
+						</div>
+					</div>
+					<div class="form-group col-sm-12" id="testCase_process">
+						<h5>流程：</h5>
+						<div class="testCase_process_body"></div>
+					</div>
+        			<div class="form-group col-sm-12" id="test_btnGroup_detail">
+						<button type="button" class="btn btn-info" id="testCase_execute">&nbsp;执行&nbsp;</button>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button type="button" class="btn btn-success" id="testCase_back">&nbsp;返回&nbsp;</button>
+					</div>
+        		</div>
         		<div id="testCaseAdd" style="display: none;">
         			<div class="form-group col-sm-12" style="min-height: 50px;">
 						<h5>接口：</h5>
-							<button type="button" class="btn btn-primary" id="selectInterface">选择接口</button>
+						<button type="button" class="btn btn-primary" id="selectInterface">选择接口</button>
 					</div>
 					<div class="form-group col-sm-12" id="testCase_param" style="display: none;">
 						<h5>参数：</h5>

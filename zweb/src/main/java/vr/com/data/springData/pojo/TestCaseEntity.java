@@ -6,6 +6,8 @@ public class TestCaseEntity {
 	@Id
 	private String id;
 	
+	private String name;
+	
 	private String expression;
 
 	public String getId() {
@@ -22,5 +24,13 @@ public class TestCaseEntity {
 
 	public void setExpression(String expression) {
 		this.expression = expression;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

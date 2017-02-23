@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="InterfaceEntity")
 public class InterfaceEntity {
 	
+	private String id;
 	private String url;
 	private String name;
 	private String desc = "";
@@ -43,5 +44,11 @@ public class InterfaceEntity {
 	}
 	public void setResults(List<InterfaceParam> results) {
 		this.results = results;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 }
