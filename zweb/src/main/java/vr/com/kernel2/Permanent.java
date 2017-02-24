@@ -19,12 +19,10 @@ public interface Permanent<T> {
 		getRepository().insert(toPojo());
 	}
 	
-	// TODO
-	@SuppressWarnings("unchecked")
-	static <T, F> F cloneFrom(T t, Class<F> clazz) {
+	static <T, F extends Permanent<T>> F cloneFrom(T t, Class<F> clazz) {
 		try {
 			F f = clazz.newInstance();
-			((Permanent<T>) f).cloneFrom(t);
+			f.cloneFrom(t);
 			return f;
 		} catch (InstantiationException e) {
 			e.printStackTrace();
