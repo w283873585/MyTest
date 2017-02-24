@@ -4,10 +4,16 @@ var testManager = (function(){
 		用例详情 -> 可以修改
 		新增用例
 	*/
+	var CONSTANT = {
+		separator: " ",
+		expSeparator: "\n",
+		paramSeparator: ","
+	};
+	
 	var basePath = null;
 	var testCases = null;
 	/**
-	 * [{
+	 * testCases = [{
 	 * 		id: "",
 	 * 		name: "",
 	 * 		expression: "",
@@ -23,6 +29,10 @@ var testManager = (function(){
 	function init(path) {
 		basePath = path;
 		
+		modifier.init();
+		detailManager.init();
+		
+		// 新增用例
 		$("#addTestCase").click(function() {
 			modifier.show();
 		});
@@ -30,6 +40,7 @@ var testManager = (function(){
 		// 查询测试用例
 		$("#queryTestCase").click(queryTestCase);
 		
+		// 测试用例详情
 		$("#testCaseBody").on("click", ".testCaseBox", function() {
 			var index = $(this).index("#testCaseBody .testCaseBox");
 			detailManager.show(testCases[index]);
@@ -41,87 +52,94 @@ var testManager = (function(){
 			url: basePath + "/my/testCase/query",
 			type: "post",
 			success: function(data) {
-				renderTestCase($.parseJSON(data));
+				testCases = $.parseJSON(data);
+				renderTestCaseList();
 			}
 		});
 	}
 	
-	function renderTestCase(data) {
+	function renderTestCaseList() {
 		var html = "";
-		
-		for (var i in data) {
-			html += '<a class="col-sm-2 bg-danger testCaseBox" tabindex="1" role="button" title="">' + data[i].name + '</a>'
+		for (var i in testCases) {
+			html += '<a class="col-sm-2 bg-danger testCaseBox" tabindex="1" role="button" title="">' + testCases[i].name + '</a>'
 		}
-		
-		testCases = data;
 		$("#testCaseBody").html(html);
 	}
-	
 	
 	function getDetailManager() {
 		var disabled = true;
 		var testCase = null;
 		
-		init();
-		
 		return {
+			init: init,
 			show: show
 		};
 		
 		function show(val) {
 			disabled = false;
-			
+			/**
+			 * 在修改具体流程时, 提供给modifier的入口
+			 * 因为在进入修改, 当前状态并未被清空, 只需要展示指定窗口就行
+			 */
 			if (val == undefined) {
 				$("#testCaseDetail").show();
 				return;
 			}
-			testCase = val;
 			
+			testCase = val;
 			$("#testCaseDetail").show();
 			$("#testCaseList").hide();
 			$("#testCase_name input").val(testCase.name);
 			
-			var exps = testCase.expression.split("\n");
+			var exps = testCase.expression.split(CONSTANT.expSeparator);
 			var html = "";
 			for (var i in exps)
 				html += '<a class="col-sm-2 bg-danger testCaseBox" tabindex="1" role="button" title="">天下之大</a>'
-			
 			$(".testCase_process_body").html(html);
 		}
 		
 		function init() {
+			// 流程修改
 			$("#testCase_process").on("click", ".testCaseBox", function() {
 				if (disabled) return;
 				
+				// 临时退出
+				exit();
+				
+				// 进入修改
 				var index = $(this).index("#testCase_process .testCaseBox");
 				modifier.show(testCase, index);
 			});
 			
+			// 测试用例执行
 			$("#testCase_execute").click(function() {
 				if (disabled) return;
 				
-				
 			});
 			
+			// 返回列表
 			$("#testCase_back").click(function() {
 				if (disabled) return;
 				
-				disabled = true;
+				// 完全退出
+				exit(true);
+			});
+		}
+		
+		function exit(entire) {
+			disabled = true;
+			$("#testCaseDetail").hide();
+			
+			if (entire) {
 				testCase = null;
-				$("#testCaseDetail").hide();
 				$("#testCaseList").show();
-				
 				$("#testCase_process_body").html("");
 				$("#testCase_name input").val("");
-			});
+			}
 		}
 	}
 	
-	
 	function getModifer() {
-		var DEFAULT = {
-			separator: " "
-		};
 		var disabled = true;
 		
 		// 接口缓存
@@ -130,25 +148,23 @@ var testManager = (function(){
 		// testCase相关数据
 		var id,
 			index,
-			beModifiedTestCase,
+			beModified,
 			testCaseData;
 		/**
-		 * testCaseData: [{
+		 * testCaseData = [{
 		 * 		interfaceId: "",
 		 * 		params: [],
 		 * 		expect: ""
 		 * }]
 		 */
-		
-		init();
-		
+		 
 		/**
 			暴露的接口
 		*/
 		return {
+			init: init,
 			show: show
 		};
-		
 		
 		function init() {
 			// 选择接口
@@ -156,27 +172,27 @@ var testManager = (function(){
 				if (disabled) return;	
 				
 				interfaceManager.search(function(data) {
-					cacheInterfaceData(data);
+					cacheInterface(data);
 					inject(data);
 				});
 			});
 			
-			// 新增流程
+			/**
+			 * 新增流程
+			 */
 			$("#testCase_nextStep").click(function() {
 				if (disabled) return;
 				
 				// 下一步
 				_goto();
 			});
-			
 			$("#testCase_complete").click(function() {
 				if (disabled) return;
 				
 				persistTestCase(function (data) {
 					if (data) alert("success"); 
 					$("#testCaseList").show();
-					$("#testCaseAdd").hide();
-					disabled = true;
+					exit();
 				});
 			});
 			
@@ -185,16 +201,54 @@ var testManager = (function(){
 			 */
 			$("#testCase_ensure").click(function() {
 				persistTestCase(function(data) {
-					beModifiedTestCase.expression = data.exp;
-					$("#testCaseAdd").hide();
-					disabled = true;
+					beModified.expression = data.exp;
+					exit();
 					detailManager.show();
 				});
 			});
 			$("#testCase_cancel").click(function() {
-				$("#testCaseAdd").hide();
+				exit();
 				detailManager.show();
 			});
+		}
+		
+		function show(testCase, idx) {
+			/**
+			 * testCase: {
+			 * 		id: "",
+			 *		name: "",
+			 *		expression: ""
+			 * }
+			 */
+			// 初始化一些数据
+			disabled = false;
+			id = null;
+			index = 0;
+			beModified = null;
+			testCaseData = [];
+			
+			// 控制html的显示
+			$("#testCaseList").hide();
+			$("#testCaseAdd").show();
+			
+			if (!testCase) {
+				// 新增
+				$("#test_btnGroup_add").show();
+				$("#test_btnGroup_edit").hide();
+			} else {
+				// 修改
+				$("#test_btnGroup_add").hide();
+				$("#test_btnGroup_edit").show();
+				loadData(testCase, idx);
+			}
+			
+			// 跳转到指定流程
+			_goto(idx || 0);
+		}
+		
+		function exit() {
+			disabled = true;
+			$("#testCaseAdd").hide();
 		}
 		
 		function persistTestCase(callback) {
@@ -214,47 +268,11 @@ var testManager = (function(){
 			});
 		}
 		
-		
-		function show(testCase, idx) {
-			/**
-			 * testCase: {
-			 * 		id: "",
-			 *		name: "",
-			 *		expression: ""
-			 * }
-			 */
-			// 初始化一些数据
-			disabled = false;
-			id = null;
-			index = 0;
-			beModifiedTestCase = null;
-			testCaseData = [];
-			
-			// 控制html的显示
-			$("#testCaseList").hide();
-			$("#testCaseDetail").hide();
-			$("#testCaseAdd").show();
-			
-			// 新增
-			if (!testCase) {
-				$("#test_btnGroup_add").show();
-				$("#test_btnGroup_edit").hide();
-			} else {
-				// 修改
-				$("#test_btnGroup_add").hide();
-				$("#test_btnGroup_edit").show();
-				loadData(testCase, idx);
-			}
-			
-			// 跳转到指定流程
-			_goto(idx || 0);
-		}
-		
 		// 用于修改时, 加载数据
 		function loadData(testCase, idx) {
 			id = testCase.id;
-			beModifiedTestCase = testCase;
-			var expressions = testCase.expression.split("\n");
+			beModified = testCase;
+			var expressions = testCase.expression.split(CONSTANT.expSeparator);
 			for (var i in expressions)
 				saveTestCaseData(expressions[i]);
 		}
@@ -281,7 +299,7 @@ var testManager = (function(){
 			var cur;
 			if (cur = testCaseData[index]) {
 				// 获取接口数据
-				getInterfaceData(cur.interfaceId, function(data) {
+				getInterface(cur.interfaceId, function(data) {
 					inject(data, cur.params, cur.expect);
 				});
 			}
@@ -291,7 +309,7 @@ var testManager = (function(){
 		 * 通过id获取接口相关数据
 		 * 首先从缓存中拿, 如果不存在则通过ajax异步拿
 		 */
-		function getInterfaceData(id, callback) {
+		function getInterface(id, callback) {
 			if (interfaceCache[id])
 				callback(interfaceCache[id])
 			else {
@@ -300,7 +318,7 @@ var testManager = (function(){
 					url: basePath + "/my/interface/" + id,
 					type: "get",
 					success: function(data) {
-						cacheInterfaceData(data);
+						cacheInterface(data);
 						callback(data);
 					}
 				});
@@ -311,10 +329,10 @@ var testManager = (function(){
 		function saveTestCaseData(expression) {
 			var interfaceId, params, expectExp;
 			if (expression) {
-				//  修改时, 手动注入
-				var curExps = expression.split(DEFAULT.separator);
+				// 修改时, 手动注入
+				var curExps = expression.split(CONSTANT.separator);
 				interfaceId = curExps[0];
-				params = curExps[1].split(",");
+				params = curExps[1].split(CONSTANT.paramSeparator);
 				expectExp = curExps[2];
 			} else {
 				// 通过页面获取
@@ -341,18 +359,18 @@ var testManager = (function(){
 		function inject(data, values, expect) {
 			$("#selectInterface").html(data.name);
 			$("#selectInterface").val(data.id);
-			addParams(data.params, values);
+			renderParams(data.params, values);
 			if (expect) $("#testCase_expect input").val(expect);
 		}
 		
 		// 缓存接口数据
-		function cacheInterfaceData(data) {
+		function cacheInterface(data) {
 			if (!interfaceCache[data.id])
 				interfaceCache[data.id] = data;
 		}
 		
 		// 根据参数信息, 渲染html对应的页面
-		function addParams(params, values) {
+		function renderParams(params, values) {
 			var testCase_paramContainer = $("#testCase_param");
 			testCase_paramContainer.find(".form-group").remove();
 			
@@ -378,11 +396,11 @@ var testManager = (function(){
 				var cur = testCaseData[i];
 				var arr = [];
 				arr.push(cur.interfaceId);
-				arr.push(cur.params.join(","));
+				arr.push(cur.params.join(CONSTANT.paramSeparator));
 				arr.push(cur.expect);
-				result.push(arr.join(DEFAULT.separator));
+				result.push(arr.join(CONSTANT.separator));
 			}
-			return result.join("\n");
+			return result.join(CONSTANT.expSeparator);
 		}
 	}
 })();

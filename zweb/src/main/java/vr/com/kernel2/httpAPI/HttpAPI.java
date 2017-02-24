@@ -27,6 +27,8 @@ import vr.com.util.SpringUtil;
  */
 public class HttpAPI implements Permanent<InterfaceEntity>{
 	
+	public HttpAPI() {}
+	
 	public HttpAPI(String name, String url, String clientName) {
 		this.url = url;
 		this.name = name;
@@ -35,6 +37,8 @@ public class HttpAPI implements Permanent<InterfaceEntity>{
 	
 	private String url;
 	private String name;
+	
+	private String host;
 	private Client client;
 	
 	private List<String> keys = new ArrayList<String>();
@@ -51,6 +55,13 @@ public class HttpAPI implements Permanent<InterfaceEntity>{
 		processors.add(ValueProcessorFactory.getProcessor(processorName));
 	}
 	
+	public void setClient(String clientName) {
+		this.client = ClientFactory.getClient(clientName);
+	}
+	
+	public void setHost(String host) {
+		this.host = host;
+	}
 	/**
 	 * send http request to the server with some special parameter
 	 * and return the result 
@@ -66,7 +77,7 @@ public class HttpAPI implements Permanent<InterfaceEntity>{
 			}
 		});
 		
-		return new HttpApIResultAdapter(client.httpRequest(new Request(false, url, param)));
+		return new HttpApIResultAdapter(client.httpRequest(new Request(false, host + url, param)));
 	}
 	
 	/**
@@ -105,11 +116,12 @@ public class HttpAPI implements Permanent<InterfaceEntity>{
 	}
 	
 	public HttpAPI cloneFrom(InterfaceEntity entity) {
-		HttpAPI api = new HttpAPI(entity.getName(), entity.getUrl(), "");
+		this.url = entity.getUrl();
+		this.name = entity.getName();
 		for (InterfaceParam iParam : entity.getParams()) {
-			api.add(iParam.getKey(), iParam.getConstraint(), iParam.getDesc());
+			this.add(iParam.getKey(), iParam.getConstraint(), iParam.getDesc());
 		}
-		return api;
+		return this;
 	}
 
 	@Override

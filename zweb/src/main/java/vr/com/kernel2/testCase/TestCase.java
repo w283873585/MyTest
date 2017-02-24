@@ -76,6 +76,8 @@ public class TestCase implements Permanent<TestCaseEntity>{
 			InterfaceEntity entity = interfaceEntityDao.findOne(interfaceId);
 			
 			HttpAPI api = Permanent.cloneFrom(entity, HttpAPI.class);
+			api.setClient("vrsoft");
+			api.setHost("http://192.168.200.148:8090/");
 			return api.execute(format(param, ctx));
 		}
 		
