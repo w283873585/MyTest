@@ -2,19 +2,22 @@ package vr.com.kernel2.testCase;
 
 import java.util.function.BiConsumer;
 
-import vr.com.data.springData.pojo.TestCaseEntity;
 import vr.com.data.springData.repository.InterfaceEntityRepository;
 import vr.com.data.springData.repository.TestCaseRepository;
 import vr.com.kernel2.Permanent;
 import vr.com.kernel2.httpAPI.HttpAPI;
 import vr.com.kernel2.httpAPI.HttpAPIResult;
 import vr.com.pojo.InterfaceEntity;
+import vr.com.pojo.TestCaseEntity;
 import vr.com.util.SpringUtil;
 import vr.com.util.text.SplitUtil;
 import vr.com.util.text.SplitUtil.FragProvider;
 
 public class TestCase implements Permanent<TestCaseEntity>{
 
+	private String host;
+	private String client;
+	
 	private String expression = null;
 	private Imagine imagine = new Imagine(new TestCaseResolver());
 	
@@ -28,11 +31,10 @@ public class TestCase implements Permanent<TestCaseEntity>{
 		return imagine.invoke();
 	}
 	
-	
 	/**
 	 * the resolver for testcase expression
 	 */
-	private static class TestCaseResolver implements Resolver{
+	private class TestCaseResolver implements Resolver{
 
 		@Override
 		public void resolve(String expression, Context ctx) {
@@ -76,8 +78,8 @@ public class TestCase implements Permanent<TestCaseEntity>{
 			InterfaceEntity entity = interfaceEntityDao.findOne(interfaceId);
 			
 			HttpAPI api = Permanent.cloneFrom(entity, HttpAPI.class);
-			api.setClient("vrsoft");
-			api.setHost("http://192.168.200.148:8090/");
+			api.setClient(client);
+			api.setHost(host);
 			return api.execute(format(param, ctx));
 		}
 		
@@ -113,6 +115,8 @@ public class TestCase implements Permanent<TestCaseEntity>{
 	@Override
 	public Permanent<TestCaseEntity> cloneFrom(TestCaseEntity t) {
 		setExpression(t.getExpression());
+		this.client = t.getClient();
+		this.host = t.getHost();
 		return this;
 	}
 

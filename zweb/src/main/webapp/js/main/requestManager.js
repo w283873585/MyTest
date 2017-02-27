@@ -44,7 +44,12 @@ function RequestManager(setting) {
 					isBusy = false;
 					$(".result").html("");
 					$(".params").html("");
-					$(".result").html(toJsonHtml($.parseJSON(res.result)));
+					try {
+						var result = $.parseJSON(res.result);
+						$(".result").html(toJsonHtml($.parseJSON(res.result)));
+					} catch (e) {
+						$(".result").html(res.result);
+					}
 					$(".params").html(res.params);
 				},
 				error: function(a, b, c, d) {

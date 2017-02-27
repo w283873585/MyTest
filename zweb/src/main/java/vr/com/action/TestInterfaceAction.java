@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import vr.com.data.springData.pojo.TestCaseEntity;
 import vr.com.data.springData.repository.InterfaceEntityRepository;
 import vr.com.data.springData.repository.TestCaseRepository;
 import vr.com.kernel.InterfaceManager;
@@ -20,7 +19,10 @@ import vr.com.kernel.RequestBody;
 import vr.com.kernel.RequestManager;
 import vr.com.kernel.processor.ValueProcessorFactory;
 import vr.com.kernel.request.ClientFactory;
+import vr.com.kernel2.Permanent;
+import vr.com.kernel2.testCase.TestCase;
 import vr.com.pojo.InterfaceEntity;
+import vr.com.pojo.TestCaseEntity;
 
 @Controller
 @RequestMapping("/my")
@@ -116,5 +118,26 @@ public class TestInterfaceAction {
 	public Object queryByID(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String id) {
 		return interfaceEntityDao.findOne(id);
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("/testCase/execute")
+	public Object doExec(HttpServletRequest request, HttpServletResponse response,
+			String id,
+			String name,
+			String host,
+			String client) {
+		
+		// 更新测试用例数据
+		TestCaseEntity entity = testCaseRepository.findOne(id);
+		entity.setName(name);
+		entity.setHost(host);
+		entity.setClient(client);
+		testCaseRepository.save(entity);
+		
+		// 执行
+		TestCase testCase = Permanent.cloneFrom(entity, TestCase.class);
+		return testCase.invoke().getMsg();
 	}
 }

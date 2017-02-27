@@ -261,6 +261,16 @@
 					      <input type="text" class="form-control" placeholder="名称">
 						</div>
 					</div>
+					<div class="form-group col-sm-12" id="testCase_host">
+						<h5>主机地址：</h5>
+						<div class="form-group">
+					      <input type="text" class="form-control" placeholder="主机地址">
+						</div>
+					</div>
+					<div class="form-group col-sm-12" id="testCase_client">
+						<label for="clients">选择客户端类型</label>
+	        			<select class="form-control"></select>
+					</div>
 					<div class="form-group col-sm-12" id="testCase_process">
 						<h5>流程：</h5>
 						<div class="testCase_process_body"></div>
@@ -310,23 +320,21 @@
 <script src="../js/main/interfaceManager.js"></script>	
 <script src="../js/main/testManager.js"></script>	
 <script type="text/javascript">
-$(function() {
-	/**
-		请求管理器
-	*/
-	var requestManager = new RequestManager({
-		basePath: "${pageContext.request.contextPath}",
-		clients: $.parseJSON('${clients}'),
-		processors: $.parseJSON('${processors}')
-	});
- 	
-	/** -----------------------------------------接口管理------------------------------------------ **/
- 	// 初始化
- 	interfaceManager.init("${pageContext.request.contextPath}");
- 	
- 	// 初始化
- 	testManager.init("${pageContext.request.contextPath}");
+/**
+	请求管理器
+*/
+var requestManager = new RequestManager({
+	basePath: "${pageContext.request.contextPath}",
+	clients: $.parseJSON('${clients}'),
+	processors: $.parseJSON('${processors}')
 });
+	
+/** -----------------------------------------接口管理------------------------------------------ **/
+// 初始化
+interfaceManager.init("${pageContext.request.contextPath}");
+
+// 初始化
+testManager.init("${pageContext.request.contextPath}", $.parseJSON('${clients}'));
 </script>
 </body>
 </html>

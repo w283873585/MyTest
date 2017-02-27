@@ -1,4 +1,4 @@
-package vr.com.data.springData.pojo;
+package vr.com.pojo;
 
 import org.springframework.data.annotation.Id;
 
@@ -7,6 +7,10 @@ public class TestCaseEntity {
 	private String id;
 	
 	private String name;
+	
+	private String host;
+	
+	private String client;
 	
 	private String expression;
 
@@ -32,5 +36,21 @@ public class TestCaseEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getClient() {
+		return client;
+	}
+
+	public void setClient(String client) {
+		this.client = client;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 }

@@ -62,6 +62,8 @@ public class Imagine {
 	
 	/**
 	 * 简单的表达式上下文实现
+	 * 
+	 * 扩展: 记录每一步的执行结果与参数
 	 */
 	public static class SimpleContext implements Context{
 

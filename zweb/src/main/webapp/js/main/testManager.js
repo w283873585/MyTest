@@ -26,11 +26,12 @@ var testManager = (function(){
 		init: init
 	};
 	
-	function init(path) {
+	function init(path, clients) {
 		basePath = path;
 		
 		modifier.init();
 		detailManager.init();
+		renderClients(clients)
 		
 		// 新增用例
 		$("#addTestCase").click(function() {
@@ -66,6 +67,14 @@ var testManager = (function(){
 		$("#testCaseBody").html(html);
 	}
 	
+	function renderClients(clients) {
+		var clientsHtml = "";
+		for (var i = clients.length - 1; i >= 0; i--) {
+			clientsHtml += "<option value='" + clients[i] + "'>" + clients[i] + "</option>";
+		}
+		$("#testCase_client select").html(clientsHtml);
+	}
+	
 	function getDetailManager() {
 		var disabled = true;
 		var testCase = null;
@@ -90,6 +99,8 @@ var testManager = (function(){
 			$("#testCaseDetail").show();
 			$("#testCaseList").hide();
 			$("#testCase_name input").val(testCase.name);
+			$("#testCase_host input").val(testCase.host);
+			$("#testCase_client select").val(testCase.client);
 			
 			var exps = testCase.expression.split(CONSTANT.expSeparator);
 			var html = "";
@@ -115,6 +126,26 @@ var testManager = (function(){
 			$("#testCase_execute").click(function() {
 				if (disabled) return;
 				
+				var data = {
+					id: testCase.id,
+					name: $("#testCase_name input").val(),
+					host: $("#testCase_host input").val(),
+					client: $("#testCase_client select").val(),
+				};
+				
+				if (!data.host) {
+					alert("host can not be empty");
+					return;
+				}
+				
+				// 发送执行请求
+				$.ajax({
+					url:　basePath + "/my/testCase/execute",
+					type: "post",
+					data: data,
+				}).done(function(data) {
+					alert(data);
+				});
 			});
 			
 			// 返回列表
