@@ -23,7 +23,7 @@ public class InterfaceManager {
 			disabled = false;
 			
 			box.setUrl(provider.get());
-			entity.setUrl(box.getUrl().replaceFirst(".*:[0-9]*", ""));
+			entity.setUrl(box.getUrl().replaceFirst("https?://[^/]*(:[0-9]+)?", ""));
 			entity.setName(provider.get());
 			entity.setDesc(provider.get());
 			
