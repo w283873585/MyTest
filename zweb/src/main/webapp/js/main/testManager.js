@@ -286,7 +286,13 @@ var testManager = (function(){
 			// 默认执行下一步
 			_goto();
 			
-			var data = {exp: getExpression()};
+			var exp = getExpression();
+			if (!exp) {
+				callback();
+				return;
+			}
+			
+			var data = {exp: exp};
 			if (id)	data.id = id;
 			
 			// 持久化测试用例
