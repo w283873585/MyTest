@@ -6,6 +6,7 @@ import java.util.function.BiConsumer;
 import com.alibaba.fastjson.JSONObject;
 
 import vr.com.kernel.request.HttpUtil.MyResponse;
+import vr.com.util.ExceptionUtil;
 
 public class HttpApIResultAdapter implements HttpAPIResult{
 
@@ -45,8 +46,13 @@ public class HttpApIResultAdapter implements HttpAPIResult{
 
 	@Override
 	public void foreach(BiConsumer<String, Object> consumer) {
-		if (body == null)
-			body = JSONObject.parseObject(getBody());
+	    if (body == null) {
+	        try {
+	            body = JSONObject.parseObject(getBody());
+	        } catch (Exception e) {
+	            ExceptionUtil.throwRuntimeException("接口返回数据不为json：" + getBody());
+	        }
+	    }
 		
 		body.forEach(consumer);
 	}

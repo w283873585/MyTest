@@ -8,7 +8,9 @@ import vr.com.kernel2.Permanent;
 import vr.com.kernel2.httpAPI.HttpAPI;
 import vr.com.kernel2.httpAPI.HttpAPIResult;
 import vr.com.pojo.InterfaceEntity;
+import vr.com.pojo.InterfaceParam;
 import vr.com.pojo.TestCaseEntity;
+import vr.com.util.ExceptionUtil;
 import vr.com.util.SpringUtil;
 import vr.com.util.text.SplitUtil;
 import vr.com.util.text.SplitUtil.FragProvider;
@@ -45,17 +47,18 @@ public class TestCase implements Permanent<TestCaseEntity>{
 			String expect = provider.get();
 			
 			HttpAPIResult result = doRequest(interfaceId, parameters, ctx);
-			if (!getExpecter(expect).match(result)) {
-				ctx.commit("result no matched");
-				return;
-			}
-			
 			result.foreach(new BiConsumer<String, Object>() {
 				@Override
 				public void accept(String key, Object value) {
 					ctx.put(key, value);
 				}
 			});
+			ctx.finishCurrent();
+			
+			// 验证是否通过期望
+			if (!getExpecter(expect).match(result)) {
+                ctx.commit("result no matched");
+            }
 		}
 		
 		/**
@@ -76,11 +79,26 @@ public class TestCase implements Permanent<TestCaseEntity>{
 		public HttpAPIResult doRequest(String interfaceId, String param, Context ctx) {
 			InterfaceEntityRepository interfaceEntityDao = SpringUtil.getSpringBean(InterfaceEntityRepository.class);
 			InterfaceEntity entity = interfaceEntityDao.findOne(interfaceId);
+			if (entity == null) {
+			    ExceptionUtil.throwRuntimeException("接口：[" + interfaceId + "]并不存在");
+			}
 			
 			HttpAPI api = Permanent.cloneFrom(entity, HttpAPI.class);
 			api.setClient(client);
 			api.setHost(host);
-			return api.execute(format(param, ctx));
+			
+			// 格式化参数信息
+			String params[] = format(param, ctx);
+			
+			// 收集相关信息
+			ctx.setCurrentName(entity.getName());
+			int index = 0;
+			for (InterfaceParam p : entity.getParams()) {
+			    ctx.addCurrentParam(p.getKey(), params[index]);
+			    index++;
+			}
+			
+			return api.execute(params);
 		}
 		
 		/**
@@ -92,8 +110,12 @@ public class TestCase implements Permanent<TestCaseEntity>{
 			String[] result = new String[origin.length];
 			for (int i = 0; i < origin.length; i++) {
 				String key = origin[i];
-				if (key.startsWith("{") && key.endsWith("}"))
-					result[i] = ctx.get(key.substring(1, key.length() - 1)).toString();
+				if (key.startsWith("{") && key.endsWith("}")) {
+				    Object value = ctx.get(key.substring(1, key.length() - 1));
+				    if (value == null)
+				        ExceptionUtil.throwRuntimeException("引用" + key + "并不存在于Context中");
+				    result[i] = value.toString();
+				}
 				else 
 					result[i] = key;
 			}

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+
 public class Imagine {
 	/**
 	 * expression:
@@ -28,8 +30,10 @@ public class Imagine {
 		for (String exp : expressions) {
 			try {
 				getResolver().resolve(exp, ctx);
+			} catch (RuntimeException e) {
+			    ctx.commit(e.getMessage());
 			} catch (Exception e) {
-				ctx.commit(e.getMessage());
+				ctx.commit("服务器发生了未期望的异常：" + e.getMessage());
 			}
 			
 			// break immediate if context has be committed
@@ -69,16 +73,33 @@ public class Imagine {
 
 		private String msg = null;
 		private boolean committed = false;
-		private Map<String, Object> map = new HashMap<String, Object>();
+		
+		/**
+		 * 上下文的数据池， 每次请求产生的结果数据都会存在这
+		 */
+		private Map<String, Object> ctxPool = new HashMap<String, Object>();
+		
+		/**
+		 * 每次流程产生的相关数据
+		 */
+		private String name = null;
+		private Map<String, Object> param = new HashMap<String, Object>();
+		private Map<String, Object> result = new HashMap<String, Object>();
+		
+		/**
+		 * 在finishCurrent执行后，会将每次流程产生的相关数据汇总在这
+		 */
+		private List<Map<String, Object>> flows = new ArrayList<Map<String, Object>>();
 		
 		@Override
 		public Object get(String key) {
-			return map.get(key);
+			return ctxPool.get(key);
 		}
 
 		@Override
 		public void put(String key, Object value) {
-			map.put(key, value);
+			ctxPool.put(key, value);
+			this.result.put(key, value);
 		}
 
 		@Override
@@ -96,5 +117,34 @@ public class Imagine {
 		public String getMsg() {
 			return this.msg;
 		}
+
+        @Override
+        public void setCurrentName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public void addCurrentParam(String key, Object value) {
+           this.param.put(key, value);
+        }
+
+        @Override
+        public void finishCurrent() {
+            Map<String, Object> current = new HashMap<String, Object>();
+            current.put("name", name);
+            current.put("params", param);
+            current.put("result", result);
+            flows.add(current);
+            
+            // clear
+            name = null;
+            param = new HashMap<String, Object>();
+            result = new HashMap<String, Object>();
+        }
+
+        @Override
+        public String getAll() {
+            return JSON.toJSONString(flows);
+        }
 	}
 }

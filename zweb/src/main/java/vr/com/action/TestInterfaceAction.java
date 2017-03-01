@@ -138,6 +138,6 @@ public class TestInterfaceAction {
 		
 		// 执行
 		TestCase testCase = Permanent.cloneFrom(entity, TestCase.class);
-		return testCase.invoke().getMsg();
+		return testCase.invoke().getAll();
 	}
 }
