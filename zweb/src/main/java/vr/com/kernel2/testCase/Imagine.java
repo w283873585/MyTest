@@ -7,16 +7,24 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 
+import vr.com.util.text.SplitUtil;
+import vr.com.util.text.SplitUtil.FragProvider;
+
 public class Imagine {
 	/**
 	 * expression:
 	 * 		interface {id},2,3,4 expect
 	 */
 	private Resolver resolver;
+	private String globalExp;
 	private List<String> expressions = new ArrayList<String>();
 	
 	public Imagine(Resolver resolver) {
 		this.resolver = resolver;
+	}
+	
+	public void setGlobalExp(String globalExp) {
+		this.globalExp = globalExp;
 	}
 	
 	public void addNode(String expression) {
@@ -24,7 +32,7 @@ public class Imagine {
 	}
 
 	public Context invoke() {
-		Context ctx = new SimpleContext();
+		Context ctx = new SimpleContext().setGlobalExp(globalExp);;
 		
 		// parse the expression list ordinally
 		for (String exp : expressions) {
@@ -86,6 +94,16 @@ public class Imagine {
 		private String msg = "测试通过";
 		private Map<String, Object> param = new HashMap<String, Object>();
 		private Map<String, Object> result = new HashMap<String, Object>();
+		
+		public SimpleContext setGlobalExp(String globalExp) {
+			if (globalExp != null && !"".equals(globalExp)) {
+				for (String key : globalExp.split("&")) {
+					FragProvider provider = SplitUtil.split(key, "=");
+					ctxPool.put(provider.get(), provider.get());
+				}
+			}
+			return this;
+		}
 		
 		/**
 		 * 在finishCurrent执行后，会将每次流程产生的相关数据汇总在这

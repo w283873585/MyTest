@@ -127,13 +127,15 @@ public class TestInterfaceAction {
 			String id,
 			String name,
 			String host,
-			String client) {
+			String client,
+			String globalExp) {
 		
 		// 更新测试用例数据
 		TestCaseEntity entity = testCaseRepository.findOne(id);
 		entity.setName(name);
 		entity.setHost(host);
 		entity.setClient(client);
+		entity.setGlobalExp(globalExp);
 		testCaseRepository.save(entity);
 		
 		// 执行

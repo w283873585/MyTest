@@ -100,6 +100,7 @@
 			}
 			
 			.testCaseBox {
+				font-size: 12px;
 				border: 0;
 				height: 34px;
 				line-height: 34px;
@@ -287,6 +288,12 @@
 						<h5>名称：</h5>
 						<div class="form-group">
 					      <input type="text" class="form-control" placeholder="名称">
+						</div>
+					</div>
+					<div class="form-group col-sm-12" id="testCase_globalExp">
+						<h5>全局表达式：</h5>
+						<div class="form-group">
+					      <input type="text" class="form-control" placeholder="全局表达式，如：name=小明&sex=女">
 						</div>
 					</div>
 					<div class="form-group col-sm-12" id="testCase_host">

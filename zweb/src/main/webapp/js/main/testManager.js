@@ -100,6 +100,7 @@ var testManager = (function(){
 			$("#testCaseList").hide();
 			$("#testCase_name input").val(testCase.name);
 			$("#testCase_host input").val(testCase.host);
+			$("#testCase_globalExp input").val(testCase.globalExp);
 			$("#testCase_client select").val(testCase.client);
 			$(".testCase_process_result").html("");
 			
@@ -148,6 +149,7 @@ var testManager = (function(){
 					name: $("#testCase_name input").val(),
 					host: $("#testCase_host input").val(),
 					client: $("#testCase_client select").val(),
+					globalExp: $("#testCase_globalExp input").val()
 				};
 				
 				if (!data.host) {
@@ -218,6 +220,7 @@ var testManager = (function(){
 				$("#testCaseList").show();
 				$("#testCase_process_body").html("");
 				$("#testCase_name input").val("");
+				$("#testCase_globalExp input").val("");
 			}
 		}
 	}

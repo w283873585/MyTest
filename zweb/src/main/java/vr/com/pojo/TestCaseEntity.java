@@ -12,6 +12,8 @@ public class TestCaseEntity {
 	
 	private String client;
 	
+	private String globalExp;
+	
 	private String expression;
 
 	public String getId() {
@@ -52,5 +54,13 @@ public class TestCaseEntity {
 
 	public void setHost(String host) {
 		this.host = host;
+	}
+
+	public String getGlobalExp() {
+		return globalExp;
+	}
+
+	public void setGlobalExp(String globalExp) {
+		this.globalExp = globalExp;
 	}
 }

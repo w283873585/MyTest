@@ -19,6 +19,7 @@ public class TestCase implements Permanent<TestCaseEntity>{
 
 	private String host;
 	private String client;
+	private String globalExp;
 	
 	private String expression = null;
 	private Imagine imagine = new Imagine(new TestCaseResolver());
@@ -30,6 +31,7 @@ public class TestCase implements Permanent<TestCaseEntity>{
 	}
 	
 	public Context invoke() {
+		imagine.setGlobalExp(globalExp);
 		return imagine.invoke();
 	}
 	
@@ -215,6 +217,7 @@ public class TestCase implements Permanent<TestCaseEntity>{
 		setExpression(t.getExpression());
 		this.client = t.getClient();
 		this.host = t.getHost();
+		this.globalExp = t.getGlobalExp();
 		return this;
 	}
 
