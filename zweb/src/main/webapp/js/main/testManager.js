@@ -101,12 +101,29 @@ var testManager = (function(){
 			$("#testCase_name input").val(testCase.name);
 			$("#testCase_host input").val(testCase.host);
 			$("#testCase_client select").val(testCase.client);
+			$(".testCase_process_result").html("");
 			
 			var exps = testCase.expression.split(CONSTANT.expSeparator);
+			var i = 0;
 			var html = "";
-			for (var i in exps)
-				html += '<a class="col-sm-2 bg-danger testCaseBox" tabindex="1" role="button" title="">天下之大</a>'
-			$(".testCase_process_body").html(html);
+			recursion(exps[i]);
+			
+			/**
+			 * 递归实现嵌套回调 和 异步居后 
+			 * 避免异步时步骤失序
+			 */ 
+			function recursion(data) {
+				if (!data) {
+					$(".testCase_process_body").html(html);
+					return;
+				}
+				
+				var id = data.split(CONSTANT.separator)[0];
+				if (modifier.getInterface(id, function(data) {
+					html += '<a class="col-sm-2 bg-danger testCaseBox" tabindex="1" role="button" title="">' + data.name + '</a>'
+					recursion(exps[++i]);
+				}));
+			}
 		}
 		
 		function init() {
@@ -144,7 +161,7 @@ var testManager = (function(){
 					type: "post",
 					data: data,
 				}).done(function(data) {
-					alert(data);
+					renderResult($.parseJSON(data));
 				});
 			});
 			
@@ -155,6 +172,40 @@ var testManager = (function(){
 				// 完全退出
 				exit(true);
 			});
+			
+			// 返回列表
+			$("#testCaseDetail").on("click", ".testCase_process_result .curResult a", function() {
+				if (disabled) return;
+				
+				$(this).next().toggle();
+			});
+			
+			function renderResult(data) {
+				var index = 0;
+				var className = ["bg-primary", "bg-success", "bg-info", "bg-warning", "bg-danger"];
+				
+				var html = "";
+				for (var i in data) {
+					var cur = data[i];
+					html += "<div class='curResult " + nextClass() + "'>" + 
+							getHtml(cur) + 
+						"</div>";
+				}
+				$(".testCase_process_result").html(html);
+				
+				function getHtml(cur) {
+					var html = "<span style='color: black; font-weight: bold;'>" + cur.name + "</span>&nbsp;:&nbsp;&nbsp;&nbsp;" + "<span>" + cur.msg + "</span><br/>"
+					+ "<a>参数详情<br/></a><div style='display:none'>" + toJsonHtml(cur.params) + "</div>"
+					+ "<a>结果详情<br/></a><div style='display:none'>" + toJsonHtml(cur.result) + "</div>";
+					return html;
+				}
+				
+				function nextClass() {
+					index++;
+					if (index == 5) index = 0;
+					return className[index];
+				}
+			}
 		}
 		
 		function exit(entire) {
@@ -171,7 +222,8 @@ var testManager = (function(){
 	}
 	
 	function getModifer() {
-		var disabled = true;
+		var disabled = true,
+			hasPopover = false;
 		
 		// 接口缓存
 		var interfaceCache = {};
@@ -194,13 +246,32 @@ var testManager = (function(){
 		*/
 		return {
 			init: init,
-			show: show
+			show: show,
+			getInterface: getInterface
 		};
 		
 		function init() {
 			// 选择接口
 			$("#selectInterface").click(function() {
+				if (disabled) return;
+				
+				if (hasPopover) {
+					$("#selectInterface").popover("toggle");
+					return;
+				}
+				
+				interfaceManager.search(function(data) {
+					cacheInterface(data);
+					inject(data);
+				});
+			});
+			
+			// 双击选择接口
+			$("#selectInterface").dblclick(function() {
 				if (disabled) return;	
+				
+				if (hasPopover)
+					$("#selectInterface").popover("hide");
 				
 				interfaceManager.search(function(data) {
 					cacheInterface(data);
@@ -326,9 +397,10 @@ var testManager = (function(){
 			else
 				index = idx;
 			
-			// 清除相关数据
+			// 清除相关页面数据
 			$("#selectInterface").val("");
 			$("#selectInterface").html("选择接口");
+			clearPopver($("#selectInterface"));
 			$("#testCase_param").hide();
 			$("#testCase_param .form-group").remove();
 			$("#testCase_expect input").val("");
@@ -394,10 +466,71 @@ var testManager = (function(){
 		
 		// 将对应数据注入到html页面, 并缓存相关数据
 		function inject(data, values, expect) {
-			$("#selectInterface").html(data.name);
 			$("#selectInterface").val(data.id);
+			renderPopover($("#selectInterface") , data);
 			renderParams(data.params, values);
 			if (expect) $("#testCase_expect input").val(expect);
+		}
+		
+		function renderPopover(target, data) {
+			hasPopover = true;
+			target.attr("tabindex", 100);
+			target.attr("role", "button");
+			target.attr("data-toggle", "popover");
+			target.attr("data-html", "true");
+			target.attr("data-placement", "left");
+			target.attr("data-trigger", "hover");
+			target.attr("title", "<code>" + data.url + "</code>");
+			
+			var html = "<div class='table_container'>"
+				+ "<div class='title'>接口描述:</div>"
+				+ (data.desc ? data.desc : "无")
+				+ "<br/><br/>"
+			+ "</div>"
+			
+			+ "<div class='table_container bg-success'>"
+    			+ "<div class='title'>请求参数:</div>"
+    			+ "<table class='table table-condensed'>"
+    				+ getTableBody(data.params)
+    			+ "</table>"
+			+ "</div>"
+			
+			+ "<div class='table_container bg-success'>"
+				+ "<div class='title'>结果:</div>"
+    			+ "<table class='table table-condensed'>"
+    				+ getTableBody(data.results)
+    			+ "</table>"
+			+ "</div>";
+			
+			target.attr("data-content", html);
+			target.html(data.name);
+			target.popover({container: "#interfaceManager", trigger: "manual"});
+			
+			function getTableBody(arr) {
+				if (!arr || !arr.length)
+					return "<tr><td>无</td><td>";
+					
+				var result = "";
+				for (var i = 0; i < arr.length; i++) {
+					var cur = arr[i];
+					result += "<tr><td>" + cur.key + "</td><td>" + cur.desc + "</td></tr>"
+				}
+				
+				return result;
+			}
+		}
+		
+		function clearPopver(target) {
+			hasPopover = false;
+			target.removeAttr("tabindex");
+			target.removeAttr("role");
+			target.removeAttr("data-toggle");
+			target.removeAttr("data-html");
+			target.removeAttr("data-placement");
+			target.removeAttr("data-trigger");
+			target.removeAttr("title");
+			target.removeAttr("data-content");
+			target.popover("destroy");
 		}
 		
 		// 缓存接口数据

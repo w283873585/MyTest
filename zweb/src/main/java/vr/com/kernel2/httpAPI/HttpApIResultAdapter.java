@@ -39,8 +39,13 @@ public class HttpApIResultAdapter implements HttpAPIResult{
 
 	@Override
 	public Object get(String key) {
-		if (body == null)
-			body = JSONObject.parseObject(getBody());
+		if (body == null) {
+			try {
+				body = JSONObject.parseObject(getBody());
+			} catch (Exception e) {
+				ExceptionUtil.throwRuntimeException("接口返回数据不为json：" + getBody());
+			}
+		}
 		return body.get(key);
 	}
 

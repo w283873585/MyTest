@@ -119,6 +119,34 @@
 			    border-radius: 3px;
 			    overflow: hidden;
 			}
+			.testCase_process_result {
+				padding: 20px;
+				padding-top: 0px;
+			    margin: 20px 0;
+			    border: 1px solid #eee;
+				border-left-color: #5cb85c;
+			    border-left-width: 5px;
+			    border-radius: 3px;
+			    overflow: hidden;
+			    min-height: 70px;
+			}
+			
+			.testCase_process_result .curResult {
+				margin-top: 20px;
+				min-height: 40px;
+				line-height: 30px;
+				border-radius: 5px;
+				padding: 10px;
+				padding-left: 15px;
+			}
+			.testCase_process_result .curResult span {
+				
+				color: #d43f3a;
+			}
+			.testCase_process_result .curResult a {
+				cursor: pointer;
+				margin-top: 10px;
+			}
     	</style>
     </head>
     <body>
@@ -275,6 +303,11 @@
 						<h5>流程：</h5>
 						<div class="testCase_process_body"></div>
 					</div>
+					<div class="form-group col-sm-12" id="testCase_result" style="min-height: 100px">
+						<h5>结果：</h5>
+						<div class="testCase_process_result">
+						</div>
+					</div>
         			<div class="form-group col-sm-12" id="test_btnGroup_detail">
 						<button type="button" class="btn btn-info" id="testCase_execute">&nbsp;执行&nbsp;</button>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -289,6 +322,7 @@
 					<div class="form-group col-sm-12" id="testCase_param" style="display: none;">
 						<h5>参数：</h5>
 					</div>
+					
 					<div class="form-group col-sm-12" id="testCase_expect">
 						<h5>期望：</h5>
 						<div class="form-group">

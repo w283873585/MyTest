@@ -53,12 +53,11 @@ public class TestCase implements Permanent<TestCaseEntity>{
 					ctx.put(key, value);
 				}
 			});
-			ctx.finishCurrent();
 			
 			// 验证是否通过期望
 			if (!getExpecter(expect).match(result)) {
-                ctx.commit("result no matched");
-            }
+				ctx.commit("result no matched!");
+			}
 		}
 		
 		/**
@@ -66,12 +65,89 @@ public class TestCase implements Permanent<TestCaseEntity>{
 		 */
 		private Expecter getExpecter(final String expect) {
 			return new Expecter() {
+				/**
+				 * a=1&b!=3
+				 */
 				@Override
 				public boolean match(HttpAPIResult result) {
-					return true;
+					
+					class Node{
+						public Node next;
+						private final String key;
+						private final String value;
+						private final boolean equal;
+						private final int isAnd;
+						
+						public Node(String exp) {
+							int target = exp.indexOf("!=");
+							this.equal = target == -1;
+							if (this.equal) {
+								target = exp.indexOf("=");
+							}
+							this.key = exp.substring(0, target);
+							String lastStr = exp.substring(exp.length() - 1);
+							if ("&".equals(lastStr)) {
+								this.isAnd = 0;
+							} else if ("|".equals(lastStr)) {
+								this.isAnd = 1;
+							} else {
+								this.isAnd = 2;
+							}
+							this.value = exp.substring(target + (this.equal ? 1 : 2), exp.length() - (this.isAnd == 2 ? 0 : 1));
+						}
+						
+						public void setNext(Node node) {
+							this.next = node;
+						}
+						
+						public boolean compute() {
+							boolean ret = value.equals(result.get(key)) == equal;
+							if (next == null) {
+								return ret;
+							} else if (isAnd == 0) {
+								return ret && next.compute();
+							} else {
+								return ret || next.compute();
+							}
+						}
+					}
+					
+					if (expect == null || "".equals(expect))
+						return true;
+					
+					Node top = null;
+					Node cur = null;
+					String surplus = expect;
+					
+					while (surplus.length() > 0) {
+						int andIndex = surplus.indexOf("&");
+						int orIndex = surplus.indexOf("|");
+						
+						int index = 0;
+						if (andIndex != -1 && (andIndex < orIndex || orIndex == -1)) {
+							index = andIndex;
+						} else if (orIndex != -1) {
+							index = orIndex;
+						} else {
+							index = surplus.length() - 1;
+						}
+						
+						String target = surplus.substring(0, index + 1);
+						if (top == null) {
+							top = new Node(target);
+							cur = top;
+						} else {
+							cur.setNext(new Node(target));
+							cur = cur.next;
+						}
+						surplus = surplus.substring(index + 1);
+					}
+					return top.compute();
 				}
 			};
 		}
+		
+		
 		
 		/**
 		 * 根据接口, 发送请求, 获取结果
@@ -87,11 +163,11 @@ public class TestCase implements Permanent<TestCaseEntity>{
 			api.setClient(client);
 			api.setHost(host);
 			
-			// 格式化参数信息
-			String params[] = format(param, ctx);
-			
 			// 收集相关信息
 			ctx.setCurrentName(entity.getName());
+			
+			// 格式化参数信息
+			String params[] = format(param, ctx);
 			int index = 0;
 			for (InterfaceParam p : entity.getParams()) {
 			    ctx.addCurrentParam(p.getKey(), params[index]);
@@ -113,7 +189,7 @@ public class TestCase implements Permanent<TestCaseEntity>{
 				if (key.startsWith("{") && key.endsWith("}")) {
 				    Object value = ctx.get(key.substring(1, key.length() - 1));
 				    if (value == null)
-				        ExceptionUtil.throwRuntimeException("引用" + key + "并不存在于Context中");
+				        ExceptionUtil.throwRuntimeException("不存在的引用: " + key);
 				    result[i] = value.toString();
 				}
 				else 

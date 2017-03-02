@@ -35,6 +35,7 @@ public class Imagine {
 			} catch (Exception e) {
 				ctx.commit("服务器发生了未期望的异常：" + e.getMessage());
 			}
+			ctx.finishCurrent();
 			
 			// break immediate if context has be committed
 			if (ctx.hasCommitted()) 
@@ -71,7 +72,6 @@ public class Imagine {
 	 */
 	public static class SimpleContext implements Context{
 
-		private String msg = null;
 		private boolean committed = false;
 		
 		/**
@@ -83,6 +83,7 @@ public class Imagine {
 		 * 每次流程产生的相关数据
 		 */
 		private String name = null;
+		private String msg = "测试通过";
 		private Map<String, Object> param = new HashMap<String, Object>();
 		private Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -131,6 +132,7 @@ public class Imagine {
         @Override
         public void finishCurrent() {
             Map<String, Object> current = new HashMap<String, Object>();
+            current.put("msg", msg);
             current.put("name", name);
             current.put("params", param);
             current.put("result", result);
