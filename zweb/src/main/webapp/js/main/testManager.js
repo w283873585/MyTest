@@ -157,6 +157,7 @@ var testManager = (function(){
 				}
 				
 				$(".testCase_process_result").html("等待中...");
+				disabled = true;
 				// 发送执行请求
 				$.ajax({
 					url:　basePath + "/my/testCase/execute",
@@ -164,6 +165,7 @@ var testManager = (function(){
 					data: testCase,
 				}).done(function(data) {
 					renderResult($.parseJSON(data));
+					disabled = false;
 				});
 			});
 			
