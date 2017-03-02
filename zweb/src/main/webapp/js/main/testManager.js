@@ -155,6 +155,7 @@ var testManager = (function(){
 					return;
 				}
 				
+				$(".testCase_process_result").html("等待中...");
 				// 发送执行请求
 				$.ajax({
 					url:　basePath + "/my/testCase/execute",
