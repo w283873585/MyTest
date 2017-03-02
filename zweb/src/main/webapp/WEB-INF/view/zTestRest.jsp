@@ -336,16 +336,12 @@
 					      <input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入你的期望表达式">
 						</div>
 					</div>
-					<div class="form-group col-sm-12" id="test_btnGroup_add" style="display: none;">
+					<div class="form-group col-sm-12" id="test_btnGroup_add">
+						<button type="button" class="btn btn-warning" id="testCase_lastStep">&nbsp;上一步&nbsp;</button>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button type="button" class="btn btn-info" id="testCase_nextStep">&nbsp;下一步&nbsp;</button>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button type="button" class="btn btn-success" id="testCase_complete">&nbsp;完成&nbsp;</button>
-					</div>
-					
-					<div class="form-group col-sm-12" id="test_btnGroup_edit" style="display: none;">
-						<button type="button" class="btn btn-info" id="testCase_ensure">&nbsp;确定&nbsp;</button>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<button type="button" class="btn btn-success" id="testCase_cancel">&nbsp;取消&nbsp;</button>
 					</div>
         		</div>
         	</div>

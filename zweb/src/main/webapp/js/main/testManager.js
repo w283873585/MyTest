@@ -232,11 +232,12 @@ var testManager = (function(){
 		// 接口缓存
 		var interfaceCache = {};
 		
-		// testCase相关数据
-		var id,
-			index,
-			beModified,
-			testCaseData;
+		var index = 0,
+		// 更改状态下缓存的数据
+		beModified,
+		
+		// 一定格式的testCase数据
+		testCaseData = [];
 		/**
 		 * testCaseData = [{
 		 * 		interfaceId: "",
@@ -290,31 +291,30 @@ var testManager = (function(){
 				if (disabled) return;
 				
 				// 下一步
+				_goto(true);
+			});
+			
+			$("#testCase_lastStep").click(function() {
+				if (disabled) return;
+				
+				// 上一步
 				_goto();
 			});
+			
 			$("#testCase_complete").click(function() {
 				if (disabled) return;
 				
 				persistTestCase(function (data) {
-					if (data) alert("success"); 
-					$("#testCaseList").show();
-					exit();
+					if (beModified) {
+						beModified.expression = data.exp;
+						detailManager.show(beModified);
+						exit();
+					} else {
+						if (data) alert("success"); 
+						$("#testCaseList").show();
+						exit();
+					}
 				});
-			});
-			
-			/**
-			 * 修改流程
-			 */
-			$("#testCase_ensure").click(function() {
-				persistTestCase(function(data) {
-					beModified.expression = data.exp;
-					exit();
-					detailManager.show();
-				});
-			});
-			$("#testCase_cancel").click(function() {
-				exit();
-				detailManager.show();
 			});
 		}
 		
@@ -326,40 +326,30 @@ var testManager = (function(){
 			 *		expression: ""
 			 * }
 			 */
-			// 初始化一些数据
 			disabled = false;
-			id = null;
-			index = 0;
-			beModified = null;
-			testCaseData = [];
 			
 			// 控制html的显示
 			$("#testCaseList").hide();
 			$("#testCaseAdd").show();
 			
-			if (!testCase) {
-				// 新增
-				$("#test_btnGroup_add").show();
-				$("#test_btnGroup_edit").hide();
-			} else {
-				// 修改
-				$("#test_btnGroup_add").hide();
-				$("#test_btnGroup_edit").show();
-				loadData(testCase, idx);
-			}
+			beModified = testCase;
+			if (beModified) loadData();
 			
 			// 跳转到指定流程
-			_goto(idx || 0);
+			toPage(idx || 0);
 		}
 		
 		function exit() {
 			disabled = true;
+			index = 0;
+			beModified = null;
+			testCaseData = [];
 			$("#testCaseAdd").hide();
 		}
 		
 		function persistTestCase(callback) {
 			// 默认执行下一步
-			_goto();
+			_goto(true);
 			
 			var exp = getExpression();
 			if (!exp) {
@@ -368,7 +358,7 @@ var testManager = (function(){
 			}
 			
 			var data = {exp: exp};
-			if (id)	data.id = id;
+			if (beModified)	data.id = beModified.id;
 			
 			// 持久化测试用例
 			$.ajax({
@@ -381,34 +371,34 @@ var testManager = (function(){
 		}
 		
 		// 用于修改时, 加载数据
-		function loadData(testCase, idx) {
-			id = testCase.id;
-			beModified = testCase;
-			var expressions = testCase.expression.split(CONSTANT.expSeparator);
+		function loadData() {
+			var expressions = beModified.expression.split(CONSTANT.expSeparator);
 			for (var i in expressions)
 				saveTestCaseData(expressions[i]);
 		}
 		
 		/**
-			职责一: 跳转到下一页, 清除当前数据.
-			职责二: 跳转到指定页, 清除当页数据, 注入数据
-			职责三: 新开窗口时, 跳转至第一页, 会有清除页面效果
+			跳转上一页和跳转下一页
 		*/
-		function _goto(idx) {
-			// 缓存在本地
-			if (idx == undefined)
-				saveTestCaseData();
-			else
-				index = idx;
-			
-			// 清除相关页面数据
+		function _goto(next) {
+			saveTestCaseData(next);
+			clear();
+			toPage(index);
+		}
+		
+		// 清除相关页面数据
+		function clear() {
 			$("#selectInterface").val("");
 			$("#selectInterface").html("选择接口");
 			clearPopver($("#selectInterface"));
 			$("#testCase_param").hide();
 			$("#testCase_param .form-group").remove();
-			$("#testCase_expect input").val("");
-			
+			$("#testCase_expect input").val("");	
+		}
+		
+		// 跳转到指定流程, 即将某流程的数据取出来显示
+		function toPage(idx) {
+			index = idx;
 			var cur;
 			if (cur = testCaseData[index]) {
 				// 获取接口数据
@@ -439,11 +429,11 @@ var testManager = (function(){
 		}
 		
 		// 保存测试相关数据
-		function saveTestCaseData(expression) {
+		function saveTestCaseData(expressionOrNext) {
 			var interfaceId, params, expectExp;
-			if (expression) {
+			if (expressionOrNext && expressionOrNext != true) {
 				// 修改时, 手动注入
-				var curExps = expression.split(CONSTANT.separator);
+				var curExps = expressionOrNext.split(CONSTANT.separator);
 				interfaceId = curExps[0];
 				params = curExps[1].split(CONSTANT.paramSeparator);
 				expectExp = curExps[2];
@@ -460,12 +450,19 @@ var testManager = (function(){
 			}
 			
 			if (interfaceId) {
-				testCaseData[index++] = {
+				testCaseData[index] = {
 					interfaceId: interfaceId,
 					params: params,
 					expect: expectExp
 				};
+				if (expressionOrNext) 
+					index++;	
 			}
+			
+			if (!expressionOrNext && testCaseData[index - 1])
+				index--;
+			
+			
 		}
 		
 		// 将对应数据注入到html页面, 并缓存相关数据
