@@ -319,6 +319,8 @@
 						<button type="button" class="btn btn-info" id="testCase_execute">&nbsp;执行&nbsp;</button>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button type="button" class="btn btn-success" id="testCase_back">&nbsp;返回&nbsp;</button>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="button" class="btn btn-danger" id="testCase_del">&nbsp;删除&nbsp;</button>
 					</div>
         		</div>
         		<div id="testCaseAdd" style="display: none;">

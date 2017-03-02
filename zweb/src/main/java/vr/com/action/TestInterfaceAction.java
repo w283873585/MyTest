@@ -105,9 +105,13 @@ public class TestInterfaceAction {
 			String id,
 			String name,
 			String exp) {
-		TestCaseEntity entity = new TestCaseEntity();
-		entity.setId(id);
-		entity.setName(name == null ? "地球村民" : name);
+	    TestCaseEntity entity = null;
+	    if (id == null) {
+	        entity = new TestCaseEntity();
+	        entity.setName("地球村民" + (testCaseRepository.count() + 1) + "号");
+	    } else {
+	        entity = testCaseRepository.findOne(id);
+	    }
 		entity.setExpression(exp);
 		testCaseRepository.save(entity);
 		return "success";
@@ -120,6 +124,15 @@ public class TestInterfaceAction {
 		return interfaceEntityDao.findOne(id);
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping("/testCase/del")
+	public Object doDel(HttpServletRequest request, HttpServletResponse response,
+			String id) {
+		// 更新测试用例数据
+		testCaseRepository.delete(id);
+		return "success";
+	}
 	
 	@ResponseBody
 	@RequestMapping("/testCase/execute")

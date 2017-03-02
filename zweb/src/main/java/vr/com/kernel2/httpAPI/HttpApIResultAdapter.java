@@ -39,26 +39,25 @@ public class HttpApIResultAdapter implements HttpAPIResult{
 
 	@Override
 	public Object get(String key) {
-		if (body == null) {
-			try {
+		Object result = null;
+		try {
+			if (body == null)
 				body = JSONObject.parseObject(getBody());
-			} catch (Exception e) {
-				ExceptionUtil.throwRuntimeException("接口返回数据不为json：" + getBody());
-			}
+			result = body.get(key);
+		} catch (Exception e) {
+			ExceptionUtil.throwRuntimeException("接口返回数据不为json：" + getBody());
 		}
-		return body.get(key);
+		return result;
 	}
 
 	@Override
 	public void foreach(BiConsumer<String, Object> consumer) {
-	    if (body == null) {
-	        try {
-	            body = JSONObject.parseObject(getBody());
-	        } catch (Exception e) {
-	            ExceptionUtil.throwRuntimeException("接口返回数据不为json：" + getBody());
-	        }
-	    }
-		
-		body.forEach(consumer);
+        try {
+        	if (body == null)
+        		body = JSONObject.parseObject(getBody());
+        	body.forEach(consumer);
+        } catch (Exception e) {
+            ExceptionUtil.throwRuntimeException("接口返回数据不为json：" + getCode());
+        }
 	}
 }

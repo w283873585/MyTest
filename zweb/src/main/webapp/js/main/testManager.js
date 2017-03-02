@@ -75,6 +75,11 @@ var testManager = (function(){
 		$("#testCase_client select").html(clientsHtml);
 	}
 	
+	function removeTestCase(testCase) {
+		testCases.splice(testCases.indexOf(testCase), 1);
+		renderTestCaseList();
+	}
+	
 	function getDetailManager() {
 		var disabled = true;
 		var testCase = null;
@@ -137,6 +142,7 @@ var testManager = (function(){
 				
 				// 进入修改
 				var index = $(this).index("#testCase_process .testCaseBox");
+				obtainDataFromPage()
 				modifier.show(testCase, index);
 			});
 			
@@ -144,15 +150,8 @@ var testManager = (function(){
 			$("#testCase_execute").click(function() {
 				if (disabled) return;
 				
-				var data = {
-					id: testCase.id,
-					name: $("#testCase_name input").val(),
-					host: $("#testCase_host input").val(),
-					client: $("#testCase_client select").val(),
-					globalExp: $("#testCase_globalExp input").val()
-				};
-				
-				if (!data.host) {
+				obtainDataFromPage();
+				if (!testCase.host) {
 					alert("host can not be empty");
 					return;
 				}
@@ -162,7 +161,7 @@ var testManager = (function(){
 				$.ajax({
 					url:　basePath + "/my/testCase/execute",
 					type: "post",
-					data: data,
+					data: testCase,
 				}).done(function(data) {
 					renderResult($.parseJSON(data));
 				});
@@ -175,6 +174,24 @@ var testManager = (function(){
 				// 完全退出
 				exit(true);
 			});
+			
+			$("#testCase_del").click(function() {
+				if (disabled) return;
+				
+				if (confirm("确认删除？")) {
+					$.ajax({
+						type: "post",
+						url: basePath + "/my/testCase/del",
+						data: {id: testCase.id},
+						success: function() {
+							removeTestCase(testCase);
+							// 完全退出
+							exit(true);
+						}
+					})
+				}
+			});
+			
 			
 			// 返回列表
 			$("#testCaseDetail").on("click", ".testCase_process_result .curResult a", function() {
@@ -209,6 +226,13 @@ var testManager = (function(){
 					return className[index];
 				}
 			}
+			
+			function obtainDataFromPage() {
+				testCase.name = $("#testCase_name input").val();
+				testCase.host = $("#testCase_host input").val();
+				testCase.client = $("#testCase_client select").val();
+				testCase.globalExp = $("#testCase_globalExp input").val();
+			}
 		}
 		
 		function exit(entire) {
@@ -233,11 +257,10 @@ var testManager = (function(){
 		var interfaceCache = {};
 		
 		var index = 0,
-		// 更改状态下缓存的数据
-		beModified,
-		
-		// 一定格式的testCase数据
-		testCaseData = [];
+			// 更改状态下缓存的数据
+			beModified,
+			// 一定格式的testCase数据
+			testCaseData = [];
 		/**
 		 * testCaseData = [{
 		 * 		interfaceId: "",
@@ -284,9 +307,6 @@ var testManager = (function(){
 				});
 			});
 			
-			/**
-			 * 新增流程
-			 */
 			$("#testCase_nextStep").click(function() {
 				if (disabled) return;
 				
@@ -374,14 +394,14 @@ var testManager = (function(){
 		function loadData() {
 			var expressions = beModified.expression.split(CONSTANT.expSeparator);
 			for (var i in expressions)
-				saveTestCaseData(expressions[i]);
+				saveInternalData(expressions[i]);
 		}
 		
 		/**
 			跳转上一页和跳转下一页
 		*/
 		function _goto(next) {
-			saveTestCaseData(next);
+			saveInternalData(next);
 			clear();
 			toPage(index);
 		}
@@ -429,7 +449,7 @@ var testManager = (function(){
 		}
 		
 		// 保存测试相关数据
-		function saveTestCaseData(expressionOrNext) {
+		function saveInternalData(expressionOrNext) {
 			var interfaceId, params, expectExp;
 			if (expressionOrNext && expressionOrNext != true) {
 				// 修改时, 手动注入
@@ -461,8 +481,6 @@ var testManager = (function(){
 			
 			if (!expressionOrNext && testCaseData[index - 1])
 				index--;
-			
-			
 		}
 		
 		// 将对应数据注入到html页面, 并缓存相关数据
@@ -480,7 +498,8 @@ var testManager = (function(){
 			target.attr("data-toggle", "popover");
 			target.attr("data-html", "true");
 			target.attr("data-placement", "left");
-			target.attr("data-trigger", "hover");
+			target.attr("data-trigger", "manual");
+			target.attr("data-container", "#interfaceManager");
 			target.attr("title", "<code>" + data.url + "</code>");
 			
 			var html = "<div class='table_container'>"
@@ -504,8 +523,7 @@ var testManager = (function(){
 			+ "</div>";
 			
 			target.attr("data-content", html);
-			target.html(data.name);
-			target.popover({container: "#interfaceManager", trigger: "manual"});
+			target.html(data.name);		
 			
 			function getTableBody(arr) {
 				if (!arr || !arr.length)
@@ -531,6 +549,7 @@ var testManager = (function(){
 			target.removeAttr("data-trigger");
 			target.removeAttr("title");
 			target.removeAttr("data-content");
+			target.removeAttr("data-container");
 			target.popover("destroy");
 		}
 		
