@@ -370,8 +370,9 @@ var testManager = (function(){
 		}
 		
 		function persistTestCase(callback) {
-			// 默认执行下一步
-			_goto(true);
+			// 保存当前数据, 并且清除页面数据
+			saveInternalData(true);
+			clear();
 			
 			var exp = getExpression();
 			if (!exp) {
