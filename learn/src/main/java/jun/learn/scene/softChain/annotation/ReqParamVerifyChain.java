@@ -29,6 +29,8 @@ public class ReqParamVerifyChain{
 	}
 	
 	public Result proceed() {
+		if (index == nodes.length - 1)
+			return new Result(true, null); 
 		Node node = nodes[++index];
 		return node.exec(target, this);
 	}

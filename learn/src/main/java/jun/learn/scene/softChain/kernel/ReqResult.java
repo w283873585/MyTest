@@ -32,6 +32,14 @@ public class ReqResult {
 		return this;
 	}
 	
+	public void clear() {
+		attach.clear();
+	}
+	
+	public String getAttach() {
+		return attach.toJSONString();
+	}
+	
 	public void each(Carrier carrier) {
 		for (String key : attach.keySet())
 			carrier.put(key, attach.get(key));

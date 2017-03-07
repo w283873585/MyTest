@@ -16,7 +16,8 @@ public class Client {
 		final HttpServletRequest request = null;
 		final HttpServletResponse response = null;
 		
-		ReqResult result = RequestManager.invoke(request, handler);
+		@SuppressWarnings("unchecked")
+		ReqResult result = RequestManager.invoke(request.getParameterMap(), handler);
 		if (!result.isSuccess()) {
 			result.doResponse(response);
 			return;

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import jun.learn.scene.softChain.kernel.ReqData;
 import jun.learn.scene.softChain.kernel.ReqResult;
 
 public class VR_Security_Util {
@@ -117,35 +118,22 @@ public class VR_Security_Util {
 	 * {"msg":"47140BFCCEDBFE37B53E7225699D065C69FDE709ECC5082B4F7ABA8490B3404B","length":"32","packageId":"1271"}
 	 * 
 	 */
-	public static JSONObject encode(String msg, HttpServletRequest request) {
+	public static void encode(ReqData reqData, ReqResult result) {
 		
-		JSONObject result = new JSONObject();
-		
-		if (msg == null 
-			|| request == null
-			|| request.getAttribute("aeskey") == null 
-			|| request.getAttribute("aesIv") == null) {
-			
-			// 请求必须是加密请求, 不然是加密不了响应信息的
-			result.put("resDesc", "请求参数发生错误");
-			return result;
-		}
-		
-		byte[] encrptData;
+		byte[] encrptData = null;
 		try {
-			encrptData = VR_Encrypt_Util.aesEncodeToByte(msg, 
-					request.getAttribute("aeskey").toString(),
-					request.getAttribute("aesIv").toString());
+			encrptData = VR_Encrypt_Util.aesEncodeToByte(result.getAttach(), 
+					reqData.getString("aeskey"),
+					reqData.getString("aesIv"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.put("resDesc", "aes加密失败");
-			return result;
+			result.attach("encodeDesc", "aes加密失败");
+			return;
 		}
 		
-		result.put("msg", Base16.encode(encrptData));
-		result.put("length", encrptData.length);
-		result.put("packageId", request.getAttribute("packageId"));
-		
-		return result;
+		result.clear();
+		result.attach("msg", Base16.encode(encrptData));
+		result.attach("length", encrptData.length);
+		result.attach("packageId", reqData.get("packageId"));
 	}
 }

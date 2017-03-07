@@ -29,7 +29,7 @@ public enum ReqParamRestrictType implements Node{
 	noEmpty("参数不能为空") {
 		@Override
 		public boolean isPass(Object c) {
-			return "".equals(c) || c == null;
+			return c != null && !"".equals(c);
 		}
 	},
 	
@@ -103,6 +103,13 @@ public enum ReqParamRestrictType implements Node{
 			} catch (Exception e) {
 				return false;
 			}
+		}
+	},
+	
+	ipAddress("必须为ip地址", noEmpty) {
+		@Override
+		public boolean isPass(Object c) {
+			return c.toString().matches("((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))");
 		}
 	};
 	

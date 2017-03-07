@@ -41,5 +41,15 @@ public enum ReqFilters implements ReqFilter{
 			
 			metaData.checkParams(reqData.getJSONObject("paramsMap"), result);
 		}
+	},
+	
+	encrypt {
+
+		@Override
+		public void filter(MetaData metaData, ReqData reqData, ReqResult result) {
+			if (result.hasCommit() && metaData.responseEncrypt()) {
+				VR_Security_Util.encode(reqData, result);
+			}
+		}
 	};
 }

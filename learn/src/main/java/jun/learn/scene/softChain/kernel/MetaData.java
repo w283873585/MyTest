@@ -28,6 +28,9 @@ public class MetaData {
 	}
 	
 	public void checkParams(Map<String, Object> data, ReqResult result) {
+		if (restricts == null) 
+			return;
+		
 		for (ReqParamRestrict restrict : restricts.value()) {
 			String key = restrict.key();
 			ReqParamVerifyChain chain = ReqParamVerifyChain.bulidChain(restrict.value(), data.get(key));
