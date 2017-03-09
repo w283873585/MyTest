@@ -1,9 +1,9 @@
-package jun.learn.scene.softChain.annotation;
+package jun.learn.scene.softChain.a1;
 
 import com.alibaba.fastjson.JSONArray;
 
-import jun.learn.scene.softChain.annotation.ReqParamVerifyChain.Node;
-import jun.learn.scene.softChain.annotation.ReqParamVerifyChain.Result;
+import jun.learn.scene.softChain.a1.ReqParamVerifyChain.Node;
+import jun.learn.scene.softChain.a1.ReqParamVerifyChain.Result;
 
 public enum ReqParamRestrictType implements Node{
 	
@@ -12,11 +12,6 @@ public enum ReqParamRestrictType implements Node{
 	 */
 	optional(null) {
 		
-		@Override
-		protected boolean expect(Result result) {
-			return result.isSuccess() == true;
-		}
-
 		@Override
 		public boolean match(Object c) {
 			return "".equals(c) || c == null;
@@ -45,18 +40,17 @@ public enum ReqParamRestrictType implements Node{
 		
 		public Result exec(Object target, ReqParamVerifyChain chain) {
 			Result r = this.check(target);
-			if (expect(r))
+			if (!r.isSuccess())
 				return r;
 			
 			try {
 				// rsa解密
 				String newTarget = target.toString();
 				chain.setTarget(newTarget);
+				return r;
 			} catch (Exception e) {
 				return new Result(false, info);
 			}
-			
-			return chain.proceed();
 		}
 	},
 	
@@ -127,22 +121,16 @@ public enum ReqParamRestrictType implements Node{
 	
 	public abstract boolean match(Object c);
 	
-	protected boolean expect(Result result) {
-		return result.isSuccess() == false;
-	}
-	
 	public Result exec(Object target, ReqParamVerifyChain chain) {
-		Result result = this.check(target);
-		if (!expect(result))
-			chain.proceed();
-		return result;
+		return this.check(target);
 	}
 	
 	protected Result check(Object c) {
 		if (parent != null) {
 			Result result = parent.check(c);
-			if (expect(result))
+			if (!result.isSuccess()) {
 				return result;
+			}
 		}
 		boolean matched = this.match(c);
 		return new Result(matched, matched ? null : info);

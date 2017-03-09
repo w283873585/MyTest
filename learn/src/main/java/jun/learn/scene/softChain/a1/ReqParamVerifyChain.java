@@ -1,38 +1,34 @@
-package jun.learn.scene.softChain.annotation;
+package jun.learn.scene.softChain.a1;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class ReqParamVerifyChain{
-	private int index = -1;
 	private Node[] nodes = null;
 	private Object target = null;
+	private Mode mode = Mode.and; 
 	
 	private ReqParamVerifyChain(Node[] nodes, Object target) {
 		this.target = target;
 		this.nodes = nodes;
 	}
 	
+	ReqParamVerifyChain(Node[] nodes, Object target, Mode mode) {
+		this(nodes, target);
+		this.mode = mode;
+	}
+	
 	public static ReqParamVerifyChain bulidChain(Node[] type, Object target) {
 		Node[] types = Arrays.copyOf(type, type.length);
-		sort(types);
 		return new ReqParamVerifyChain(types, target);
 	}
 	
-	private static void sort(Node[] types) {
-		Arrays.sort(types, new Comparator<Node>() {
-			@Override
-			public int compare(Node o1, Node o2) {
-				return o1.ordinal() - o2.ordinal();
-			}
-		});
-	}
-	
-	public Result proceed() {
-		if (index == nodes.length - 1)
-			return new Result(true, null); 
-		Node node = nodes[++index];
-		return node.exec(target, this);
+	public Result execute() {
+		for (Node cur : nodes) {
+			Result r = cur.exec(target, this);
+			if (mode.needQuitImmediate(r))
+				return r;
+		}
+		return new Result(mode.finalStatus(), null);
 	}
 	
 	public void setTarget(Object target) {
@@ -47,6 +43,19 @@ public class ReqParamVerifyChain{
 		public Result exec(Object target, ReqParamVerifyChain chain);
 		
 		public int ordinal();
+	}
+	
+	
+	public enum Mode{
+		and,
+		or;
+		public boolean finalStatus() {
+			return this == and;
+		}
+		
+		public boolean needQuitImmediate(Result r) {
+			return r.isSuccess() == (this == or); 
+		}
 	}
 
 	public static class Result{
