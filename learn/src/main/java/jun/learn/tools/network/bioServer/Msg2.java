@@ -5,8 +5,8 @@ import static jun.learn.tools.network.Util.*;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Msg{
-	public Msg(InputStream input) {
+public class Msg2{
+	public Msg2(InputStream input) {
 		this.input = input;
 	}
 	
@@ -19,14 +19,15 @@ public class Msg{
 			/**
 			 * 每个数据报的前二个字节用来表示数据包的长度
 			 */
-			byte[] len = new byte[4];
-			input.read(len, 0, 4);
+			byte[] head = new byte[4];
+			int hasReaded = 0;
+			while (hasReaded < 4)
+				hasReaded += input.read(head, hasReaded, 4 - hasReaded);
 			
-			int surplus = byte2Int(len);
+			int surplus = byte2Int(head);
 			while (surplus > 0) {
-				input.read(buff, 0, surplus > 1024 ? 1024 : surplus);
+				surplus -= input.read(buff);
 				sb.append(new String(buff));
-				surplus -= 1024;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

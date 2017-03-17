@@ -1,13 +1,11 @@
 package jun.learn.tools.network;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-import jun.learn.tools.network.bioServer.Msg;
+import jun.learn.tools.network.bioServer.StringPacket;
 
 public class Client {
 	
@@ -32,44 +30,15 @@ public class Client {
 			Scanner sc = new Scanner(System.in);
 			boolean flag = false;
 			while (!flag) {
-				String s = sc.nextLine();
-				byte[] content = s.getBytes();
-				socket.getOutputStream().write(Util.int2byte(content.length));
-				socket.getOutputStream().write(content);
-				socket.getOutputStream().flush();
-				Msg msg = new Msg(socket.getInputStream());
-				if (msg.isReady()) {
-					System.out.println(msg);
-				}
+				DataPacket<String> packet = new StringPacket();
+				packet.write(socket.getOutputStream(), sc.nextLine());	// "客户端说: i love you" sc.nextLine()
+				System.out.println(packet.read(socket.getInputStream()));
 			}
 			
 			sc.close();
 			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
-	}
-	
-	public static void send(OutputStream out, String msg) {
-		try {
-			out.write(msg.getBytes());
-			out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-	}
-	
-	public static String print(InputStream input) {
-		byte[] buff = new byte[1024];
-		StringBuilder sb = new StringBuilder();
-		try {
-			while (input.read(buff) != -1) {
-				sb.append(new String(buff));
-				System.out.println("读到的数据是" + sb);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return sb.toString();
 	}
 }
