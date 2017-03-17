@@ -103,7 +103,7 @@ public class TestCase implements Permanent<TestCaseEntity>{
 						}
 						
 						public boolean compute() {
-							boolean ret = value.equals(result.get(key)) == equal;
+							boolean ret = compare(value, result.get(key)) == equal;
 							if (next == null) {
 								return ret;
 							} else if (isAnd == 0) {
@@ -111,6 +111,16 @@ public class TestCase implements Permanent<TestCaseEntity>{
 							} else {
 								return ret || next.compute();
 							}
+						}
+						
+						private boolean compare(String vlaue, Object v) {
+							if ("null".equals(value)) {
+								return v == null;
+							}
+							if (v == null) {
+								return false;
+							}
+							return value.equals(v.toString());
 						}
 					}
 					
