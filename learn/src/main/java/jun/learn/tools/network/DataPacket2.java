@@ -1,24 +1,21 @@
 package jun.learn.tools.network;
 
 import static jun.learn.tools.network.Util.byte2Int;
+import static jun.learn.tools.network.Util.int2byte;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
 
 public interface DataPacket2<T> {
-	
 	/*
 	int length();
 	boolean isEmpty();
 	*/
-	
+	//  
 	T read() throws IOException;
 	
 	void write(T content) throws IOException;
@@ -30,6 +27,8 @@ public interface DataPacket2<T> {
 	public class Helper implements DataPacket2<String>{
 		private Socket socket;
 		private boolean closed;
+		byte[] head = new byte[4];
+		private byte buff[] = new byte[1024];
 		
 		public Helper(Socket socket) {
 			this.socket = socket;
@@ -39,12 +38,10 @@ public interface DataPacket2<T> {
 		public String read() throws IOException {
 			InputStream input = socket.getInputStream();
 			StringBuilder sb = new StringBuilder();
-			byte buff[] = new byte[1024];
 			
 			/**
 			 * 每个数据报的前4个字节用来表示数据包的长度
 			 */
-			byte[] head = new byte[4];
 			int hasReaded = 0;
 			while (hasReaded < 4) {
 				int readLen = input.read(head, hasReaded, 4 - hasReaded); 
@@ -62,13 +59,15 @@ public interface DataPacket2<T> {
 				surplus -= readLen;
 				sb.append(new String(buff, 0, readLen));
 			}
-			
 			return sb.toString();
 		}
 		
 		@Override
 		public void write(String content) throws IOException {
-			socket.getOutputStream();
+			OutputStream out = socket.getOutputStream();
+			out.write(int2byte(content.getBytes().length));
+			out.write(content.getBytes());
+			out.flush();
 		}
 		
 		@Override

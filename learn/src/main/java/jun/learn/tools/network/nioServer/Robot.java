@@ -1,10 +1,9 @@
-package jun.learn.tools.network.bioServer;
+package jun.learn.tools.network.nioServer;
 
 import java.io.IOException;
-import java.net.Socket;
+import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import jun.learn.tools.network.DataPacket;
 import jun.learn.tools.network.Util;
 
 public class Robot extends Thread{
@@ -15,7 +14,7 @@ public class Robot extends Thread{
 	
 	private final int id;
 	private final Server server;
-	private Socket socket = null;
+	private SocketChannel socket = null;
 	private AtomicInteger replyIndex =  new AtomicInteger();
 	
 	public Robot(Server server) {
@@ -42,11 +41,10 @@ public class Robot extends Thread{
 			 * 当被唤醒时, 与客户端进行通信, 提供自动回复功能
 			 */
 			System.out.println(this + "开始工作");
-			DataPacket<String> packet = new StringPacket();
 			try {
-				packet.write(socket.getOutputStream(), "成功连接->" + this);
+				Util.write(socket, "成功连接->" + this);
 				while (started) {
-					String msg = packet.read(socket.getInputStream());
+					String msg = Util.read(socket);
 					
 					// 收到shutdown命令
 					if (Util.isShutdown(msg)) {
@@ -55,7 +53,7 @@ public class Robot extends Thread{
 					}
 					
 					// 自动回复
-					packet.write(socket.getOutputStream(), reply(msg));
+					Util.write(socket, reply(msg));
 				}
 			} catch (IOException e) {
 				reset();
@@ -64,7 +62,7 @@ public class Robot extends Thread{
 	}
 	
 	
-	public synchronized void accept(Socket socket) {
+	public synchronized void accept(SocketChannel socket) {
 		if (started) {
         	System.out.println("有两个线程使用了同一个robot");
             return;
@@ -85,7 +83,7 @@ public class Robot extends Thread{
 		System.out.println(this + "重置该连接");
 		try {
 			//　回收时，通知客户端，我要关闭连接了
-			Util.sendShutdownCommand(socket.getOutputStream());
+			Util.sendShutdownCommand(socket);
 			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();

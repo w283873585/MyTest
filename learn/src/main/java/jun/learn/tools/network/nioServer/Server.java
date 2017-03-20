@@ -1,8 +1,9 @@
-package jun.learn.tools.network.bioServer;
+package jun.learn.tools.network.nioServer;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.Stack;
 
 import jun.learn.tools.network.Util;
@@ -16,21 +17,17 @@ public class Server {
 		 *	推送消息给客户端,
 		 *  接收客户端的消息 
 		 */
-		ServerSocket serverSocket;
 		try {
+			ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
 			boolean shutdown = false;
-			serverSocket = new ServerSocket(12020);
+			serverSocketChannel.bind(new InetSocketAddress(12020));
 			
 			initPool();
-			
 			while (!shutdown) {
-				Socket socket = serverSocket.accept();
-				/**
-				 * 单线程环境， 分配到不同线程
-				 */
-				assign(socket);
+ 				SocketChannel channel = serverSocketChannel.accept();
+ 				assign(channel);
 			}
-			serverSocket.close();
+			serverSocketChannel.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,13 +42,13 @@ public class Server {
 		}
 	}
 	
-	public void assign(Socket socket) {
+	public void assign(SocketChannel socket) {
 		try {
 			pools.pop().accept(socket);
 		} catch (Exception e) {
 			System.out.println("已经没有多余的机器人!");
 			try {
-				Util.write(socket.getOutputStream(), "连接失败， 连接数已达上限");
+				Util.write(socket, "连接失败， 连接数已达上限");
 				// 分配失败则强制关闭。
 				socket.close();
 			} catch (IOException e1) {
