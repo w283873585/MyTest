@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.Charset;
 
 public class Util {
 	public static final String SHUTDOWN = "886";
@@ -79,37 +80,52 @@ public class Util {
 	 * 输出内容时， 给包添加一个4字节的包头， 用来标记包主体的大小
 	 */
 	public static void write(SocketChannel out, String content) throws IOException {
-		ByteBuffer buff = ByteBuffer.allocate(1024);
 		byte[] bContent = content.getBytes();
+		ByteBuffer buff = ByteBuffer.allocate(1024);
+		/**
+		 * 首先放入一个int长度的包头
+		 */
 		buff.putInt(bContent.length);
-		int offset = 0, 
-			length = bContent.length,
-			limit = length > 1020 ? 1020 : length;
 		
-		while (offset < limit) {
-			buff.put(bContent, offset, limit);
-			out.write(buff);
+		int offset = 0, 
+			surplus = bContent.length,
+			size = surplus > 1020 ? 1020 : surplus;
+		
+		while (size > 0) {
+			buff.put(bContent, offset, size);
+			buff.flip();
+			while (buff.hasRemaining())
+				out.write(buff);
 			buff.clear();
-			offset = limit;
-			limit = (offset + 1024 > length) ? length : offset + 1024;
+			
+			surplus -= size;
+			offset = size;
+			size = surplus > 1024 ? 1024 : surplus;
 		}
 	}
 	
 	
 	public static String read(SocketChannel channel) throws IOException {
 		StringBuilder sb = new StringBuilder();
-		ByteBuffer buff = ByteBuffer.allocate(4);
+		ByteBuffer buff = ByteBuffer.allocate(1024);
+		
+		buff.limit(4);
 		while (buff.hasRemaining())
 			channel.read(buff);
 		
 		buff.flip();
-		buff = ByteBuffer.allocate(buff.getInt());
-		while (buff.hasRemaining()) {
-			channel.read(buff);
+		int surplus = buff.getInt();
+		while (surplus > 0) {
+			if (surplus < 1024) buff.limit(surplus);
+			int readed = channel.read(buff);
+			surplus = readed == -1 ? -1 : surplus - readed;  
 			buff.flip();
-			while (buff.hasRemaining())
-				sb.append(buff.getChar());
+			
+			if (buff.hasRemaining())
+				sb.append(Charset.forName("utf-8").decode(buff));
+			buff.clear();
 		}
+		
 		return sb.toString();
 	}
 	

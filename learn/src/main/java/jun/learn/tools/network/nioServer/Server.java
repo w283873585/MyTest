@@ -24,8 +24,7 @@ public class Server {
 			
 			initPool();
 			while (!shutdown) {
- 				SocketChannel channel = serverSocketChannel.accept();
- 				assign(channel);
+ 				assign(serverSocketChannel.accept());
 			}
 			serverSocketChannel.close();
 		} catch (IOException e) {
@@ -35,10 +34,11 @@ public class Server {
 	
 	private void initPool() {
 		for (int i = 0; i < poolSize; i++) {
-			Robot thread = new Robot(this);
+			Robot2 robot = new Robot2(this);
+			Thread thread = new Thread(robot);
 			thread.setDaemon(true);
 			thread.start();
-			pools.add(thread);
+			pools.add(robot);
 		}
 	}
 	
@@ -62,6 +62,6 @@ public class Server {
 	}
 	
 	public static void main(String[] args){
-		new Server().start();
+		new Server().start(); 
 	}
 }
