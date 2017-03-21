@@ -51,7 +51,7 @@ class ClientHandler implements Runnable
     public void run()
     {
         try {
-            channel.connect(new InetSocketAddress("xx.xx.xx.xx", 5656));
+            channel.connect(new InetSocketAddress(5656));
             int i = 0;
             while (true) {
                 work();

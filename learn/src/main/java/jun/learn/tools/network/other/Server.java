@@ -25,7 +25,7 @@ public class Server
         final Selector selector = Selector.open();
         final ServerSocketChannel server = ServerSocketChannel.open();
         server.configureBlocking(false);
-        server.socket().bind(new InetSocketAddress("xx.xx.xx.xx", 5656), 5);
+        server.socket().bind(new InetSocketAddress(5656), 5);
         // Register both channels with selector
         server.register(selector, SelectionKey.OP_ACCEPT);
         new Thread(new Daemon(selector)).start();

@@ -22,14 +22,17 @@ public class Server {
 		 *  接收客户端的消息 
 		 */
 		try {
-			ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+			initPool();
 			boolean shutdown = false;
+			
+			ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
 			serverSocketChannel.bind(new InetSocketAddress(12020));
 			serverSocketChannel.configureBlocking(false);
 			
 			Selector selector = Selector.open();
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-			while(true) {
+			
+			while (!shutdown) {
 			  int readyChannels = selector.select();
 			  if(readyChannels == 0) continue;
 			  Set<SelectionKey> selectedKeys = selector.selectedKeys();
@@ -37,21 +40,28 @@ public class Server {
 			  while (keyIterator.hasNext()) {
 			    SelectionKey key = keyIterator.next();
 			    if (key.isAcceptable()) {
+			    	ServerSocketChannel server = (ServerSocketChannel) key.channel();
+			    	SocketChannel channel = server.accept();
+			    	channel.configureBlocking(false);
+			    	if (channel != null) {
+			    		SelectionKey readKey = channel.register(selector, SelectionKey.OP_READ);
+			    		readKey.attach(channel);
+			    	}
 			        // a connection was accepted by a ServerSocketChannel.
-			    } else if (key.isConnectable()) {
-			        // a connection was established with a remote server.
 			    } else if (key.isReadable()) {
 			        // a channel is ready for reading
-			    } else if (key.isWritable()) {
-			        // a channel is ready for writing
+			    	SocketChannel s = (SocketChannel) key.attachment();
+			    	System.out.println("-?" + Util.read(s));
 			    }
+			    
+			    else if (key.isWritable()) {
+			    	// a channel is ready for writing
+			    } else if (key.isConnectable()) {
+			        // a connection was established with a remote server.
+			    } 
+			    
 			    keyIterator.remove();
 			  }
-			}
-			
-			initPool();
-			while (!shutdown) {
- 				assign(serverSocketChannel.accept());
 			}
 			serverSocketChannel.close();
 		} catch (IOException e) {
