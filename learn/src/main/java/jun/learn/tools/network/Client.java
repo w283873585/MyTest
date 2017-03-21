@@ -107,11 +107,17 @@ public class Client {
 				);
 			
 			Scanner sc = new Scanner(System.in);
-			sc.nextLine();
-			sc.close();
+			while (true) {
+				String msg = sc.nextLine();
+				packet.write(socket.getOutputStream(), msg);
+				if (Util.isShutdown(msg)) {
+					sc.close();
+					break;
+				}
+			}
 			
 			// 通知服务器，我要关闭连接了。
-			Util.sendShutdownCommand(socket.getOutputStream());
+			// Util.sendShutdownCommand(socket.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
