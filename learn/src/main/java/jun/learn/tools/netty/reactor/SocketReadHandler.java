@@ -35,6 +35,7 @@ public class SocketReadHandler implements Runnable{
             //激活线程池 处理这些request  
             //requestHandle(new Request(socket,btt));   
             System.out.println(new String(inputBuffer.array()));
+            inputBuffer.flip();
             socketChannel.write(inputBuffer);
             socketChannel.close();
         } catch (IOException e) {  
