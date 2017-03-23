@@ -21,9 +21,9 @@ public class Server {
 			serverSocketChannel.bind(new InetSocketAddress(12020));
 			serverSocketChannel.configureBlocking(false);
 			
-			ServerHandler handler = new ServerHandler();
 			Selector selector = Selector.open();
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+			ServerHandler handler = new ServerHandler();
 			while (!shutdown) {
 				if (selector.select() == 0) continue;
 				Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
