@@ -8,6 +8,8 @@ public interface Manager extends Closeable{
 	
 	public void addConnection(Connection conn);
 	
+	public void removeConnection(Connection conn);
+	
 	/**
 	 * obtain Message from the Netty, 
 	 * then transport it to specify MessageHandler

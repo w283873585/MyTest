@@ -9,4 +9,6 @@ public interface Connection {
 	void writeAndClose(Message message);
 	
 	void close();
+	
+	void setManager(Manager manager);
 }

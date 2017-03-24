@@ -20,6 +20,7 @@ public class ManagerSupport implements Manager{
 	@Override
 	public void addConnection(Connection conn) {
 		connections.put(conn.getId(), conn);
+		conn.setManager(this);
 	}
 
 	@Override
@@ -47,5 +48,10 @@ public class ManagerSupport implements Manager{
 	
 	private Connection getConnection(String id) {
 		return connections.get(id);
+	}
+
+	@Override
+	public void removeConnection(Connection conn) {
+		connections.remove(conn.getId());
 	}
 }

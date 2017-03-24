@@ -9,19 +9,19 @@ import jun.learn.tools.network.netty.core.Message;
 import jun.learn.tools.network.netty.core.MessageHandler;
 
 public class AuthMessageHandler implements MessageHandler{
-
 	private static final String CONTEXTKEY = "CONTEXTKEY";
+
 	private Manager manager;
 	
-	@Override
 	public Manager getManager() {
 		return manager;
 	}
 
 	@Override
 	public void handle(Message message) {
-		if (verify(message))
-			getManager().addConnection(new MyConnection(message));
+		if (verify(message)) {
+			getManager().addConnection(	new MyConnection(message));
+		}
 	}
 	
 	private boolean verify(Message message) {
@@ -33,11 +33,17 @@ public class AuthMessageHandler implements MessageHandler{
 	 */
 	public static class MyConnection implements Connection{
 		private final String id;
+		private Manager manager;
 		private final ChannelHandlerContext ctx;
 		
 		public MyConnection(Message message) {
 			this.id = message.getClientId();
 			this.ctx = (ChannelHandlerContext) message.get(CONTEXTKEY);
+		}
+		
+		@Override
+		public void setManager(Manager manager) {
+			this.manager = manager;
 		}
 		
 		@Override
@@ -65,6 +71,7 @@ public class AuthMessageHandler implements MessageHandler{
 		@Override
 		public void close() {
 			ctx.close();
+			manager.removeConnection(this);
 		}
 	}
 }
