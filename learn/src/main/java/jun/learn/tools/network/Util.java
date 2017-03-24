@@ -87,20 +87,19 @@ public class Util {
 		 */
 		buff.putInt(bContent.length);
 		
-		int offset = 0, 
-			surplus = bContent.length,
-			size = surplus > 1020 ? 1020 : surplus;
-		
-		while (size > 0) {
-			buff.put(bContent, offset, size);
+		int left = 0, right = 0;
+		while (true) {
+			left = right;
+			right += Math.min(buff.remaining(), bContent.length - left);
+			
+			if (right <= left)
+				break;
+			
+			buff.put(bContent, left, right - left);
 			buff.flip();
 			while (buff.hasRemaining())
 				out.write(buff);
 			buff.clear();
-			
-			surplus -= size;
-			offset = size;
-			size = surplus > 1024 ? 1024 : surplus;
 		}
 	}
 	

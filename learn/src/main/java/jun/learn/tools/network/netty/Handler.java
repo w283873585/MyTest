@@ -29,6 +29,24 @@ public class Handler extends ChannelInboundHandlerAdapter{
 				ctx.close();
 			}
 		});
+        
+        /**
+         *	Manager 获取 Message
+         *	Message: {
+         *		type: "",
+         *		clientId: "",
+         *		body: {}
+         *		attribute: {} ? 
+         *	}
+         * 
+         *  dispatch(Message) 
+         *  	-> 根据type和clientId, 获取PipeHandler, (需要连接的type类型, 临时type类型, 需要授权的类型)
+         *  	-> auth的请求, 缓存Connection在Manager, 该Connection可通过手动关闭, 以及手动发送消息
+         *  
+         *  
+         *  -> 心跳相关
+         *  -> 关闭策略
+         */
     }
 	
     @Override
