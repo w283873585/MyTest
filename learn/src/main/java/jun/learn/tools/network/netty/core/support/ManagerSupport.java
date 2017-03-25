@@ -3,18 +3,24 @@ package jun.learn.tools.network.netty.core.support;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.netty.channel.ChannelHandlerContext;
 import jun.learn.tools.network.netty.core.Connection;
+import jun.learn.tools.network.netty.core.Context;
 import jun.learn.tools.network.netty.core.Manager;
 import jun.learn.tools.network.netty.core.Message;
 import jun.learn.tools.network.netty.core.MessageHandler;
+import jun.learn.tools.network.netty.core.support.MessageType;
+import jun.learn.tools.network.netty.core.support.MessageUtil.ServerMessage;
 
-public class ManagerSupport implements Manager{
+public enum ManagerSupport implements Manager{
+	instance;
+	
 	private Map<String, Connection> connections = new HashMap<String, Connection>();
-	private Map<Integer, MessageHandler> handlers = new HashMap<Integer, MessageHandler>();
+	private Map<MessageType, MessageHandler> handlers = new HashMap<MessageType, MessageHandler>();
 	
 	@Override
 	public void registerHanlder(MessageHandler handler) {
-		handlers.put(1, handler);
+		handlers.put(handler.getType(), handler);
 	}
 
 	@Override
@@ -23,10 +29,13 @@ public class ManagerSupport implements Manager{
 		conn.setManager(this);
 	}
 
+	/**
+	 * 单类型handler
+	 */
 	@Override
-	public void dispath(Message message) {
-		MessageHandler hanlder = handlers.get(message.getType());
-		hanlder.handle(message);
+	public void dispath(Message message, ChannelHandlerContext ctx) {
+		handlers.get(MessageType.valueOf(message.getType())).handle(message,
+				new SimpleContext(ctx, connections.get(message.getClientId()) != null));
 	}
 
 	@Override
@@ -42,7 +51,7 @@ public class ManagerSupport implements Manager{
 	}
 
 	@Override
-	public void send(Message msg) {
+	public void send(ServerMessage msg) {
 		getConnection(msg.getClientId()).write(msg);
 	}
 	
@@ -54,4 +63,35 @@ public class ManagerSupport implements Manager{
 	public void removeConnection(Connection conn) {
 		connections.remove(conn.getId());
 	}
+	
+
+	public static class SimpleContext implements Context{
+		private SimpleContext(ChannelHandlerContext ctx, boolean authorized) {
+			this.ctx = ctx;
+			this.authorized = authorized;
+		}
+		
+		private boolean authorized;
+		private ChannelHandlerContext ctx;
+		
+		@Override
+		public void write(Message message) {
+			ctx.writeAndFlush(message);
+		}
+
+		@Override
+		public void close() {
+			ctx.close();
+		}
+		
+		@Override
+		public boolean authorized() {
+			return authorized;
+		}
+
+		@Override
+		public ChannelHandlerContext getNettyContext() {
+			return ctx;
+		}
+	} 
 }

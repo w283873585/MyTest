@@ -9,6 +9,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import jun.learn.tools.network.netty.core.Message;
+import jun.learn.tools.network.netty.core.support.MessageUtil;
+import jun.learn.tools.network.netty.core.support.MessageType;
 
 public class Decoder extends ByteToMessageDecoder{
 
@@ -19,36 +21,16 @@ public class Decoder extends ByteToMessageDecoder{
 		
 		in.markReaderIndex();
 		int length = in.readInt();
-		int type = (int) in.readByte();
+		int type = 0; // (int) in.readByte();
 		if (in.readableBytes() < length) {
 			in.resetReaderIndex();
 			return;
 		}
 		
-		String recvBody = in.readBytes(length).toString(Charset.forName("utf-8"));
-		Message msg = new Message() {
-			private JSONObject body = JSONObject.parseObject(recvBody);
-			
-			@Override
-			public int getType() {
-				return type;
-			}
-			
-			@Override
-			public String getClientId() {
-				return ctx.channel().id().toString();
-			}
-			
-			@Override
-			public Object get(String key) {
-				return body.get(key);
-			}
-
-			@Override
-			public String getBody() {
-				return body.toJSONString();
-			}
-		};
+		String recvBody = in.readBytes(length)
+				.toString(Charset.forName("utf-8"));
+		Message msg = MessageUtil.build(MessageType.valueOf(type), ctx.channel().id().toString())
+				.wrap(JSONObject.parseObject(recvBody));
 		out.add(msg);
 	}
 }

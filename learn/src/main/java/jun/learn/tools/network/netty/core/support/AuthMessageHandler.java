@@ -4,13 +4,13 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import jun.learn.tools.network.netty.core.Connection;
+import jun.learn.tools.network.netty.core.Context;
 import jun.learn.tools.network.netty.core.Manager;
 import jun.learn.tools.network.netty.core.Message;
 import jun.learn.tools.network.netty.core.MessageHandler;
+import jun.learn.tools.network.netty.core.support.MessageType;
 
 public class AuthMessageHandler implements MessageHandler{
-	private static final String CONTEXTKEY = "CONTEXTKEY";
-
 	private Manager manager;
 	
 	public Manager getManager() {
@@ -18,27 +18,34 @@ public class AuthMessageHandler implements MessageHandler{
 	}
 
 	@Override
-	public void handle(Message message) {
+	public MessageType getType() {
+		return MessageType.auth;
+	}
+
+	@Override
+	public void handle(Message message, Context ctx) {
 		if (verify(message)) {
-			getManager().addConnection(	new MyConnection(message));
+			getManager().addConnection(new SimpleConnection(message, ctx));
 		}
 	}
 	
 	private boolean verify(Message message) {
-		return true;
+		if (message.getType() == 0)
+			return true;
+		return false;
 	}
 	
 	/**
 	 *	A Connection Object is used to send message to client initiatively
 	 */
-	public static class MyConnection implements Connection{
+	public static class SimpleConnection implements Connection{
 		private final String id;
 		private Manager manager;
 		private final ChannelHandlerContext ctx;
 		
-		public MyConnection(Message message) {
+		public SimpleConnection(Message message, Context ctx) {
 			this.id = message.getClientId();
-			this.ctx = (ChannelHandlerContext) message.get(CONTEXTKEY);
+			this.ctx = ctx.getNettyContext();
 		}
 		
 		@Override
