@@ -7,28 +7,26 @@ import com.alibaba.fastjson.JSONObject;
 import jun.learn.tools.network.netty.core.Message;
 
 public class MessageUtil {
-
-	public static StanrdMessage build(MessageType type) {
-		return new StanrdMessage(type.value());
+	public static ServerMessage build(String clientId) {
+		return new ServerMessage(clientId);
 	}
 	
-	public static ServerMessage build(MessageType type, String clientId) {
-		return new ServerMessage(type.value(), clientId);
+	public static ConnectionMessage build() {
+		return new ConnectionMessage();
 	}
 	
-	public static ServerMessage cloneFrom(ServerMessage message) {
-		return new ServerMessage(message.getType(), message.getClientId());
+	public static ConnectionMessage build(MessageType type, String clientId) {
+		return new ConnectionMessage(type.value(), clientId);
 	}
-	
 	/**
 	 * 服务端Message clientId不能为空，
 	 * 否则找不到对应的连接
 	 */
 	public static class ServerMessage implements Message{
-		private final StanrdMessage message;
+		private final ConnectionMessage message;
 		
-		public ServerMessage(int type, String clientId) {
-			message = new StanrdMessage(type, clientId); 
+		public ServerMessage(String clientId) {
+			message = new ConnectionMessage(clientId); 
 		}
 		
 		@Override
@@ -60,23 +58,38 @@ public class MessageUtil {
 			this.message.wrap(map);
 			return this;
 		}
+		
+		public ConnectionMessage getInternalMessage() {
+			return this.message;
+		}
 	}
 	
 	/**
-	 * clientId可以为空。
+	 * Connection消息， 只需要填充内容就够了， 
+	 * 因为消息type和clientId都可以在Connection中获取到
 	 */
-	public static class StanrdMessage implements Message{
+	public static class ConnectionMessage implements Message{
 		private int type;
 		private String clientId;
 		private JSONObject body = new JSONObject();
 		
-		private StanrdMessage(int type) {
+		private ConnectionMessage() {}
+		
+		private ConnectionMessage(String clientId) {
+			this.clientId = clientId;
+		}
+		
+		private ConnectionMessage(int type, String clientId) {
+			this.type = type;
+			this.clientId = clientId;
+		}
+		
+		public void setType(int type) {
 			this.type = type;
 		}
 		
-		private StanrdMessage(int type, String clientId) {
-			this.type = type;
-			this.clientId = clientId;
+		public void setClientId(String id) {
+			this.clientId = id;
 		}
 		
 		@Override
@@ -84,12 +97,12 @@ public class MessageUtil {
 			return type;
 		}
 
-		public StanrdMessage put(String key, Object value) {
+		public ConnectionMessage put(String key, Object value) {
 			this.body.put(key, value);
 			return this;
 		}
 		
-		public StanrdMessage wrap(Map<String, Object> map) {
+		public ConnectionMessage wrap(Map<String, Object> map) {
 			body.putAll(map);
 			return this;
 		}
@@ -109,9 +122,4 @@ public class MessageUtil {
 			return body.toJSONString();
 		}
 	}
-	
-	/**
-	 * 消息类型
-	 */
-	
 }

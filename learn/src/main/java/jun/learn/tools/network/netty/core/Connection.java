@@ -1,14 +1,18 @@
 package jun.learn.tools.network.netty.core;
 
+import jun.learn.tools.network.netty.core.support.MessageUtil.ConnectionMessage;
+
 public interface Connection {
 	
 	String getId();
 	
-	void write(Message message);
+	void write(ConnectionMessage message);
 	
-	void writeAndClose(Message message);
+	void writeAndClose(ConnectionMessage message);
 	
 	void close();
 	
-	void setManager(Manager manager);
+	void keepAlive();
+	
+	boolean authorized();
 }
