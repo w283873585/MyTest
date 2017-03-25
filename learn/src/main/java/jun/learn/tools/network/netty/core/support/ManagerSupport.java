@@ -12,9 +12,7 @@ import jun.learn.tools.network.netty.core.MessageHandler;
 import jun.learn.tools.network.netty.core.support.MessageType;
 import jun.learn.tools.network.netty.core.support.MessageUtil.ServerMessage;
 
-public enum ManagerSupport implements Manager{
-	instance;
-	
+public class ManagerSupport implements Manager{
 	private Map<String, Connection> connections = new HashMap<String, Connection>();
 	private Map<MessageType, MessageHandler> handlers = new HashMap<MessageType, MessageHandler>();
 	
@@ -35,7 +33,7 @@ public enum ManagerSupport implements Manager{
 	@Override
 	public void dispath(Message message, ChannelHandlerContext ctx) {
 		handlers.get(MessageType.valueOf(message.getType())).handle(message,
-				new SimpleContext(ctx, connections.get(message.getClientId()) != null));
+				new SimpleContext(ctx, message, connections.get(message.getClientId()) != null));
 	}
 
 	@Override
@@ -66,17 +64,19 @@ public enum ManagerSupport implements Manager{
 	
 
 	public static class SimpleContext implements Context{
-		private SimpleContext(ChannelHandlerContext ctx, boolean authorized) {
+		private SimpleContext(ChannelHandlerContext ctx, Message message, boolean authorized) {
 			this.ctx = ctx;
+			this.originMsg = (ServerMessage) message;
 			this.authorized = authorized;
 		}
 		
 		private boolean authorized;
 		private ChannelHandlerContext ctx;
+		private ServerMessage originMsg;
 		
 		@Override
-		public void write(Message message) {
-			ctx.writeAndFlush(message);
+		public void write(Map<String, Object> body) {
+			ctx.writeAndFlush(MessageUtil.cloneFrom(originMsg).wrap(body));
 		}
 
 		@Override

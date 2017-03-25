@@ -2,15 +2,16 @@ package jun.learn.tools.network.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import jun.learn.tools.network.netty.core.Manager;
 import jun.learn.tools.network.netty.core.Message;
 import jun.learn.tools.network.netty.core.support.ManagerSupport;
 
 public class Handler extends ChannelInboundHandlerAdapter{
-	ChannelHandlerContext ctx1 = null;
+	Manager manager = new ManagerSupport(); 
 	
 	@Override
     public void channelRead(final ChannelHandlerContext ctx, Object msg) { // (2)
-		ManagerSupport.instance.dispath((Message) msg, ctx);
+		manager.dispath((Message) msg, ctx);
         /**
          *	Manager 获取 Message
          *	Message: {
