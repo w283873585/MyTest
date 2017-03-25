@@ -3,7 +3,7 @@ package jun.learn.tools.network.netty.core;
 import java.io.Closeable;
 
 import io.netty.channel.ChannelHandlerContext;
-import jun.learn.tools.network.netty.core.support.MessageUtil.ServerMessage;
+import jun.learn.tools.network.netty.core.support.MessageBuilder.ServerMessage;
 
 public interface Manager extends Closeable{
 	

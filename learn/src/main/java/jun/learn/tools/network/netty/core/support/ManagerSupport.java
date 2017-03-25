@@ -2,6 +2,8 @@ package jun.learn.tools.network.netty.core.support;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -11,12 +13,16 @@ import jun.learn.tools.network.netty.core.Manager;
 import jun.learn.tools.network.netty.core.Message;
 import jun.learn.tools.network.netty.core.MessageHandler;
 import jun.learn.tools.network.netty.core.support.MessageType;
-import jun.learn.tools.network.netty.core.support.MessageUtil.ConnectionMessage;
-import jun.learn.tools.network.netty.core.support.MessageUtil.ServerMessage;
+import jun.learn.tools.network.netty.core.support.MessageBuilder.ConnectionMessage;
+import jun.learn.tools.network.netty.core.support.MessageBuilder.ServerMessage;
 
 public class ManagerSupport implements Manager{
-	private Map<String, Connection> connections = new HashMap<String, Connection>();
+	private ConcurrentMap<String, Connection> connections = new ConcurrentHashMap<String, Connection>();
 	private Map<MessageType, MessageHandler> handlers = new HashMap<MessageType, MessageHandler>();
+	
+	public void registerHandler(MessageHandler handler) {
+		handlers.put(handler.getType(), handler);
+	}
 	
 	/**
 	 * 单类型handler

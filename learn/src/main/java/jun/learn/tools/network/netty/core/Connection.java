@@ -1,6 +1,6 @@
 package jun.learn.tools.network.netty.core;
 
-import jun.learn.tools.network.netty.core.support.MessageUtil.ConnectionMessage;
+import jun.learn.tools.network.netty.core.support.MessageBuilder.ConnectionMessage;
 
 public interface Connection {
 	

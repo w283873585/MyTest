@@ -6,17 +6,13 @@ import com.alibaba.fastjson.JSONObject;
 
 import jun.learn.tools.network.netty.core.Message;
 
-public class MessageUtil {
+public class MessageBuilder {
 	public static ServerMessage build(String clientId) {
 		return new ServerMessage(clientId);
 	}
 	
 	public static ConnectionMessage build() {
 		return new ConnectionMessage();
-	}
-	
-	public static ConnectionMessage build(MessageType type, String clientId) {
-		return new ConnectionMessage(type.value(), clientId);
 	}
 	/**
 	 * 服务端Message clientId不能为空，
