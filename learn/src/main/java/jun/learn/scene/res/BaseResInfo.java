@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author 易茂剑
  * 
  */
-public class BaseResInfo<T extends ResInfo> implements Serializable {
+public class BaseResInfo<T extends Enum<T>> implements Serializable {
 
 	private static final long serialVersionUID = 730550958919883038L;
 	private String resCode; // 返回码
@@ -31,15 +31,22 @@ public class BaseResInfo<T extends ResInfo> implements Serializable {
 		this.resDesc = resDesc;
 	}
 	
-	public BaseResInfo<T> error(T res) {
-		this.setResCode(res.getResCode());
-		this.setResDesc(res.getResDesc());
-		return this;
+	public BaseResInfo<T> success() {
+		return resCommon(Common.success);
 	}
 	
-	public BaseResInfo<T> error(Common res) {
-		this.setResCode(res.getResCode());
-		this.setResDesc(res.getResDesc());
+	public BaseResInfo<T> res(T info) {
+		return extract(info);
+	}
+	
+	public BaseResInfo<T> resCommon(Common info) {
+		return extract(info);
+	}
+	
+	private BaseResInfo<T> extract(Object o) {
+		ResInfo r = o.getClass().getAnnotation(ResInfo.class);
+		this.setResCode(r.resCode());
+		this.setResDesc(r.resDesc());
 		return this;
 	}
 }

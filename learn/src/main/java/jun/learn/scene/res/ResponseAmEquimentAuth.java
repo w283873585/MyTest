@@ -1,8 +1,16 @@
 package jun.learn.scene.res;
 
+import jun.learn.scene.res.ResponseAmEquimentAuth.Hello;
 
 public class ResponseAmEquimentAuth extends BaseResInfo<Hello>{
 
+	public enum Hello{
+		@ResInfo(resCode="", resDesc="")
+		noInUse,
+		@ResInfo(resCode="", resDesc="")
+		我分为;
+	}
+	
 	/**
 	 * 
 	 */

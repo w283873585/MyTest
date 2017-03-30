@@ -2,18 +2,22 @@ package jun.learn.scene.res;
 /**
  * 通用接口
  */
-public enum Common implements ResInfo{
-	success("0", "操作成功"),
-	failed("-1", "操作失败"),
-	serverError("-99", "服务器错误");
+public enum Common{
+	/**
+	 * 操作成功
+	 */
+	@ResInfo(resCode="0", resDesc="操作成功")
+	success,
 	
-	private Common(String resCode, String resDesc) {
-		this.resCode = resCode;
-		this.resDesc = resDesc;
-	}
+	/**
+	 * 操作失败
+	 */
+	@ResInfo(resCode="-1", resDesc="操作失败")
+	failed,
 	
-	private String resDesc;
-	private String resCode;
-	public String getResCode() { return resCode; }
-	public String getResDesc() { return resDesc; }
+	/**
+	 * 系统错误
+	 */
+	@ResInfo(resCode="-99", resDesc="服务器错误")
+	serverError;
 }

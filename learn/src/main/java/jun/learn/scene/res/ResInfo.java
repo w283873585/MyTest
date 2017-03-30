@@ -1,7 +1,11 @@
 package jun.learn.scene.res;
 
-public interface ResInfo {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+
+@Target(ElementType.FIELD)
+public @interface ResInfo{
 	
-	public String getResCode();
-	public String getResDesc();
+	public String resCode();
+	public String resDesc();
 }
