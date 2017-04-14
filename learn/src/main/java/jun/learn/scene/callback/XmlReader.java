@@ -8,6 +8,10 @@ public class XmlReader {
 	}
 	
 	public void loadXml(String path) {
-		factory.add("<hello></hello>");
+		factory.add(resolveXml(path));
+	}
+	
+	public String resolveXml(String path) {
+		return "<hello></hello>";
 	}
 }
