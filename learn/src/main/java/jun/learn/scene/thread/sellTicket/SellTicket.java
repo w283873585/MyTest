@@ -1,17 +1,16 @@
 package jun.learn.scene.thread.sellTicket;
 
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
  
 public class SellTicket implements Runnable {
-     
     private int count = 100;
-    static Map<String,Integer> map = new ConcurrentHashMap<String,Integer>(); 
+    private static Map<String,Integer> map = new ConcurrentHashMap<String,Integer>(); 
      
-    public static void main(String[] args) {    
+    public static void main(String[] args) {
         SellTicket st = new SellTicket();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             Thread thread = new Thread(st);
             map.put(thread.getName(), 0);
             thread.start();
@@ -19,30 +18,25 @@ public class SellTicket implements Runnable {
     }
  
     public void run() {
+    	String threadName = Thread.currentThread().getName();
         while (true) {
-            synchronized(this){
-                if(count > 0){
-                    count--;
-                    System.out.println("�߳�=" + Thread.currentThread().getName() + "��ʣ��Ʊ��=" + count);                    
-                    Iterator<Map.Entry<String,Integer>> i = map.entrySet().iterator();
-                    while(i.hasNext()){
-                        Map.Entry<String,Integer> entry=(Map.Entry<String,Integer>)i.next();
-                        if(entry.getKey().equals(Thread.currentThread().getName()))
-                            map.put(entry.getKey(), entry.getValue().intValue() + 1);
-                    }                   
-                }else if(count==0){                 
-                    Iterator<Map.Entry<String,Integer>> i = map.entrySet().iterator();
-                    while(i.hasNext()){
-                        Map.Entry<String,Integer> entry=(Map.Entry<String,Integer>)i.next();
-                        System.out.println("�߳�=" + entry.getKey() + "����Ʊ��=" + entry.getValue());
-                    }       
-                }
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    		if (count == 0) {
+    			int cCount = 0;
+    			for (Entry<String,Integer> e : map.entrySet())
+    				cCount += e.getValue();
+    			System.out.println("finally: " + cCount);
+    			return;
+    		}  
+    			if (count > 0) {
+    				synchronized (this) { 
+    					count--; 
+    					// System.out.println(123);
+    				}
+	    		}
+    		for (Entry<String,Integer> e : map.entrySet()) {
+    			if (e.getKey().equals(threadName))
+    				map.put(threadName, e.getValue().intValue() + 1);
+    		}
         }
     }
  
