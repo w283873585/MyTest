@@ -26,8 +26,8 @@ public class Context {
 	public String name() { return name; }
 	public Handler handler() { return handler; }
 	public Pipeline pipeline() { return pipeline;}
-	public void fireInEvent() { this.next.execute(); }
-	public void fireOutEvent() { this.prev.execute(); }
+	public void fireInEvent() { findInContext().execute(); }
+	public void fireOutEvent() { findOutContext().execute(); }
 	
 	public Context findOutContext() {
 		Context ctx = this;

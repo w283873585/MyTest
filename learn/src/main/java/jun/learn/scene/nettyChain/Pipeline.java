@@ -56,7 +56,9 @@ public class Pipeline {
 		}
 		
 		@Override
-		public void read(Context ctx) {}
+		public void read(Context ctx) {
+			ctx.fireOutEvent();
+		}
 	}
 	
 	private class TailContext extends Context implements InHandler{
@@ -70,6 +72,8 @@ public class Pipeline {
 		}
 
 		@Override
-		public void read(Context ctx) {}
+		public void read(Context ctx) {
+			ctx.fireInEvent();
+		}
 	}
 }
