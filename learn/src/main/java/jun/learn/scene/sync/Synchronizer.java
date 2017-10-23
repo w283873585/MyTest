@@ -1,7 +1,11 @@
 package jun.learn.scene.sync;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import jun.learn.scene.sync.Synchronizer.ObjectChainProcessor.Context;
 
 public class Synchronizer {
 	public void sync(String name, Integer type) {
@@ -11,8 +15,8 @@ public class Synchronizer {
 		 * 3. 逻辑处理
 		 */
 		DataProvider provider = getDataProvider(name, type);
-		final ProcessorFactory factory = new ProcessorFactory();
-		final DataProcessor processor = factory.getProcessor(name);
+		final ObjectChainProcessor<?> processor = ObjectChainProcessor
+				.buildChain(name, ProcessorFactory.getClassByName(name));
 		provider.foreach(new Consumer() {
 			@Override
 			public void apply(Map<String, Object> data) {
@@ -56,16 +60,22 @@ public class Synchronizer {
 		void apply(Map<String, Object> map);
 	}
 	
-	public interface DataProcessor {
-		String getName();
-		void process(Map<String, Object> data);
-	}
-	
-	public static abstract class ObjectProcessor<T> implements DataProcessor{
+	public static class ObjectChainProcessor<T> {
+		public static <T> ObjectChainProcessor<T> buildChain(String name, Class<T> c) {
+			return new ObjectChainProcessor<T>(name, c);
+		}
 		
-		@SuppressWarnings("unchecked")
+		private Class<T> reqClass;
+		private Context<T> ctx = new Context<T>();
+		
+		public ObjectChainProcessor(String name, Class<T> c) {
+			this.reqClass = c;
+			ctx.add(new CheckerProcessor<T>());
+			ctx.add(ProcessorFactory.getProcessors(name));
+		}
+		
 		public void process(Map<String, Object> data) {
-			T finalVal = convert(data, (Class<T>) ReflectUtil.getGenericClass(this.getClass()));
+			T finalVal = convert(data, reqClass);
 			process(finalVal);
 		}
 		
@@ -78,34 +88,108 @@ public class Synchronizer {
 			return (T) target;
 		}
 		
-		public abstract void process(T t);
+		public void process(T t) {
+			ctx.init();
+			ctx.invokeNext(t);
+		}
+		
+		public static class Context<T>{
+			private int index = 0;
+			private List<DataProcessor<T>> processors = new ArrayList<DataProcessor<T>>();
+			private Map<String, Object> body = new HashMap<String, Object>();
+			
+			public void init() {
+				index = 0;
+			}
+			
+			public void invokeNext(T t) {
+				if (index >= processors.size()) {
+					return;
+				}
+				processors.get(index++).process(t, this);
+			}
+			
+			public void add(List<DataProcessor<T>> processorList) {
+				for (DataProcessor<T> processor : processorList) {
+					add(processor);
+				}
+			}
+			
+			public void add(DataProcessor<T> processor) {
+				processors.add(processor);
+			}
+			public void put(String key, Object value) {
+				body.put(key, value);
+			}
+			public void remove(String key) {
+				body.remove(key);
+			}
+			public Object get(String key) {
+				return body.get(key);
+			}
+		}
+	}
+	
+	public interface DataProcessor<T>{
+		public String getName();
+		public void process(T t, Context<T> ctx);
+	}
+	
+	public static class CheckerProcessor<T> implements DataProcessor<T> {
+		@Override
+		public void process(T t, Context<T> ctx) {
+			ctx.invokeNext(t);
+		}
+
+		@Override
+		public String getName() {
+			return null;
+		}
 	}
 	
 	public static class ProcessorFactory{
-		private Map<String, DataProcessor> processorMap = new HashMap<String, DataProcessor>();
-		{
+		private static Map<String, List<DataProcessor<?>>> processorMap = new HashMap<String, List<DataProcessor<?>>>();
+		private static Map<String, Class<?>> classMap = new HashMap<String, Class<?>>();
+		static {
 			register(new AProcessor());
 		}
 		
-		public DataProcessor getProcessor(String name) {
-			return processorMap.get(name);
+		@SuppressWarnings("unchecked")
+		public static <T> List<DataProcessor<T>> getProcessors(String name) {
+			List<DataProcessor<?>> list = processorMap.get(name);
+			List<DataProcessor<T>> result = new ArrayList<DataProcessor<T>>(); 
+			for (int i = 0; i < list.size(); i++) {
+				result.add((DataProcessor<T>) list.get(i));
+			}
+			return result;
 		}
 		
-		public void register(DataProcessor processor) {
-			processorMap.put(processor.getName(), processor);
+		public static void register(DataProcessor<?> processor) {
+			if (!processorMap.containsKey(processor.getName())) {
+				List<DataProcessor<?>> list = new ArrayList<DataProcessor<?>>();
+				list.add(processor);
+				classMap.put(processor.getName(), ReflectUtil.getGenericClass(processor.getClass()));
+				processorMap.put(processor.getName(), list);
+			} else {
+				List<DataProcessor<?>> list = processorMap.get(processor.getName());
+				list.add(processor);
+			}
+		}
+		
+		public static Class<?> getClassByName(String name) {
+			return classMap.get(name);
 		}
 	}
 	
-	public static class AProcessor extends ObjectProcessor<Req>{
-
+	public static class AProcessor implements DataProcessor<Req>{
 		@Override
 		public String getName() {
 			return "a";
 		}
 
 		@Override
-		public void process(Req t) {
-			System.out.println("----------->" + t.getKey());
+		public void process(Req t, Context<Req> ctx) {
+			System.out.println(t.getKey());
 		}
 	}
 	

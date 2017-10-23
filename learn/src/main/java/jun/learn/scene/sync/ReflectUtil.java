@@ -105,7 +105,14 @@ public class ReflectUtil {
 	 * 获取clazz类的泛型Class
 	 */
 	public static Class<?> getGenericClass(Class<?> clazz) {
-		return getGenericClass(clazz.getGenericSuperclass());
+		Type superClass = clazz.getGenericSuperclass(); 
+		if (superClass == Object.class) {
+			Type superInterface[] = clazz.getGenericInterfaces();
+			if (superInterface != null && superInterface.length > 0) {
+				superClass = clazz.getGenericInterfaces()[0];
+			}
+		}
+		return getGenericClass(superClass);
 	}
 	
 	/**
