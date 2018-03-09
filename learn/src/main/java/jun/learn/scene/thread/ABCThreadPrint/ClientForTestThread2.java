@@ -117,7 +117,7 @@ public class ClientForTestThread2 {
 		
 		ThreadPrint aP = new ThreadPrint("A", A, chain);
 		ThreadPrint bP = new ThreadPrint("B", B, chain);
-		ThreadPrint cP = new ThreadPrint("C", C, chain);
+		ThreadPrint cP = new ThreadPrint("C\n", C, chain);
 	
 		bP.start();
 		aP.start();

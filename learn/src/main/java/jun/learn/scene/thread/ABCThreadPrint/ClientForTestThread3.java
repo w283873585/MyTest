@@ -24,9 +24,9 @@ public class ClientForTestThread3 {
 					}
 				}
 				synchronized (next) {
-					System.out.print(msg);
 					next.notify();
 				}
+				System.out.print(msg);
 			}
 		}
 	}
@@ -40,12 +40,17 @@ public class ClientForTestThread3 {
 		
 		ThreadPrint aP = new ThreadPrint("A", A, B);
 		ThreadPrint bP = new ThreadPrint("B", B, C);
-		ThreadPrint cP = new ThreadPrint("C", C, A);
+		ThreadPrint cP = new ThreadPrint("C\n", C, A);
 	
 		bP.start();
 		aP.start();
 		cP.start();
 		
+		
+		/**
+		 * 线程协作：
+		 * 	每个人只会通知下一个等待的人
+		 */
 		Thread.sleep(110);
 		synchronized (A) {
 			A.notify();
