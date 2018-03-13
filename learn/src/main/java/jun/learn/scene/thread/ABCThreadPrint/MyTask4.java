@@ -14,9 +14,9 @@ class MyTask4 extends Thread {
         int cnt = 10;
 
         while (cnt-- > 0) {
-            synchronized (prev) {
+        	synchronized (prev) {
                 synchronized (curr) {
-                    System.out.print(info + " ");
+                	System.out.print(info + " ");
                     curr.notify();
                 }
 
@@ -37,7 +37,7 @@ class MyTask4 extends Thread {
 
         MyTask4 myThread1 = new MyTask4(C, A, "A");
         MyTask4 myThread2 = new MyTask4(A, B, "B");
-        MyTask4 myThread3 = new MyTask4(B, C, "C");
+        MyTask4 myThread3 = new MyTask4(B, C, "C\n");
 
         myThread1.start();
         Thread.sleep(10);

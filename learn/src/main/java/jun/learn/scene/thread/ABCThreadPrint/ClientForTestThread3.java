@@ -23,10 +23,16 @@ public class ClientForTestThread3 {
 						e.printStackTrace();
 					}
 				}
+				System.out.print(msg);
 				synchronized (next) {
 					next.notify();
 				}
-				System.out.print(msg);
+				/**
+				 * 循环通知时，如果在通知后还需要等待时，则可能存在通知断层的情况
+				 * 即，通知已经发出，接受方还未进入睡眠状态
+				 * Thrad.sleep(1);
+				 * 
+				 */
 			}
 		}
 	}

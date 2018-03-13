@@ -20,8 +20,8 @@ class MyTask3 extends Thread {
 	        while (i > 0) {
                 if (gData.get() % 3 == n) {
                 	i--;
-                	System.out.print(info + " ");
                 	Thread.sleep(100);
+                	System.out.print(info + " ");
                 	gData.increment();
                 }
 	        }
@@ -34,11 +34,19 @@ class MyTask3 extends Thread {
     
     
     public static class VariableInteger{
+    	/**
+    	 * 可见性
+    	 */
     	private volatile int value;
     	
     	public VariableInteger(int value) {
     		this.value = value;
     	}
+    	
+    	/**
+    	 * synchronized可见性：
+    	 * 		获取锁能保证可见性
+    	 */
     	
     	public void increment() {
     		this.value++;
@@ -54,7 +62,7 @@ class MyTask3 extends Thread {
         
     	Thread  thread1 = new MyTask3(gData, 0, "A");
         Thread  thread2 = new MyTask3(gData, 1, "B");
-        Thread  thread3 = new MyTask3(gData, 2, "C");
+        Thread  thread3 = new MyTask3(gData, 2, "C\n");
 
         thread1.start();
         thread2.start();

@@ -16,31 +16,31 @@ class MyTask extends Thread {
     }
 
     public void run() {
-    	try {
-	        int i = 10;
-	
-	        while (i > 0) {
-                if (gData.get() % 3 == n) {
-                	i--;
-                	System.out.print(info + " ");
-                	Thread.sleep(100);
-                	gData.incrementAndGet();
-                }
-	            synchronized (gData) {
-	            }
-	        }
-            Thread.yield();
+    	int i = 10;
+    	
+    	while (i > 0) {
+    		if (gData.get() % 3 == n) {
+    			i--;
+    			System.out.print(info + " ");
+    			gData.incrementAndGet();
+    			// Thread.sleep(100);
+    		}
+    		synchronized (gData) {
+    		}
+    	}
+    	/*try {
+            // Thread.yield();
             sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
     }
     
     public static void main(String[] args) throws InterruptedException {
         AtomicInteger gData = new AtomicInteger(0);
         Thread  thread1 = new MyTask(gData, 0, "A");
         Thread  thread2 = new MyTask(gData, 1, "B");
-        Thread  thread3 = new MyTask(gData, 2, "C");
+        Thread  thread3 = new MyTask(gData, 2, "C\n");
 
         thread1.start();
         thread2.start();

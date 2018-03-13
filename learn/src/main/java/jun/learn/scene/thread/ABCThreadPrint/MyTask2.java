@@ -18,13 +18,16 @@ class MyTask2 extends Thread {
 	        int i = 10;
 	
 	        while (i > 0) {
+	        	/**
+	        	 * 值传递：
+	        	 * 	不存在共享对象，因此都处于死循环的状态。
+	        	 */
                 if (gData % 3 == n) {
                 	i--;
                 	System.out.print(info + " ");
                 	Thread.sleep(100);
                 	gData++;
                 }
-	           
 	        }
             Thread.yield();
             sleep(10);
