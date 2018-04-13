@@ -31,6 +31,29 @@ public class ReflectUtil {
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static <T> T getValueFromObject(String name, Object obj, Class<T> c) {
+		try {
+			Class<?> clazz = obj.getClass();
+			Object value = null;
+			if (Map.class.isAssignableFrom(clazz)) {
+				value = ((Map<String, Object>) obj).get(name);
+			} else {
+				value = clazz.getDeclaredField(name).get(obj);
+			}
+			return c.cast(value);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	/**
 	 *	遍历class对象属性的消费者
 	 */
