@@ -10,11 +10,11 @@ public class Client {
 			public String getName() {
 				return "Patient";
 			}
-			public void beforeProcess(DataProvider p) {
+			public void preProcess(DataProvider p, Context ctx) {
 				List<String> nameList = p.getByName("name", String.class);
 				System.out.println(nameList);
 			}
-			public void process(A t) {
+			public void process(A t, Context ctx) {
 				System.out.println("process->" + t.getName());
 			}
 		});

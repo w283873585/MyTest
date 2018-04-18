@@ -6,8 +6,8 @@ import java.util.List;
 public class Factory {
 	private List<Bean> msgBox = new ArrayList<Bean>();
 	
-	public void add(String msg) {
-		msgBox.add(new Bean(msg));
+	public void addBean(Bean bean) {
+		msgBox.add(bean);
 	}
 	
 	public void show() {
@@ -33,16 +33,5 @@ public class Factory {
 	*/
 	
 	
-	public static class Bean{
-		public Bean(String msg) {
-			this.msg = msg;
-		}
-		private String msg;
-		public String getMsg() {
-			return msg;
-		}
-		public void setMsg(String msg) {
-			this.msg = msg;
-		}
-	}
+	
 }

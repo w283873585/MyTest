@@ -8,7 +8,8 @@ public class XmlReader {
 	}
 	
 	public void loadXml(String path) {
-		factory.add(resolveXml(path));
+		Bean bean = new Bean(resolveXml(path));
+		factory.addBean(bean);
 	}
 	
 	public String resolveXml(String path) {
